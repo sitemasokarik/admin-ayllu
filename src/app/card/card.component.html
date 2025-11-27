@@ -1,0 +1,156 @@
+<div class="dashboard-main-body">
+  <app-breadcrumb [title]="'Components / Card'" [main-title]="'Card'"></app-breadcrumb>
+
+
+  <div class="mb-40">
+    <div class="row gy-4">
+      <div class="col-xxl-3 col-sm-6" *ngFor="let card of cards">
+        <div class="card h-100 radius-12">
+          <img [src]="card.img" class="card-img-top" alt="">
+          <div class="card-body p-16" [ngClass]="card.align">
+            <h5 class="card-title text-lg text-primary-light mb-6">{{ card.title }}</h5>
+            <p class="card-text text-neutral-600">{{ card.text }}</p>
+
+            <div *ngIf="card.buttons?.length; else linkTemplate" [ngClass]="card.buttonContainerClass">
+              <ng-container *ngFor="let btn of card.buttons">
+                <a *ngIf="btn.type === 'link'" href="javascript:void(0)" [ngClass]="btn.classes">
+                  {{ btn.label }}
+                  <iconify-icon [icon]="btn.icon" class="text-xl"></iconify-icon>
+                </a>
+                <button *ngIf="btn.type === 'button'" [ngClass]="btn.classes">
+                  {{ btn.label }}
+                  <iconify-icon [icon]="btn.icon" class="text-xl"></iconify-icon>
+                </button>
+              </ng-container>
+            </div>
+
+            <ng-template #linkTemplate>
+              <a href="javascript:void(0)" [ngClass]="card.linkClass">
+                Read More
+                <iconify-icon icon="iconamoon:arrow-right-2" class="text-xl"></iconify-icon>
+              </a>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mb-40">
+    <h6 class="mb-24">Card Text & Icon</h6>
+    <div class="row gy-4">
+      <div class="col-xxl-3 col-sm-6" *ngFor="let card of iconCards">
+        <div class="card h-100 radius-12" [ngClass]="card.align">
+          <div class="card-body p-24">
+            <div class="w-64-px h-64-px d-inline-flex align-items-center justify-content-center mb-16 radius-12"
+              [ngClass]="[card.bgGradient, card.textColor]">
+              <iconify-icon [icon]="card.icon" class="h5 mb-0"></iconify-icon>
+            </div>
+            <h6 class="mb-8">{{ card.title }}</h6>
+            <p class="card-text mb-8 text-secondary-light">{{ card.text }}</p>
+            <a href="javascript:void(0)" [ngClass]="card.linkClass">
+              Read More <iconify-icon icon="iconamoon:arrow-right-2" class="text-xl"></iconify-icon>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mb-40">
+    <h6 class="mb-24">Card With Image & Overlays</h6>
+    <div class="row gy-4">
+      <div class="col-xxl-4 col-sm-6" *ngFor="let overlayCard of overlayCards">
+        <div class="card h-100 radius-12 p-0 overflow-hidden position-relative">
+          <div class="card-body p-0 gradient-overlay" [ngClass]="[overlayCard.position]">
+            <img [src]="overlayCard.img" alt="" class="w-100 h-100">
+            <div class="position-absolute p-24 z-1" [ngClass]="[overlayCard.textPosition]">
+              <h5 class="card-title text-white text-primary-light text-lg mb-6">{{ overlayCard.title }}</h5>
+              <p class="card-text text-white">{{ overlayCard.text }}</p>
+              <a href="javascript:void(0)"
+                class="btn text-primary-600 hover-text-primary px-0 py-10 d-inline-flex align-items-center gap-2">
+                Read More <iconify-icon icon="iconamoon:arrow-right-2" class="text-xl"></iconify-icon>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mb-40">
+    <h6 class="mb-24">Card Header & Footer</h6>
+    <div class="row gy-4">
+      <div class="col-xxl-4 col-sm-6" *ngFor="let card of headerFooterCards">
+        <div class="card radius-12 h-100">
+          <div *ngIf="card.header"
+            class="card-header py-16 px-24 bg-base d-flex align-items-center gap-1 justify-content-between border border-end-0 border-start-0 border-top-0">
+            <div>
+              <h6 class="text-lg mb-0">{{ card.headerTitle }}</h6>
+              <span *ngIf="card.headerSubtitle" class="text-sm">{{ card.headerSubtitle }}</span>
+            </div>
+            <a *ngIf="card.headerLink" href="javascript:void(0)" class="text-primary-600">View All</a>
+            <button *ngIf="card.headerButton" type="button" class="text-xl line-height-1">
+              <iconify-icon [icon]="card.headerButtonIcon" class="text-xl"></iconify-icon>
+            </button>
+          </div>
+          <div class="card-body py-16 px-24">
+            <h6 *ngIf="card.bodyTitle" class="card-title text-primary-light mb-8 text-lg">{{ card.bodyTitle }}</h6>
+            <p class="card-text text-neutral-600 mb-16" *ngIf="card.bodyText1">{{ card.bodyText1 }}</p>
+            <p class="card-text text-neutral-600 mb-0" *ngIf="card.bodyText2">{{ card.bodyText2 }}</p>
+            <a *ngIf="card.readMore" href="javascript:void(0)"
+              class="btn text-primary-600 hover-text-primary px-0 py-0 d-inline-flex align-items-center gap-2 mt-16">
+              Read More <iconify-icon icon="iconamoon:arrow-right-2" class="text-xl"></iconify-icon>
+            </a>
+          </div>
+          <div *ngIf="card.footer"
+            class="card-footer text-center bg-transparent border border-end-0 border-start-0 border-bottom-0 py-16 px-24">
+            <a href="javascript:void(0)" class="text-primary-600">View All</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="mb-40">
+    <h6 class="mb-24">Horizontal Card</h6>
+    <div class="row gy-4">
+      <div class="col-xl-6" *ngFor="let card of horizontalCards">
+        <div class="card radius-12 overflow-hidden h-100 d-flex align-items-center flex-nowrap flex-row"
+          [ngClass]="card.reverse ? 'flex-row-reverse' : ''">
+          <div class="d-flex flex-shrink-0 w-170-px h-100">
+            <img [src]="card.img" class="h-100 w-100 object-fit-cover" alt="">
+          </div>
+          <div class="card-body p-16 flex-grow-1">
+            <h5 class="card-title text-lg text-primary-light mb-6">{{ card.title }}</h5>
+            <p class="card-text text-neutral-600 mb-16">{{ card.text }}</p>
+            <a href="javascript:void(0)"
+              class="btn text-primary-600 hover-text-primary p-0 d-inline-flex align-items-center gap-2">
+              Read More <iconify-icon icon="iconamoon:arrow-right-2" class="text-xl"></iconify-icon>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <h6 class="mb-24">Card With Background Color</h6>
+    <div class="row gy-4">
+      <div class="col-xxl-3 col-sm-6" *ngFor="let card of bgCards">
+        <div class="card h-100 radius-12" [ngClass]="card.bgGradient + ' ' + card.align">
+          <div class="card-body p-24">
+            <div class="w-64-px h-64-px d-inline-flex align-items-center justify-content-center mb-16 radius-12"
+              [ngClass]="card.bgIcon + ' text-white'">
+              <iconify-icon [icon]="card.icon" class="h5 mb-0"></iconify-icon>
+            </div>
+            <h6 class="mb-8">{{ card.title }}</h6>
+            <p class="card-text mb-8 text-secondary-light">{{ card.text }}</p>
+            <a href="javascript:void(0)" class="btn" [ngClass]="card.linkClass">
+              Read More <iconify-icon icon="iconamoon:arrow-right-2" class="text-xl"></iconify-icon>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

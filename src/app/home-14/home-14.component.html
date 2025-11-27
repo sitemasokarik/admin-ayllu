@@ -1,0 +1,713 @@
+<div class="dashboard-main-body">
+
+  <app-breadcrumb [title]="'Podcast'" [main-title]="'Podcast'"></app-breadcrumb>
+  <div class="row gy-4">
+    <div class="col-xxl-4 col-lg-5">
+      <div class="row gy-4">
+        <div class="col-lg-12 col-md-6">
+          <div class="bg-base radius-12 py-20 px-24 shadow-9">
+            <div class="d-flex align-items-center justify-content-between">
+              <div class="">
+                <span class="text-secondary-light mb-8">Total Users</span>
+                <div class="d-flex align-items-center gap-12">
+                  <h6 class="mb-0">17,500</h6>
+                  <div class="d-flex align-items-center gap-1 fw-semibold text-success-600">
+                    <span class="">+2.5%</span>
+                    <i class="ri-arrow-up-line"></i>
+                  </div>
+                </div>
+              </div>
+              <span
+                class="w-60-px h-60-px bg-primary-600 text-white rounded-circle d-flex justify-content-center align-items-center text-2xl primary-shadow">
+                <i class="ri-group-fill"></i>
+              </span>
+            </div>
+
+            <div class="mt-32 d-flex align-items-center justify-content-between gap-12 flex-wrap">
+              <div class="py-8 px-12 radius-6 gradient-bg-light-one border br-white flex-grow-1">
+                <span class="text-secondary-light mb-8 text-sm">Active User:</span>
+                <h6 class="mb-0 text-xl">3,500</h6>
+              </div>
+              <div class="py-8 px-12 radius-6 gradient-bg-light-two border br-white flex-grow-1">
+                <span class="text-secondary-light mb-8 text-sm">New Sign ups:</span>
+                <h6 class="mb-0 text-xl">5,700</h6>
+              </div>
+              <div class="py-8 px-12 radius-6 gradient-bg-light-three border br-white flex-grow-1">
+                <span class="text-secondary-light mb-8 text-sm">Subscribed:</span>
+                <h6 class="mb-0 text-xl">8,000</h6>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-12 col-md-6">
+          <div class="bg-base radius-12 py-20 px-24 shadow-9">
+            <div class="d-flex align-items-center justify-content-between">
+              <div class="">
+                <span class="text-secondary-light mb-8">Total Podcasts</span>
+                <div class="d-flex align-items-center gap-12">
+                  <h6 class="mb-0">450</h6>
+                  <div class="d-flex align-items-center gap-1 fw-semibold text-success-600">
+                    <span class="">+2.5%</span>
+                    <i class="ri-arrow-up-line"></i>
+                  </div>
+                </div>
+              </div>
+              <span
+                class="w-60-px h-60-px bg-warning-600 text-white rounded-circle d-flex justify-content-center align-items-center text-2xl warning-shadow">
+                <i class="ri-mic-fill"></i>
+              </span>
+            </div>
+
+            <div class="mt-32 d-flex align-items-center justify-content-between gap-12 flex-wrap">
+              <div class="py-8 px-12 radius-6 gradient-bg-light-four border br-white flex-grow-1">
+                <span class="text-secondary-light mb-8 text-sm">Trending:</span>
+                <h6 class="mb-0 text-xl">60</h6>
+              </div>
+              <div class="py-8 px-12 radius-6 gradient-bg-light-five border br-white flex-grow-1">
+                <span class="text-secondary-light mb-8 text-sm">Free Podcasts:</span>
+                <h6 class="mb-0 text-xl">240</h6>
+              </div>
+              <div class="py-8 px-12 radius-6 gradient-bg-light-six border br-white flex-grow-1">
+                <span class="text-secondary-light mb-8 text-sm">Premium:</span>
+                <h6 class="mb-0 text-xl">150</h6>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xxl-8 col-lg-7">
+      <div class="bg-base radius-12 py-20 px-24 shadow-9 h-100">
+        <div class="d-flex align-items-center flex-wrap gap-2 justify-content-between">
+          <h6 class="mb-0 fw-bold text-lg">Audience Stats</h6>
+          <select class="form-select form-select-sm w-auto bg-base border text-secondary-light radius-8">
+            <option>Yearly</option>
+            <option>Monthly</option>
+            <option>Weekly</option>
+            <option>Today</option>
+          </select>
+        </div>
+        <ul class="d-flex flex-wrap align-items-center justify-content-center mt-18 gap-3">
+          <li class="d-flex align-items-center gap-2">
+            <span class="w-10-px h-6-px rounded-pill bg-primary-600"></span>
+            <span class="text-secondary-light text-sm fw-medium d-inline-flex align-items-center gap-1">
+              Total Audience:
+              <span class="text-primary-light text-xl fw-bold">26,201</span>
+            </span>
+          </li>
+        </ul>
+        <div class="mt-24">
+          <div id="paymentStatusChart" class="">
+            <apx-chart [series]="paymentStatusChart.series" [chart]="paymentStatusChart.chart"
+              [xaxis]="paymentStatusChart.xaxis" [yaxis]="paymentStatusChart.yaxis"
+              [dataLabels]="paymentStatusChart.dataLabels" [plotOptions]="paymentStatusChart.plotOptions"
+              [stroke]="paymentStatusChart.stroke" [fill]="paymentStatusChart.fill" [colors]="paymentStatusChart.colors"
+              [grid]="paymentStatusChart.grid" [legend]="paymentStatusChart.legend" [labels]="paymentStatusChart.labels"
+              [states]="paymentStatusChart.states"></apx-chart>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="bg-base radius-12 py-20 px-24 shadow-9 h-100 mb-20">
+        <div class="d-flex align-items-center flex-wrap gap-2 justify-content-between">
+          <h6 class="mb-0 fw-bold text-lg">Earnings Overview</h6>
+          <select class="form-select form-select-sm w-auto bg-base border text-secondary-light radius-8">
+            <option>Yearly</option>
+            <option>Monthly</option>
+            <option>Weekly</option>
+            <option>Today</option>
+          </select>
+        </div>
+        <ul class="d-flex flex-wrap align-items-center justify-content-center mt-24 gap-3">
+          <li class="d-flex align-items-center gap-2">
+            <span class="w-8-px h-8-px rounded-circle bg-primary-600"></span>
+            <span class="text-secondary-light text-sm fw-medium d-inline-flex align-items-center gap-1">
+              Income:
+              <span class="text-primary-light text-xl fw-bold">$26,201</span>
+            </span>
+            <div class="d-flex align-items-center gap-1 fw-semibold text-success-600">
+              <span class="">10%</span>
+              <i class="ri-arrow-up-s-fill"></i>
+            </div>
+          </li>
+        </ul>
+        <div class="mt-24">
+          <div id="revenueChart" class="apexcharts-tooltip-style-1">
+            <apx-chart [series]="revenueChart.series" [chart]="revenueChart.chart"
+              [dataLabels]="revenueChart.dataLabels" [stroke]="revenueChart.stroke" [grid]="revenueChart.grid"
+              [colors]="revenueChart.colors" [fill]="revenueChart.fill" [markers]="revenueChart.markers"
+              [xaxis]="revenueChart.xaxis" [yaxis]="revenueChart.yaxis" [tooltip]="revenueChart.tooltip"
+              [legend]="revenueChart.legend"></apx-chart>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-8">
+      <div class="bg-base radius-12 py-20 px-24 shadow-9 h-100 mb-24">
+        <div class="d-flex align-items-center flex-wrap gap-2 justify-content-between border-bottom mb-24 pb-16">
+          <h6 class="mb-0 fw-bold text-lg">Recently Played</h6>
+          <a href="javascript:void(0)" class="text-primary-600 hover-text-primary d-flex align-items-center gap-1">
+            View All
+            <iconify-icon icon="solar:alt-arrow-right-linear" class="icon"></iconify-icon>
+          </a>
+        </div>
+        <div class="mt-20">
+          <div class="row gy-4">
+            <div class="col-lg-3 col-sm-6">
+              <div class="">
+                <div class="radius-8 overflow-hidden position-relative">
+                  <img src="assets/images/home-fourteen/podcast-img1.png" alt="Thumb"
+                    class="w-100 h-100 object-fit-cover">
+                  <a href="javascript:void(0)"
+                    class="w-28-px h-24-px text-white bg-white bg-opacity-50 d-flex justify-content-center align-items-center position-absolute start-0 bottom-0 ms-10 mb-10 radius-6 hover-bg-white hover-text-primary text-sm">
+                    <i class="ri-play-large-fill"></i>
+                  </a>
+                </div>
+                <div class="mt-12">
+                  <h6 class="text-md mb-0">Talk show </h6>
+                  <span class="text-sm text-secondary-light">Esther Howard</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+              <div class="">
+                <div class="radius-8 overflow-hidden position-relative">
+                  <img src="assets/images/home-fourteen/podcast-img2.png" alt="Thumb"
+                    class="w-100 h-100 object-fit-cover">
+                  <a href="javascript:void(0)"
+                    class="w-28-px h-24-px text-white bg-white bg-opacity-50 d-flex justify-content-center align-items-center position-absolute start-0 bottom-0 ms-10 mb-10 radius-6 hover-bg-white hover-text-primary text-sm">
+                    <i class="ri-play-large-fill"></i>
+                  </a>
+                </div>
+                <div class="mt-12">
+                  <h6 class="text-md mb-0">Change Life Style </h6>
+                  <span class="text-sm text-secondary-light">Cameron Williamson</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+              <div class="">
+                <div class="radius-8 overflow-hidden position-relative">
+                  <img src="assets/images/home-fourteen/podcast-img3.png" alt="Thumb"
+                    class="w-100 h-100 object-fit-cover">
+                  <a href="javascript:void(0)"
+                    class="w-28-px h-24-px text-white bg-white bg-opacity-50 d-flex justify-content-center align-items-center position-absolute start-0 bottom-0 ms-10 mb-10 radius-6 hover-bg-white hover-text-primary text-sm">
+                    <i class="ri-play-large-fill"></i>
+                  </a>
+                </div>
+                <div class="mt-12">
+                  <h6 class="text-md mb-0">Neon Lights</h6>
+                  <span class="text-sm text-secondary-light">Leslie Alexander</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+              <div class="">
+                <div class="radius-8 overflow-hidden position-relative">
+                  <img src="assets/images/home-fourteen/podcast-img4.png" alt="Thumb"
+                    class="w-100 h-100 object-fit-cover">
+                  <a href="javascript:void(0)"
+                    class="w-28-px h-24-px text-white bg-white bg-opacity-50 d-flex justify-content-center align-items-center position-absolute start-0 bottom-0 ms-10 mb-10 radius-6 hover-bg-white hover-text-primary text-sm">
+                    <i class="ri-play-large-fill"></i>
+                  </a>
+                </div>
+                <div class="mt-12">
+                  <h6 class="text-md mb-0">Product Design</h6>
+                  <span class="text-sm text-secondary-light">Bessie Cooper</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xxl-8">
+      <div class="shadow-7 radius-12 bg-base h-100 overflow-hidden">
+        <div class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center justify-content-between">
+          <h6 class="text-lg fw-semibold mb-0">Recent Purchase Plan</h6>
+          <a href="javascript:void(0)" class="text-primary-600 hover-text-primary d-flex align-items-center gap-1">
+            View All
+            <iconify-icon icon="solar:alt-arrow-right-linear" class="icon"></iconify-icon>
+          </a>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive scroll-sm">
+            <table class="table bordered-table table-py-8 mb-0 rounded-0 border-0">
+              <thead>
+                <tr>
+                  <th scope="col" class="rounded-0">User</th>
+                  <th scope="col" class="rounded-0">Amount</th>
+                  <th scope="col" class="rounded-0">StartDate</th>
+                  <th scope="col" class="rounded-0">End Date</th>
+                  <th scope="col" class="rounded-0">Duration</th>
+                  <th scope="col" class="rounded-0 text-center">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="text-secondary-light">
+                    <div class="d-flex align-items-center gap-12">
+                      <span class="w-40-px h-40-px radius-4 overflow-hidden rounded-circle">
+                        <img src="assets/images/user-grid/user-grid-img5.png" alt="Avatar"
+                          class="w-100 h-100 object-fit-cover">
+                      </span>
+                      <span class="text-secondary-light">Dianne Russell</span>
+                    </div>
+                  </td>
+                  <td class="text-secondary-light">$29.00</td>
+                  <td class="text-secondary-light">Jan 10, 2025</td>
+                  <td class="text-secondary-light">Feb 10, 2025</td>
+                  <td class="text-secondary-light">1 Month</td>
+                  <td class="text-center">
+                    <span class="bg-success-focus text-success-main px-16 py-2 radius-4 fw-medium text-sm">Basic</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-secondary-light">
+                    <div class="d-flex align-items-center gap-12">
+                      <span class="w-40-px h-40-px radius-4 overflow-hidden rounded-circle">
+                        <img src="assets/images/user-grid/user-grid-img4.png" alt="Avatar"
+                          class="w-100 h-100 object-fit-cover">
+                      </span>
+                      <span class="text-secondary-light">Cody Fisher</span>
+                    </div>
+                  </td>
+                  <td class="text-secondary-light">$$99.00</td>
+                  <td class="text-secondary-light">Feb 10, 2025</td>
+                  <td class="text-secondary-light">April 10, 2025</td>
+                  <td class="text-secondary-light">3 Month</td>
+                  <td class="text-center">
+                    <span
+                      class="bg-warning-focus text-warning-main px-16 py-2 radius-4 fw-medium text-sm">Standard</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-secondary-light">
+                    <div class="d-flex align-items-center gap-12">
+                      <span class="w-40-px h-40-px radius-4 overflow-hidden rounded-circle">
+                        <img src="assets/images/user-grid/user-grid-img3.png" alt="Avatar"
+                          class="w-100 h-100 object-fit-cover">
+                      </span>
+                      <span class="text-secondary-light">Ronald Richards</span>
+                    </div>
+                  </td>
+                  <td class="text-secondary-light">$499.00</td>
+                  <td class="text-secondary-light">Jan 10, 2025</td>
+                  <td class="text-secondary-light">Jan 10, 2026</td>
+                  <td class="text-secondary-light">1 Year</td>
+                  <td class="text-center">
+                    <span class="bg-info-focus text-info-main px-16 py-2 radius-4 fw-medium text-sm">Premium </span>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-secondary-light">
+                    <div class="d-flex align-items-center gap-12">
+                      <span class="w-40-px h-40-px radius-4 overflow-hidden rounded-circle">
+                        <img src="assets/images/user-grid/user-grid-img2.png" alt="Avatar"
+                          class="w-100 h-100 object-fit-cover">
+                      </span>
+                      <span class="text-secondary-light">Albert Flores</span>
+                    </div>
+                  </td>
+                  <td class="text-secondary-light">$29.00</td>
+                  <td class="text-secondary-light">Jan 10, 2025</td>
+                  <td class="text-secondary-light">Feb 10, 2025</td>
+                  <td class="text-secondary-light">1 Month</td>
+                  <td class="text-center">
+                    <span class="bg-success-focus text-success-main px-16 py-2 radius-4 fw-medium text-sm">Basic</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-secondary-light">
+                    <div class="d-flex align-items-center gap-12">
+                      <span class="w-40-px h-40-px radius-4 overflow-hidden rounded-circle">
+                        <img src="assets/images/user-grid/user-grid-img1.png" alt="Avatar"
+                          class="w-100 h-100 object-fit-cover">
+                      </span>
+                      <span class="text-secondary-light">Cameron Williamson</span>
+                    </div>
+                  </td>
+                  <td class="text-secondary-light">$99.00</td>
+                  <td class="text-secondary-light">Feb 10, 2025</td>
+                  <td class="text-secondary-light">April 10, 2025</td>
+                  <td class="text-secondary-light">3 Month</td>
+                  <td class="text-center">
+                    <span
+                      class="bg-warning-focus text-warning-main px-16 py-2 radius-4 fw-medium text-sm">Standard</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-secondary-light">
+                    <div class="d-flex align-items-center gap-12">
+                      <span class="w-40-px h-40-px radius-4 overflow-hidden rounded-circle">
+                        <img src="assets/images/user-grid/user-grid-img7.png" alt="Avatar"
+                          class="w-100 h-100 object-fit-cover">
+                      </span>
+                      <span class="text-secondary-light">John Doe</span>
+                    </div>
+                  </td>
+                  <td class="text-secondary-light">$99.00</td>
+                  <td class="text-secondary-light">Feb 10, 2025</td>
+                  <td class="text-secondary-light">April 10, 2025</td>
+                  <td class="text-secondary-light">3 Month</td>
+                  <td class="text-center">
+                    <span class="bg-success-focus text-success-main px-16 py-2 radius-4 fw-medium text-sm">Basic</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-secondary-light">
+                    <div class="d-flex align-items-center gap-12">
+                      <span class="w-40-px h-40-px radius-4 overflow-hidden rounded-circle">
+                        <img src="assets/images/user-grid/user-grid-img8.png" alt="Avatar"
+                          class="w-100 h-100 object-fit-cover">
+                      </span>
+                      <span class="text-secondary-light">John Robiul </span>
+                    </div>
+                  </td>
+                  <td class="text-secondary-light">$99.00</td>
+                  <td class="text-secondary-light">Feb 10, 2025</td>
+                  <td class="text-secondary-light">April 10, 2025</td>
+                  <td class="text-secondary-light">3 Month</td>
+                  <td class="text-center">
+                    <span class="bg-success-focus text-success-main px-16 py-2 radius-4 fw-medium text-sm">Basic</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xxl-4 col-md-6">
+      <div class="card radius-8 border-0">
+
+        <div class="card-body">
+          <div class="d-flex align-items-center flex-wrap gap-2 justify-content-between">
+            <h6 class="mb-2 fw-bold text-lg">Countries Status</h6>
+            <div class="">
+              <select class="form-select form-select-sm w-auto bg-base border text-secondary-light radius-8">
+                <option>Yearly</option>
+                <option>Monthly</option>
+                <option>Weekly</option>
+                <option>Today</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <app-world-map></app-world-map>
+
+
+        <div class="card-body p-24 max-h-266-px scroll-sm overflow-y-auto">
+          <div class="">
+
+            <div class="d-flex align-items-center justify-content-between gap-3 mb-3 pb-2">
+              <div class="d-flex align-items-center w-100">
+                <img src="assets/images/flags/flag1.png" alt=""
+                  class="w-40-px h-40-px rounded-circle flex-shrink-0 me-12 overflow-hidden">
+                <div class="flex-grow-1">
+                  <h6 class="text-sm mb-0">USA</h6>
+                  <span class="text-xs text-secondary-light fw-medium">1,240 Users</span>
+                </div>
+              </div>
+              <div class="d-flex align-items-center gap-2 w-100">
+                <div class="w-100 max-w-66 ms-auto">
+                  <div class="progress progress-sm rounded-pill" role="progressbar" aria-label="Success example"
+                    aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar bg-primary-600 rounded-pill" style="width: 80%;"></div>
+                  </div>
+                </div>
+                <span class="text-secondary-light font-xs fw-semibold">80%</span>
+              </div>
+            </div>
+
+            <div class="d-flex align-items-center justify-content-between gap-3 mb-3 pb-2">
+              <div class="d-flex align-items-center w-100">
+                <img src="assets/images/flags/flag2.png" alt=""
+                  class="w-40-px h-40-px rounded-circle flex-shrink-0 me-12 overflow-hidden">
+                <div class="flex-grow-1">
+                  <h6 class="text-sm mb-0">Japan</h6>
+                  <span class="text-xs text-secondary-light fw-medium">1,240 Users</span>
+                </div>
+              </div>
+              <div class="d-flex align-items-center gap-2 w-100">
+                <div class="w-100 max-w-66 ms-auto">
+                  <div class="progress progress-sm rounded-pill" role="progressbar" aria-label="Success example"
+                    aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar bg-orange rounded-pill" style="width: 60%;"></div>
+                  </div>
+                </div>
+                <span class="text-secondary-light font-xs fw-semibold">60%</span>
+              </div>
+            </div>
+
+            <div class="d-flex align-items-center justify-content-between gap-3 mb-3 pb-2">
+              <div class="d-flex align-items-center w-100">
+                <img src="assets/images/flags/flag3.png" alt=""
+                  class="w-40-px h-40-px rounded-circle flex-shrink-0 me-12 overflow-hidden">
+                <div class="flex-grow-1">
+                  <h6 class="text-sm mb-0">France</h6>
+                  <span class="text-xs text-secondary-light fw-medium">1,240 Users</span>
+                </div>
+              </div>
+              <div class="d-flex align-items-center gap-2 w-100">
+                <div class="w-100 max-w-66 ms-auto">
+                  <div class="progress progress-sm rounded-pill" role="progressbar" aria-label="Success example"
+                    aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar bg-yellow rounded-pill" style="width: 49%;"></div>
+                  </div>
+                </div>
+                <span class="text-secondary-light font-xs fw-semibold">49%</span>
+              </div>
+            </div>
+
+            <div class="d-flex align-items-center justify-content-between gap-3">
+              <div class="d-flex align-items-center w-100">
+                <img src="assets/images/flags/flag4.png" alt=""
+                  class="w-40-px h-40-px rounded-circle flex-shrink-0 me-12 overflow-hidden">
+                <div class="flex-grow-1">
+                  <h6 class="text-sm mb-0">Germany</h6>
+                  <span class="text-xs text-secondary-light fw-medium">1,240 Users</span>
+                </div>
+              </div>
+              <div class="d-flex align-items-center gap-2 w-100">
+                <div class="w-100 max-w-66 ms-auto">
+                  <div class="progress progress-sm rounded-pill" role="progressbar" aria-label="Success example"
+                    aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar bg-success-main rounded-pill" style="width: 100%;"></div>
+                  </div>
+                </div>
+                <span class="text-secondary-light font-xs fw-semibold">100%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xxl-4 col-md-6">
+      <div class="shadow-7 radius-12 bg-base h-100 overflow-hidden">
+        <div class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center justify-content-between">
+          <h6 class="text-lg fw-semibold mb-0">Trending Episodes</h6>
+          <select class="form-select form-select-sm w-auto bg-base border text-secondary-light radius-8">
+            <option>Yearly</option>
+            <option>Monthly</option>
+            <option>Weekly</option>
+            <option>Today</option>
+          </select>
+        </div>
+        <div class="card-body p-20 d-flex flex-column gap-12">
+          <div class="d-flex align-items-center justify-content-between gap-3">
+            <div class="d-flex align-items-center">
+              <img src="assets/images/home-fourteen/trending-img1.png" alt=""
+                class="w-40-px h-40-px rounded-circle flex-shrink-0 me-12 overflow-hidden">
+              <div class="flex-grow-1">
+                <h6 class="text-md mb-0 fw-medium">Product Design</h6>
+                <span class="text-sm text-secondary-light fw-medium">Esther Howand</span>
+              </div>
+            </div>
+            <div class="text-end d-flex gap-1 justify-content-end flex-column">
+              <span class="">Durations: <span class="fw-semibold text-primary-light">30:05 mins</span> </span>
+              <span class="">Views: <span class="fw-semibold text-primary-light">512k</span> </span>
+            </div>
+          </div>
+          <div class="d-flex align-items-center justify-content-between gap-3">
+            <div class="d-flex align-items-center">
+              <img src="assets/images/home-fourteen/trending-img2.png" alt=""
+                class="w-40-px h-40-px rounded-circle flex-shrink-0 me-12 overflow-hidden">
+              <div class="flex-grow-1">
+                <h6 class="text-md mb-0 fw-medium">How to Change Your Life</h6>
+                <span class="text-sm text-secondary-light fw-medium">Esther Howand</span>
+              </div>
+            </div>
+            <div class="text-end d-flex gap-1 justify-content-end flex-column">
+              <span class="">Durations: <span class="fw-semibold text-primary-light">30:05 mins</span> </span>
+              <span class="">Views: <span class="fw-semibold text-primary-light">512k</span> </span>
+            </div>
+          </div>
+          <div class="d-flex align-items-center justify-content-between gap-3">
+            <div class="d-flex align-items-center">
+              <img src="assets/images/home-fourteen/trending-img3.png" alt=""
+                class="w-40-px h-40-px rounded-circle flex-shrink-0 me-12 overflow-hidden">
+              <div class="flex-grow-1">
+                <h6 class="text-md mb-0 fw-medium">Logo Design</h6>
+                <span class="text-sm text-secondary-light fw-medium">Esther Howand</span>
+              </div>
+            </div>
+            <div class="text-end d-flex gap-1 justify-content-end flex-column">
+              <span class="">Durations: <span class="fw-semibold text-primary-light">30:05 mins</span> </span>
+              <span class="">Views: <span class="fw-semibold text-primary-light">512k</span> </span>
+            </div>
+          </div>
+          <div class="d-flex align-items-center justify-content-between gap-3">
+            <div class="d-flex align-items-center">
+              <img src="assets/images/home-fourteen/trending-img3.png" alt=""
+                class="w-40-px h-40-px rounded-circle flex-shrink-0 me-12 overflow-hidden">
+              <div class="flex-grow-1">
+                <h6 class="text-md mb-0 fw-medium">Good Health</h6>
+                <span class="text-sm text-secondary-light fw-medium">Esther Howand</span>
+              </div>
+            </div>
+            <div class="text-end d-flex gap-1 justify-content-end flex-column">
+              <span class="">Durations: <span class="fw-semibold text-primary-light">30:05 mins</span> </span>
+              <span class="">Views: <span class="fw-semibold text-primary-light">512k</span> </span>
+            </div>
+          </div>
+          <div class="d-flex align-items-center justify-content-between gap-3">
+            <div class="d-flex align-items-center">
+              <img src="assets/images/home-fourteen/trending-img4.png" alt=""
+                class="w-40-px h-40-px rounded-circle flex-shrink-0 me-12 overflow-hidden">
+              <div class="flex-grow-1">
+                <h6 class="text-md mb-0 fw-medium">Episodes Name</h6>
+                <span class="text-sm text-secondary-light fw-medium">Esther Howand</span>
+              </div>
+            </div>
+            <div class="text-end d-flex gap-1 justify-content-end flex-column">
+              <span class="">Durations: <span class="fw-semibold text-primary-light">30:05 mins</span> </span>
+              <span class="">Views: <span class="fw-semibold text-primary-light">512k</span> </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xxl-4 col-md-6">
+      <div class="shadow-7 radius-12 bg-base h-100 overflow-hidden">
+        <div class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center justify-content-between">
+          <h6 class="text-lg fw-semibold mb-0">Top 5 Categories </h6>
+          <a href="javascript:void(0)" class="text-primary-600 hover-text-primary d-flex align-items-center gap-1">
+            View All
+            <iconify-icon icon="solar:alt-arrow-right-linear" class="icon"></iconify-icon>
+          </a>
+        </div>
+        <div class="card-body p-32 mt-20 d-flex align-items-center justify-content-between gap-24">
+          <div class="">
+            <div id="userOverviewDonutChart" class="margin-16-minus y-value-left apexcharts-tooltip-z-none">
+              <apx-chart #chart [series]="userOverviewDonutChart.series" [chart]="userOverviewDonutChart.chart"
+                [colors]="userOverviewDonutChart.colors" [labels]="userOverviewDonutChart.labels"
+                [legend]="userOverviewDonutChart.legend" [stroke]="userOverviewDonutChart.stroke"
+                [dataLabels]="userOverviewDonutChart.dataLabels" [responsive]="userOverviewDonutChart.responsive">
+              </apx-chart>
+            </div>
+          </div>
+          <ul class="d-flex flex-column gap-12">
+            <li>
+              <span class="text-lg">UI/UX Design: <span class="text-success-600 fw-semibold">50%</span> </span>
+            </li>
+            <li>
+              <span class="text-lg">Entertainment: <span class="text-purple fw-semibold">30%</span> </span>
+            </li>
+            <li>
+              <span class="text-lg">Lifestyle: <span class="text-danger-600 fw-semibold">87%</span> </span>
+            </li>
+            <li>
+              <span class="text-lg">Business: <span class="text-primary-600 fw-semibold">87%</span> </span>
+            </li>
+            <li>
+              <span class="text-lg">Health: <span class="text-warning-600 fw-semibold">40%</span> </span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xxl-4 col-md-6">
+      <div class="shadow-7 radius-12 bg-base h-100 overflow-hidden">
+        <div class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center justify-content-between">
+          <h6 class="text-lg fw-semibold mb-0">Top Podcaster</h6>
+          <a href="javascript:void(0)" class="text-primary-600 hover-text-primary d-flex align-items-center gap-1">
+            View All
+            <iconify-icon icon="solar:alt-arrow-right-linear" class="icon"></iconify-icon>
+          </a>
+        </div>
+        <div class="card-body p-20 d-flex flex-column gap-20">
+          <div class="d-flex align-items-center justify-content-between gap-3">
+            <div class="d-flex align-items-center">
+              <img src="assets/images/homeThirteen/podcaster-img1.png" alt=""
+                class="w-40-px h-40-px rounded-circle flex-shrink-0 me-12 overflow-hidden">
+              <div class="flex-grow-1">
+                <h6 class="text-md mb-0 fw-medium">Digital Assets</h6>
+                <span class="text-sm text-secondary-light fw-medium">UI Design</span>
+              </div>
+            </div>
+            <button type="button" (click)="toggleFollow(0)" [ngClass]="{
+    'bg-success-600 text-white': followStates[0],
+    'bg-success-100 text-success-600': !followStates[0]
+  }" class="follow-btn bg-success-100 rounded px-16 py-6 text-success-600">{{ followStates[0] ? 'Following' : 'Follow'
+              }}</button>
+          </div>
+
+          <div class="d-flex align-items-center justify-content-between gap-3">
+            <div class="d-flex align-items-center">
+              <img src="assets/images/homeThirteen/podcaster-img2.png" alt=""
+                class="w-40-px h-40-px rounded-circle flex-shrink-0 me-12 overflow-hidden">
+              <div class="flex-grow-1">
+                <h6 class="text-md mb-0 fw-medium">Side Project</h6>
+                <span class="text-sm text-secondary-light fw-medium">Business</span>
+              </div>
+            </div>
+            <button type="button" (click)="toggleFollow(1)" [ngClass]="{
+    'bg-success-600 text-white': followStates[1],
+    'bg-success-100 text-success-600': !followStates[1]
+  }" class="follow-btn bg-success-100 rounded px-16 py-6 text-success-600">{{ followStates[1] ? 'Following' : 'Follow'
+              }}</button>
+          </div>
+
+          <div class="d-flex align-items-center justify-content-between gap-3">
+            <div class="d-flex align-items-center">
+              <img src="assets/images/homeThirteen/podcaster-img3.png" alt=""
+                class="w-40-px h-40-px rounded-circle flex-shrink-0 me-12 overflow-hidden">
+              <div class="flex-grow-1">
+                <h6 class="text-md mb-0 fw-medium">Investment</h6>
+                <span class="text-sm text-secondary-light fw-medium">Lifestyle</span>
+              </div>
+            </div>
+            <button type="button" (click)="toggleFollow(2)" [ngClass]="{
+    'bg-success-600 text-white': followStates[2],
+    'bg-success-100 text-success-600': !followStates[2]
+  }" class="follow-btn bg-success-100 rounded px-16 py-6 text-success-600">{{ followStates[2] ? 'Following' : 'Follow'
+              }}</button>
+          </div>
+
+          <div class="d-flex align-items-center justify-content-between gap-3">
+            <div class="d-flex align-items-center">
+              <img src="assets/images/homeThirteen/podcaster-img4.png" alt=""
+                class="w-40-px h-40-px rounded-circle flex-shrink-0 me-12 overflow-hidden">
+              <div class="flex-grow-1">
+                <h6 class="text-md mb-0 fw-medium">Investment</h6>
+                <span class="text-sm text-secondary-light fw-medium">Lifestyle</span>
+              </div>
+            </div>
+            <button type="button" (click)="toggleFollow(3)" [ngClass]="{
+    'bg-success-600 text-white': followStates[3],
+    'bg-success-100 text-success-600': !followStates[3]
+  }" class="follow-btn bg-success-100 rounded px-16 py-6 text-success-600">{{ followStates[3] ? 'Following' : 'Follow'
+              }}</button>
+          </div>
+
+          <div class="d-flex align-items-center justify-content-between gap-3">
+            <div class="d-flex align-items-center">
+              <img src="assets/images/homeThirteen/podcaster-img5.png" alt=""
+                class="w-40-px h-40-px rounded-circle flex-shrink-0 me-12 overflow-hidden">
+              <div class="flex-grow-1">
+                <h6 class="text-md mb-0 fw-medium">Investment</h6>
+                <span class="text-sm text-secondary-light fw-medium">Lifestyle</span>
+              </div>
+            </div>
+            <button type="button" (click)="toggleFollow(4)" [ngClass]="{
+    'bg-success-600 text-white': followStates[4],
+    'bg-success-100 text-success-600': !followStates[4]
+  }" class="follow-btn bg-success-100 rounded px-16 py-6 text-success-600">{{ followStates[4] ? 'Following' : 'Follow'
+              }}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

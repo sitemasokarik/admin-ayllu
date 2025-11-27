@@ -1,0 +1,626 @@
+<div class="dashboard-main-body">
+    <app-breadcrumb [title]="'Cryptocracy'" [main-title]="'Dashboard'"></app-breadcrumb>
+
+
+    <!-- Crypto Home Widgets Start -->
+    <div class="row row-cols-xxxl-5 row-cols-lg-3 row-cols-sm-2 row-cols-1 gy-4">
+        <div class="col" *ngFor="let card of cryptoCards">
+            <div class="card shadow-none border h-100" [ngClass]="card.bgClass">
+                <div class="card-body p-20">
+                    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                        <img [src]="card.img" alt="" class="w-40-px h-40-px rounded-circle flex-shrink-0" />
+                        <div class="flex-grow-1">
+                            <h6 class="text-xl mb-1">{{ card.name }}</h6>
+                            <p class="fw-medium text-secondary-light mb-0">{{ card.symbol }}</p>
+                        </div>
+                    </div>
+                    <div class="mt-3 d-flex flex-wrap justify-content-between align-items-center gap-1">
+                        <div>
+                            <h6 class="mb-8">{{ card.price }}</h6>
+                            <span class="text-md" [ngClass]="card.changeClass">{{ card.change }}</span>
+                        </div>
+                        <div [id]="card.chartId" class="remove-tooltip-title rounded-tooltip-value">
+                            <apx-chart [series]="card.chartOptions.series" [chart]="card.chartOptions.chart"
+                                [xaxis]="card.chartOptions.xaxis" [yaxis]="card.chartOptions.yaxis"
+                                [fill]="card.chartOptions.fill" [grid]="card.chartOptions.grid"
+                                [plotOptions]="card.chartOptions.plotOptions"
+                                [dataLabels]="card.chartOptions.dataLabels" [responsive]="card.chartOptions.responsive"
+                                [stroke]="card.chartOptions.stroke" [colors]="card.chartOptions.colors"
+                                [legend]="card.chartOptions.legend" [labels]="card.chartOptions.labels">
+                            </apx-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Crypto Home Widgets End -->
+
+    <div class="row gy-4 mt-4">
+
+        <!-- Crypto Home Widgets Start -->
+        <div class="col-xxl-8">
+            <div class="row gy-4">
+                <div class="col-12">
+                    <div class="card h-100 radius-8 border-0">
+                        <div class="card-body p-24">
+                            <div class="d-flex align-items-center flex-wrap gap-2 justify-content-between">
+                                <h6 class="mb-2 fw-bold text-lg">Coin Analytics</h6>
+
+                                <div class="d-flex flex-wrap align-items-center gap-4">
+                                    <div class="form-check d-flex align-items-center">
+                                        <input class="form-check-input" type="radio" name="crypto" id="BTC">
+                                        <label class="form-check-label line-height-1 fw-medium text-secondary-light"
+                                            for="BTC"> BTC </label>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center">
+                                        <input class="form-check-input" type="radio" name="crypto" id="ETH">
+                                        <label class="form-check-label line-height-1 fw-medium text-secondary-light"
+                                            for="ETH"> ETH </label>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center">
+                                        <input class="form-check-input" type="radio" name="crypto" id="SOL">
+                                        <label class="form-check-label line-height-1 fw-medium text-secondary-light"
+                                            for="SOL"> SOL </label>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center">
+                                        <input class="form-check-input" type="radio" name="crypto" id="LTE">
+                                        <label class="form-check-label line-height-1 fw-medium text-secondary-light"
+                                            for="LTE"> LTE </label>
+                                    </div>
+                                </div>
+
+                                <select class="form-select form-select-sm w-auto bg-base border text-secondary-light">
+                                    <option>Yearly</option>
+                                    <option>Monthly</option>
+                                    <option>Weekly</option>
+                                    <option>Today</option>
+                                </select>
+                            </div>
+
+                            <div class="d-flex align-items-center gap-2 mt-12">
+                                <h6 class="fw-semibold mb-0">$25,000</h6>
+                                <p class="text-sm mb-0 d-flex align-items-center gap-1">
+                                    Bitcoin (BTC)
+                                    <span
+                                        class="bg-success-focus border border-success px-8 py-2 rounded-pill fw-semibold text-success-main text-sm d-inline-flex align-items-center gap-1">
+                                        10%
+                                        <iconify-icon icon="iconamoon:arrow-up-2-fill" class="icon"></iconify-icon>
+                                    </span>
+                                </p>
+                            </div>
+
+                            <div id="candleStickChart">
+                                <apx-chart [series]="candleStickChart.series" [chart]="candleStickChart.chart"
+                                    [xaxis]="candleStickChart.xaxis" [yaxis]="candleStickChart.yaxis"
+                                    [fill]="candleStickChart.fill" [grid]="candleStickChart.grid"
+                                    [plotOptions]="candleStickChart.plotOptions"
+                                    [dataLabels]="candleStickChart.dataLabels"
+                                    [responsive]="candleStickChart.responsive" [stroke]="candleStickChart.stroke"
+                                    [colors]="candleStickChart.colors" [legend]="candleStickChart.legend"
+                                    [labels]="candleStickChart.labels">
+                                </apx-chart>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xxl-6">
+                    <div class="card h-100 radius-8 border-0">
+                        <div class="card-body p-24">
+                            <div class="d-flex align-items-center flex-wrap gap-2 justify-content-between mb-20">
+                                <h6 class="mb-2 fw-bold text-lg">Coin Analytics</h6>
+                                <div
+                                    class="border radius-4 px-3 py-2 pe-0 d-flex align-items-center gap-1 text-sm text-secondary-light">
+                                    Currency:
+                                    <select
+                                        class="form-select form-select-sm w-auto bg-base border-0 text-primary-light fw-semibold text-sm">
+                                        <option>USD</option>
+                                        <option>BDT</option>
+                                        <option>RUP</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div
+                                class="d-flex flex-wrap align-items-center justify-content-between gap-2 bg-neutral-200 px-8 py-8 radius-4 mb-16">
+                                <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+                                    <img src="assets/images/currency/crypto-img1.png" alt=""
+                                        class="w-36-px h-36-px rounded-circle flex-shrink-0">
+                                    <div class="flex-grow-1">
+                                        <h6 class="text-md mb-0">Bitcoin</h6>
+                                    </div>
+                                </div>
+                                <h6 class="text-md fw-medium mb-0">$55,000.00</h6>
+                                <span class="text-success-main text-md fw-medium">+3.85%</span>
+                                <div id="markerBitcoinChart" class="remove-tooltip-title rounded-tooltip-value">
+                                    <apx-chart [series]="markerBitcoinChart.series" [chart]="markerBitcoinChart.chart"
+                                        [xaxis]="markerBitcoinChart.xaxis" [yaxis]="markerBitcoinChart.yaxis"
+                                        [fill]="markerBitcoinChart.fill" [grid]="markerBitcoinChart.grid"
+                                        [plotOptions]="markerBitcoinChart.plotOptions"
+                                        [dataLabels]="markerBitcoinChart.dataLabels"
+                                        [responsive]="markerBitcoinChart.responsive"
+                                        [stroke]="markerBitcoinChart.stroke" [colors]="markerBitcoinChart.colors"
+                                        [legend]="markerBitcoinChart.legend" [labels]="markerBitcoinChart.labels">
+                                    </apx-chart>
+                                </div>
+                            </div>
+
+                            <div
+                                class="d-flex flex-wrap align-items-center justify-content-between gap-2 bg-neutral-200 px-8 py-8 radius-4 mb-16">
+                                <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+                                    <img src="assets/images/currency/crypto-img2.png" alt=""
+                                        class="w-36-px h-36-px rounded-circle flex-shrink-0">
+                                    <div class="flex-grow-1">
+                                        <h6 class="text-md mb-0">Ethereum</h6>
+                                    </div>
+                                </div>
+                                <h6 class="text-md fw-medium mb-0">$55,000.00</h6>
+                                <span class="text-danger-main text-md fw-medium">-2.85%</span>
+                                <div id="markerEthereumChart" class="remove-tooltip-title rounded-tooltip-value">
+                                    <apx-chart [series]="markerEthereumChart.series" [chart]="markerEthereumChart.chart"
+                                        [xaxis]="markerEthereumChart.xaxis" [yaxis]="markerEthereumChart.yaxis"
+                                        [fill]="markerEthereumChart.fill" [grid]="markerEthereumChart.grid"
+                                        [plotOptions]="markerEthereumChart.plotOptions"
+                                        [dataLabels]="markerEthereumChart.dataLabels"
+                                        [responsive]="markerEthereumChart.responsive"
+                                        [stroke]="markerEthereumChart.stroke" [colors]="markerEthereumChart.colors"
+                                        [legend]="markerEthereumChart.legend" [labels]="markerEthereumChart.labels">
+                                    </apx-chart>
+                                </div>
+                            </div>
+
+                            <div
+                                class="d-flex flex-wrap align-items-center justify-content-between gap-2 bg-neutral-200 px-8 py-8 radius-4 mb-16">
+                                <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+                                    <img src="assets/images/currency/crypto-img3.png" alt=""
+                                        class="w-36-px h-36-px rounded-circle flex-shrink-0">
+                                    <div class="flex-grow-1">
+                                        <h6 class="text-md mb-0">Solana</h6>
+                                    </div>
+                                </div>
+                                <h6 class="text-md fw-medium mb-0">$55,000.00</h6>
+                                <span class="text-success-main text-md fw-medium">+3.85%</span>
+                                <div id="markerSolanaChart" class="remove-tooltip-title rounded-tooltip-value">
+                                    <apx-chart [series]="markerSolanaChart.series" [chart]="markerSolanaChart.chart"
+                                        [xaxis]="markerSolanaChart.xaxis" [yaxis]="markerSolanaChart.yaxis"
+                                        [fill]="markerSolanaChart.fill" [grid]="markerSolanaChart.grid"
+                                        [plotOptions]="markerSolanaChart.plotOptions"
+                                        [dataLabels]="markerSolanaChart.dataLabels"
+                                        [responsive]="markerSolanaChart.responsive" [stroke]="markerSolanaChart.stroke"
+                                        [colors]="markerSolanaChart.colors" [legend]="markerSolanaChart.legend"
+                                        [labels]="markerSolanaChart.labels">
+                                    </apx-chart>
+                                </div>
+                            </div>
+
+                            <div
+                                class="d-flex flex-wrap align-items-center justify-content-between gap-2 bg-neutral-200 px-8 py-8 radius-4 mb-16">
+                                <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+                                    <img src="assets/images/currency/crypto-img4.png" alt=""
+                                        class="w-36-px h-36-px rounded-circle flex-shrink-0">
+                                    <div class="flex-grow-1">
+                                        <h6 class="text-md mb-0">Litecoin</h6>
+                                    </div>
+                                </div>
+                                <h6 class="text-md fw-medium mb-0">$55,000.00</h6>
+                                <span class="text-success-main text-md fw-medium">+3.85%</span>
+                                <div id="markerLitecoinChart" class="remove-tooltip-title rounded-tooltip-value">
+                                    <apx-chart [series]="markerLitecoinChart.series" [chart]="markerLitecoinChart.chart"
+                                        [xaxis]="markerLitecoinChart.xaxis" [yaxis]="markerLitecoinChart.yaxis"
+                                        [fill]="markerLitecoinChart.fill" [grid]="markerLitecoinChart.grid"
+                                        [plotOptions]="markerLitecoinChart.plotOptions"
+                                        [dataLabels]="markerLitecoinChart.dataLabels"
+                                        [responsive]="markerLitecoinChart.responsive"
+                                        [stroke]="markerLitecoinChart.stroke" [colors]="markerLitecoinChart.colors"
+                                        [legend]="markerLitecoinChart.legend" [labels]="markerLitecoinChart.labels">
+                                    </apx-chart>
+                                </div>
+                            </div>
+
+                            <div
+                                class="d-flex flex-wrap align-items-center justify-content-between gap-2 bg-neutral-200 px-8 py-8 radius-4 mb-16">
+                                <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+                                    <img src="assets/images/currency/crypto-img5.png" alt=""
+                                        class="w-36-px h-36-px rounded-circle flex-shrink-0">
+                                    <div class="flex-grow-1">
+                                        <h6 class="text-md mb-0">Dogecoin</h6>
+                                    </div>
+                                </div>
+                                <h6 class="text-md fw-medium mb-0">$15,000.00</h6>
+                                <span class="text-danger-main text-md fw-medium">-2.85%</span>
+                                <div id="markerDogecoinChart" class="remove-tooltip-title rounded-tooltip-value">
+                                    <apx-chart [series]="markerDogecoinChart.series" [chart]="markerDogecoinChart.chart"
+                                        [xaxis]="markerDogecoinChart.xaxis" [yaxis]="markerDogecoinChart.yaxis"
+                                        [fill]="markerDogecoinChart.fill" [grid]="markerDogecoinChart.grid"
+                                        [plotOptions]="markerDogecoinChart.plotOptions"
+                                        [dataLabels]="markerDogecoinChart.dataLabels"
+                                        [responsive]="markerDogecoinChart.responsive"
+                                        [stroke]="markerDogecoinChart.stroke" [colors]="markerDogecoinChart.colors"
+                                        [legend]="markerDogecoinChart.legend" [labels]="markerDogecoinChart.labels">
+                                    </apx-chart>
+                                </div>
+                            </div>
+
+                            <div
+                                class="d-flex flex-wrap align-items-center justify-content-between gap-2 bg-neutral-200 px-8 py-4 radius-4">
+                                <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+                                    <img src="assets/images/currency/crypto-img1.png" alt=""
+                                        class="w-36-px h-36-px rounded-circle flex-shrink-0">
+                                    <div class="flex-grow-1">
+                                        <h6 class="text-md mb-0">Crypto</h6>
+                                    </div>
+                                </div>
+                                <h6 class="text-md fw-medium mb-0">$15,000.00</h6>
+                                <span class="text-danger-main text-md fw-medium">-2.85%</span>
+                                <div id="markerCryptoChart" class="remove-tooltip-title rounded-tooltip-value">
+                                    <apx-chart [series]="markerCryptoChart.series" [chart]="markerCryptoChart.chart"
+                                        [xaxis]="markerCryptoChart.xaxis" [yaxis]="markerCryptoChart.yaxis"
+                                        [fill]="markerCryptoChart.fill" [grid]="markerCryptoChart.grid"
+                                        [plotOptions]="markerCryptoChart.plotOptions"
+                                        [dataLabels]="markerCryptoChart.dataLabels"
+                                        [responsive]="markerCryptoChart.responsive" [stroke]="markerCryptoChart.stroke"
+                                        [colors]="markerCryptoChart.colors" [legend]="markerCryptoChart.legend"
+                                        [labels]="markerCryptoChart.labels">
+                                    </apx-chart>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xxl-6">
+                    <div class="card h-100 radius-8 border-0">
+                        <div class="card-body p-24">
+                            <div class="d-flex align-items-center flex-wrap gap-2 justify-content-between mb-20">
+                                <h6 class="mb-2 fw-bold text-lg">My Orders</h6>
+                                <div class="">
+                                    <select
+                                        class="form-select form-select-sm w-auto bg-base border text-secondary-light">
+                                        <option>Today</option>
+                                        <option>Monthly</option>
+                                        <option>Weekly</option>
+                                        <option>Today</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="table-responsive scroll-sm">
+                                <table class="table bordered-table mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Rate</th>
+                                            <th scope="col">Amount ETH</th>
+                                            <th scope="col">Price PLN</th>
+                                            <th scope="col" class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let rate of rates; let i = index">
+                                            <td>
+                                                <span
+                                                    [ngClass]="rate.positive ? 'text-success-main' : 'text-danger-main'">
+                                                    {{ rate.rate }}
+                                                </span>
+                                            </td>
+                                            <td>{{ rate.amountEth }}</td>
+                                            <td>{{ rate.pricePln }}</td>
+                                            <td class="text-center line-height-1">
+                                                <button type="button" class="text-lg text-danger-main remove-btn"
+                                                    (click)="removeRate(i)">
+                                                    <iconify-icon icon="radix-icons:cross-2"
+                                                        class="icon"></iconify-icon>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xxl-12">
+                    <div class="card h-100">
+                        <div class="card-body p-24">
+                            <div class="d-flex align-items-center flex-wrap gap-2 justify-content-between mb-20">
+                                <h6 class="mb-2 fw-bold text-lg mb-0">Recent Transaction</h6>
+                                <a href="javascript:void(0)"
+                                    class="text-primary-600 hover-text-primary d-flex align-items-center gap-1">
+                                    View All
+                                    <iconify-icon icon="solar:alt-arrow-right-linear" class="icon"></iconify-icon>
+                                </a>
+                            </div>
+                            <div class="table-responsive scroll-sm">
+                                <table class="table bordered-table mb-0 xsm-table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Ast</th>
+                                            <th scope="col">Date & Time</th>
+                                            <th scope="col">Amount</th>
+                                            <th scope="col">Address</th>
+                                            <th scope="col" class="text-center">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let tx of transactions">
+                                            <td>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <span
+                                                        [ngClass]="tx.iconClass + ' w-32-px h-32-px d-flex align-items-center justify-content-center rounded-circle text-xl'">
+                                                        <iconify-icon [icon]="tx.icon" class="icon"></iconify-icon>
+                                                    </span>
+                                                    <span class="fw-medium">{{ tx.type }}</span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="text-primary-light d-block fw-medium">{{ tx.time }}</span>
+                                                <span class="text-secondary-light text-sm">{{ tx.date }}</span>
+                                            </td>
+                                            <td>
+                                                <span class="text-primary-light d-block fw-medium">{{ tx.amount
+                                                    }}</span>
+                                                <span class="text-secondary-light text-sm">{{ tx.price }}</span>
+                                            </td>
+                                            <td>{{ tx.address }}</td>
+                                            <td class="text-center">
+                                                <span
+                                                    [ngClass]="tx.statusClass + ' px-16 py-4 radius-4 fw-medium text-sm'">{{
+                                                    tx.statusText }}</span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Crypto Home Widgets End -->
+
+        <div class="col-xxl-4">
+            <div class="row gy-4">
+                <div class="col-xxl-12 col-lg-6">
+                    <div class="card h-100 radius-8 border-0">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center flex-wrap gap-2 justify-content-between mb-20">
+                                <h6 class="mb-2 fw-bold text-lg">My Cards</h6>
+                                <a href=""
+                                    class="btn btn-outline-primary d-inline-flex align-items-center gap-2 text-sm btn-sm px-8 py-6">
+                                    <iconify-icon icon="ph:plus-circle" class="icon text-xl"></iconify-icon> Button
+                                </a>
+                            </div>
+                            <div class="position-relative">
+                                <div class="swiper cardSlider" #cardSlider>
+                                    <div class="swiper-wrapper">
+                                        <div class="swiper-slide" *ngFor="let card of cards">
+                                            <div class="p-20 h-240-px radius-8 overflow-hidden position-relative z-1">
+                                                <img src="assets/images/card/card-bg.png" alt=""
+                                                    class="position-absolute start-0 top-0 w-100 h-100 object-fit-cover z-n1">
+                                                <div class="d-flex flex-column justify-content-between h-100">
+                                                    <div
+                                                        class="d-flex align-items-center justify-content-between flex-wrap">
+                                                        <h6 class="text-white mb-0">{{card.title}}</h6>
+                                                        <img [src]="card.logo" alt="Card Logo">
+                                                    </div>
+                                                    <div>
+                                                        <span
+                                                            class="text-white text-xs fw-normal text-opacity-75">Credit
+                                                            Card Number</span>
+                                                        <h6 class="text-white text-xl fw-semibold mt-1 mb-0">
+                                                            {{card.number}}</h6>
+                                                    </div>
+                                                    <div class="d-flex align-items-center justify-content-between">
+                                                        <div>
+                                                            <span
+                                                                class="text-white text-xs fw-normal text-opacity-75">Name</span>
+                                                            <h6 class="text-white text-xl fw-semibold mb-0">
+                                                                {{card.name}}</h6>
+                                                        </div>
+                                                        <div>
+                                                            <span
+                                                                class="text-white text-xs fw-normal text-opacity-75">Exp.
+                                                                Date</span>
+                                                            <h6 class="text-white text-xl fw-semibold mb-0">
+                                                                {{card.expiry}}</h6>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Add pagination -->
+                                    <div class="swiper-pagination position-relative line-height-1 mt-3"></div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xxl-12 col-lg-6">
+                    <div class="card h-100">
+                        <div class="card-body p-24">
+                            <span class="mb-4 text-sm text-secondary-light">Total Balance</span>
+                            <h6 class="mb-4">$320,320.00</h6>
+
+                            <ul class="nav nav-pills pill-tab mb-24 mt-28 border input-form-light p-1 radius-8 bg-neutral-50"
+                                id="pills-tab" role="tablist">
+                                <li class="nav-item w-50" role="presentation">
+                                    <button class="nav-link px-12 py-10 text-md w-100 text-center radius-8 active"
+                                        id="pills-Buy-tab" data-bs-toggle="pill" data-bs-target="#pills-Buy"
+                                        type="button" role="tab" aria-controls="pills-Buy"
+                                        aria-selected="true">Buy</button>
+                                </li>
+                                <li class="nav-item w-50" role="presentation">
+                                    <button class="nav-link px-12 py-10 text-md w-100 text-center radius-8"
+                                        id="pills-Sell-tab" data-bs-toggle="pill" data-bs-target="#pills-Sell"
+                                        type="button" role="tab" aria-controls="pills-Sell"
+                                        aria-selected="false">Sell</button>
+                                </li>
+                            </ul>
+                            <div class="tab-content" id="pills-tabContent">
+                                <div class="tab-pane fade show active" id="pills-Buy" role="tabpanel"
+                                    aria-labelledby="pills-Buy-tab" tabindex="0">
+                                    <div class="mb-20">
+                                        <label for="estimatedValue"
+                                            class="fw-semibold mb-8 text-primary-light">Estimated Purchase Value</label>
+                                        <div class="input-group input-group-lg border input-form-light radius-8">
+                                            <input type="text" class="form-control bg-base border-0 radius-8"
+                                                id="estimatedValue" placeholder="Estimated Value">
+                                            <div
+                                                class="input-group-text bg-neutral-50 border-0 fw-normal text-md ps-1 pe-1">
+                                                <select
+                                                    class="form-select form-select-sm w-auto bg-transparent fw-bolder border-0 text-secondary-light">
+                                                    <option class="bg-base">BTC</option>
+                                                    <option class="bg-base">LTC</option>
+                                                    <option class="bg-base">ETC</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-20">
+                                        <label for="tradeValue" class="fw-semibold mb-8 text-primary-light">Trade
+                                            Value</label>
+                                        <div class="input-group input-group-lg border input-form-light radius-8">
+                                            <input type="text" class="form-control bg-base border-0 radius-8"
+                                                id="tradeValue" placeholder="Trade Value">
+                                            <div
+                                                class="input-group-text bg-neutral-50 border-0 fw-normal text-md ps-1 pe-1">
+                                                <select
+                                                    class="form-select form-select-sm w-auto bg-transparent fw-bolder border-0 text-secondary-light">
+                                                    <option class="bg-base">USD</option>
+                                                    <option class="bg-base">BTC</option>
+                                                    <option class="bg-base">LTC</option>
+                                                    <option class="bg-base">ETC</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-20">
+                                        <label class="fw-semibold mb-8 text-primary-light">Trade Value</label>
+                                        <textarea class="form-control bg-base h-80-px radius-8"
+                                            placeholder="Enter Address"></textarea>
+                                    </div>
+                                    <div class="mb-24">
+                                        <span class="mb-4 text-sm text-secondary-light">Total Balance</span>
+                                        <h6 class="mb-4 fw-semibold text-xl text-warning-main">$320,320.00</h6>
+                                    </div>
+                                    <a href="" class="btn btn-primary text-sm btn-sm px-8 py-12 w-100 radius-8">
+                                        Transfer Now</a>
+                                </div>
+                                <div class="tab-pane fade" id="pills-Sell" role="tabpanel"
+                                    aria-labelledby="pills-Sell-tab" tabindex="0">
+                                    <div class="mb-20">
+                                        <label for="estimatedValueSell"
+                                            class="fw-semibold mb-8 text-primary-light">Estimated Purchase Value</label>
+                                        <div class="input-group input-group-lg border input-form-light radius-8">
+                                            <input type="text" class="form-control border-0 radius-8"
+                                                id="estimatedValueSell" placeholder="Estimated Value">
+                                            <div
+                                                class="input-group-text bg-neutral-50 border-0 fw-normal text-md ps-1 pe-1">
+                                                <select
+                                                    class="form-select form-select-sm w-auto bg-transparent fw-bolder border-0 text-secondary-light">
+                                                    <option>BTC</option>
+                                                    <option>LTC</option>
+                                                    <option>USD</option>
+                                                    <option>ETC</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-20">
+                                        <label for="tradeValueSell" class="fw-semibold mb-8 text-primary-light">Trade
+                                            Value</label>
+                                        <div class="input-group input-group-lg border input-form-light radius-8">
+                                            <input type="text" class="form-control border-0 radius-8"
+                                                id="tradeValueSell" placeholder="Trade Value">
+                                            <div
+                                                class="input-group-text bg-neutral-50 border-0 fw-normal text-md ps-1 pe-1">
+                                                <select
+                                                    class="form-select form-select-sm w-auto bg-transparent fw-bolder border-0 text-secondary-light">
+                                                    <option>BTC</option>
+                                                    <option>LTC</option>
+                                                    <option>USD</option>
+                                                    <option>ETC</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-20">
+                                        <label class="fw-semibold mb-8">Trade Value</label>
+                                        <textarea class="form-control h-80-px radius-8"
+                                            placeholder="Enter Address"></textarea>
+                                    </div>
+                                    <div class="mb-24">
+                                        <span class="mb-4 text-sm text-secondary-light">Total Balance</span>
+                                        <h6 class="mb-4 fw-semibold text-xl text-warning-main">$320,320.00</h6>
+                                    </div>
+                                    <a href="" class="btn btn-primary text-sm btn-sm px-8 py-12 w-100 radius-8">
+                                        Transfer Now</a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xxl-12 col-lg-6">
+                    <div class="card h-100 radius-8 border-0">
+                        <div class="card-body p-24">
+                            <div class="d-flex align-items-center flex-wrap gap-2 justify-content-between">
+                                <h6 class="mb-2 fw-bold text-lg">User Activates</h6>
+                                <div class="">
+                                    <select
+                                        class="form-select form-select-sm w-auto bg-base border text-secondary-light">
+                                        <option>This Week</option>
+                                        <option>This Month</option>
+                                        <option>This Year</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="position-relative">
+                                <span
+                                    class="w-80-px h-80-px bg-base shadow text-primary-light fw-semibold text-xl d-flex justify-content-center align-items-center rounded-circle position-absolute end-0 top-0 z-1">+30%</span>
+                                <div id="statisticsDonutChart"
+                                    class="mt-36 flex-grow-1 apexcharts-tooltip-z-none title-style circle-none">
+                                    <apx-chart [series]="statisticsDonutChart.series"
+                                        [chart]="statisticsDonutChart.chart" [labels]="statisticsDonutChart.labels"
+                                        [responsive]="statisticsDonutChart.responsive"
+                                        [legend]="statisticsDonutChart.legend"
+                                        [dataLabels]="statisticsDonutChart.dataLabels"
+                                        [plotOptions]="statisticsDonutChart.plotOptions"
+                                        [fill]="statisticsDonutChart.fill" [stroke]="statisticsDonutChart.stroke"
+                                        [colors]="statisticsDonutChart.colors" [grid]="statisticsDonutChart.grid"
+                                        [tooltip]="statisticsDonutChart.tooltip">
+                                        >
+                                    </apx-chart>
+                                </div>
+                                <span
+                                    class="w-80-px h-80-px bg-base shadow text-primary-light fw-semibold text-xl d-flex justify-content-center align-items-center rounded-circle position-absolute start-0 bottom-0 z-1">+25%</span>
+                            </div>
+
+                            <ul class="d-flex flex-wrap align-items-center justify-content-between mt-3 gap-3">
+                                <li class="d-flex align-items-center gap-2">
+                                    <span class="w-12-px h-12-px radius-2 bg-primary-600"></span>
+                                    <span class="text-secondary-light text-sm fw-normal">Visits By Day:
+                                        <span class="text-primary-light fw-bold">20,000</span>
+                                    </span>
+                                </li>
+                                <li class="d-flex align-items-center gap-2">
+                                    <span class="w-12-px h-12-px radius-2 bg-yellow"></span>
+                                    <span class="text-secondary-light text-sm fw-normal">Referral Join:
+                                        <span class="text-primary-light fw-bold">25,000</span>
+                                    </span>
+                                </li>
+                            </ul>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

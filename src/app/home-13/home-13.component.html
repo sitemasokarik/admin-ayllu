@@ -1,0 +1,390 @@
+<div class="dashboard-main-body">
+
+  <app-breadcrumb [title]="'Help Desk'" [main-title]="'Help Desk'"></app-breadcrumb>
+
+  <div class="row gy-4">
+    <div class="col-lg-8">
+      <div class="shadow-7 p-20 radius-12 bg-base z-1 gradient-bg-chart position-relative h-100">
+        <div class="d-flex align-items-center flex-wrap gap-2 justify-content-between mb-3">
+          <h6 class="mb-2 fw-bold text-lg">Task Summary</h6>
+        </div>
+        <div class="row gy-4">
+          <div class="col-xxxl-3 col-sm-6">
+            <div class="radius-12 overflow-hidden p-20 position-relative z-1 bg-gradient-custom-1">
+              <img src="assets/images/homeThirteen/shape/moon-shape-border.png" alt="Shape"
+                class="position-absolute start-0 bottom-0 mb-10 z-n1">
+              <span class="d-block text-base mb-24">New Resolved</span>
+              <div class="d-flex align-items-center justify-content-between gap-3">
+                <h5 class="text-base">2.5k</h5>
+                <span class="opacity-25">
+                  <img src="assets/images/homeThirteen/icon/task-summary-icon1.svg" alt="Icon" class="">
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="col-xxxl-3 col-sm-6">
+            <div class="radius-12 overflow-hidden p-20 position-relative z-1 bg-gradient-custom-2">
+              <img src="assets/images/homeThirteen/shape/moon-shape-border.png" alt="Shape"
+                class="position-absolute start-0 bottom-0 mb-10 z-n1">
+              <span class="d-block text-base mb-24">Tickets In Progress</span>
+              <div class="d-flex align-items-center justify-content-between gap-3">
+                <h5 class="text-base">2.5k</h5>
+                <span class="opacity-25">
+                  <img src="assets/images/homeThirteen/icon/task-summary-icon2.svg" alt="Icon" class="">
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="col-xxxl-3 col-sm-6">
+            <div class="radius-12 overflow-hidden p-20 position-relative z-1 bg-gradient-custom-3">
+              <img src="assets/images/homeThirteen/shape/moon-shape-border.png" alt="Shape"
+                class="position-absolute start-0 bottom-0 mb-10 z-n1">
+              <span class="d-block text-base mb-24">Tickets Due</span>
+              <div class="d-flex align-items-center justify-content-between gap-3">
+                <h5 class="text-base">2.5k</h5>
+                <span class="opacity-25">
+                  <img src="assets/images/homeThirteen/icon/task-summary-icon3.svg" alt="Icon" class="">
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="col-xxxl-3 col-sm-6">
+            <div class="radius-12 overflow-hidden p-20 position-relative z-1 bg-gradient-custom-4">
+              <img src="assets/images/homeThirteen/shape/moon-shape-border.png" alt="Shape"
+                class="position-absolute start-0 bottom-0 mb-10 z-n1">
+              <span class="d-block text-base mb-24">Tickets Resolved</span>
+              <div class="d-flex align-items-center justify-content-between gap-3">
+                <h5 class="text-base">2.5k</h5>
+                <span class="opacity-25">
+                  <img src="assets/images/homeThirteen/icon/task-summary-icon4.svg" alt="Icon" class="">
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-20 d-flex align-items-center justify-content-between gap-4 flex-wrap">
+          <div class="">
+            <span class="text-secondary-light">On Time Completion Rate</span>
+            <div class="d-flex align-items-center gap-3 mt-8">
+              <h5 class="mb-0">98%</h5>
+              <div class="d-flex align-items-center gap-1 text-success-600 fw-semibold">
+                <span class="line-height-1 d-flex"><i class="ri-arrow-right-up-line"></i></span>
+                <span class="">2.73%</span>
+              </div>
+            </div>
+          </div>
+          <div class="">
+            <div id="enrollmentChart" class="apexcharts-tooltip-style-1">
+              <apx-chart #chart [series]="enrollmentChart.series" [chart]="enrollmentChart.chart"
+                [stroke]="enrollmentChart.stroke" [grid]="enrollmentChart.grid" [fill]="enrollmentChart.fill"
+                [markers]="enrollmentChart.markers" [xaxis]="enrollmentChart.xaxis" [yaxis]="enrollmentChart.yaxis"
+                [tooltip]="enrollmentChart.tooltip" [legend]="enrollmentChart.legend" [colors]="enrollmentChart.colors">
+              </apx-chart>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="shadow-7 p-20 radius-12 bg-base h-100">
+        <div class="d-flex align-items-center flex-wrap gap-2 justify-content-between">
+          <h6 class="mb-2 fw-bold text-lg">Ticket Priority</h6>
+        </div>
+        <div class="position-relative">
+          <div id="statisticBarChart" class="text-style">
+            <apx-chart [series]="statisticBarChart.series" [chart]="statisticBarChart.chart"
+              [xaxis]="statisticBarChart.xaxis" [plotOptions]="statisticBarChart.plotOptions"
+              [dataLabels]="statisticBarChart.dataLabels" [grid]="statisticBarChart.grid"
+              [legend]="statisticBarChart.legend" [fill]="statisticBarChart.fill" [colors]="statisticBarChart.colors">
+            </apx-chart>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="shadow-7 p-0 radius-12 bg-base overflow-hidden h-100">
+        <div
+          class="d-flex align-items-center flex-wrap gap-2 justify-content-between py-12 px-20 border-bottom border-neutral-200">
+          <h6 class="mb-0 fw-bold text-lg">Ticket Status</h6>
+          <div class="">
+            <select class="form-select form-select-sm w-auto bg-base border text-secondary-light radius-8">
+              <option>Yearly</option>
+              <option>Monthly</option>
+              <option>Weekly</option>
+              <option>Today</option>
+            </select>
+          </div>
+        </div>
+        <div class="card-body p-20">
+          <div id="multipleSeriesChart"
+            class="apexcharts-tooltip-z-none square-marker check-marker series-gap-24 d-flex justify-content-center">
+            <apx-chart [series]="multipleSeriesChart.series" [chart]="multipleSeriesChart.chart"
+              [labels]="multipleSeriesChart.labels" [colors]="multipleSeriesChart.colors"
+              [stroke]="multipleSeriesChart.stroke" [fill]="multipleSeriesChart.fill"
+              [legend]="multipleSeriesChart.legend" [responsive]="multipleSeriesChart.responsive"></apx-chart>
+          </div>
+
+          <div class="d-flex align-items-center gap-3 text-sm justify-content-center">
+            <span class="text-secondary-light fw-medium">Pending: <span class="fw-semibold text-warning-600">32</span>
+            </span>
+            <span class="text-secondary-light fw-medium">Hold: <span class="fw-semibold text-purple">10</span> </span>
+            <span class="text-secondary-light fw-medium">Complete: <span class="fw-semibold text-success-600">25</span>
+            </span>
+            <span class="text-secondary-light fw-medium">Cancelled: <span class="fw-semibold text-danger-600">28</span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-8">
+      <div class="shadow-7 p-0 radius-12 bg-base h-100 overflow-hidden">
+        <div
+          class="d-flex align-items-center flex-wrap gap-2 justify-content-between py-12 px-20 border-bottom border-neutral-200">
+          <h6 class="mb-0 fw-bold text-lg">Pending Vs Solved Tickets</h6>
+          <div class="">
+            <select class="form-select form-select-sm w-auto bg-base border text-secondary-light radius-8">
+              <option>Yearly</option>
+              <option>Monthly</option>
+              <option>Weekly</option>
+              <option>Today</option>
+            </select>
+          </div>
+        </div>
+        <div class="card-body p-20">
+          <ul class="d-flex flex-wrap align-items-center justify-content-center my-3 gap-3">
+            <li class="d-flex align-items-center gap-2">
+              <span class="w-12-px h-8-px rounded-pill bg-warning-600"></span>
+              <div class="d-flex align-items-center gap-1">
+                <span class="text-secondary-light text-sm fw-semibold">Pending: </span>
+                <h6 class="text-primary-light fw-bold">505</h6>
+              </div>
+            </li>
+            <li class="d-flex align-items-center gap-2">
+              <span class="w-12-px h-8-px rounded-pill bg-success-600"></span>
+              <div class="d-flex align-items-center gap-1">
+                <span class="text-secondary-light text-sm fw-semibold">Solved:</span>
+                <h6 class="text-primary-light fw-bold"> 700</h6>
+              </div>
+            </li>
+          </ul>
+          <div id="pendingSolvedTicket" class="apexcharts-tooltip-style-1">
+            <apx-chart [series]="pendingSolvedTicket.series" [chart]="pendingSolvedTicket.chart"
+              [xaxis]="pendingSolvedTicket.xaxis" [stroke]="pendingSolvedTicket.stroke"
+              [grid]="pendingSolvedTicket.grid" [fill]="pendingSolvedTicket.fill"
+              [markers]="pendingSolvedTicket.markers" [dataLabels]="pendingSolvedTicket.dataLabels"
+              [tooltip]="pendingSolvedTicket.tooltip" [colors]="pendingSolvedTicket.colors"
+              [legend]="pendingSolvedTicket.legend"></apx-chart>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-8">
+      <div class="shadow-7 radius-12 bg-base h-100 overflow-hidden">
+        <div class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center justify-content-between">
+          <h6 class="text-lg fw-semibold mb-0">To Do List</h6>
+          <a href="javascript:void(0)" class="text-primary-600 hover-text-primary d-flex align-items-center gap-1">
+            View All
+            <iconify-icon icon="solar:alt-arrow-right-linear" class="icon"></iconify-icon>
+          </a>
+        </div>
+        <div class="card-body p-0">
+  <div class="table-responsive scroll-sm">
+    <table class="table bordered-table table-py-8 mb-0 rounded-0 border-0">
+      <thead>
+        <tr>
+          <th scope="col" class="rounded-0">
+            <div class="d-flex align-items-center gap-10">
+              <div class="form-check style-check d-flex align-items-center">
+                <input class="form-check-input radius-4 border border-neutral-300 input-form-dark"
+                  type="checkbox" name="checkbox" id="selectAll" (change)="toggleAll($event)">
+              </div>
+              ID
+            </div>
+          </th>
+          <th scope="col" class="rounded-0">Task Name</th>
+          <th scope="col" class="rounded-0">Assigned To</th>
+          <th scope="col" class="rounded-0">Due Date</th>
+          <th scope="col" class="rounded-0">Priority</th>
+          <th scope="col" class="rounded-0">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let task of tasks">
+          <td class="text-secondary-light">
+            <div class="d-flex align-items-center gap-10">
+              <div class="form-check style-check d-flex align-items-center">
+                <input class="form-check-input radius-4 border border-neutral-300 input-form-dark"
+                  type="checkbox" >
+              </div>
+              {{ task.id }}
+            </div>
+          </td>
+          <td class="text-secondary-light">{{ task.name }}</td>
+          <td class="text-secondary-light">
+            <div class="d-flex align-items-center">
+              <ng-container *ngFor="let img of task.assignedImages; let i = index">
+                <span class="w-36-px h-36-px border border-white rounded-circle shadow-8" [ngClass]="{ 'ms--10px': i > 0 }">
+                  <img [src]="img" alt="Image" class="w-100 h-100 object-fit-cover">
+                </span>
+              </ng-container>
+              <label class="w-36-px h-36-px border border-white rounded-circle shadow-8 ms--10px d-inline-flex justify-content-center align-items-center bg-primary-600 text-white">
+                <i class="ri-add-fill"></i>
+                <input type="file" hidden>
+              </label>
+            </div>
+          </td>
+          <td class="text-secondary-light">{{ task.dueDate }}</td>
+          <td class="text-secondary-light">{{ task.priority }}</td>
+          <td class="text-center">
+            <span class="px-16 py-2 radius-4 fw-medium text-sm"
+              [ngClass]="{
+                'bg-success-focus text-success-main': task.status === 'Basic',
+                'bg-warning-focus text-warning-main': task.status === 'Standard',
+                'bg-info-focus text-info-main': task.status === 'Premium'
+              }">
+              {{ task.status }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="shadow-7 radius-12 bg-base h-100 overflow-hidden">
+        <div class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center justify-content-between">
+          <h6 class="text-lg fw-semibold mb-0">Top Podcaster</h6>
+          <a href="javascript:void(0)" class="text-primary-600 hover-text-primary d-flex align-items-center gap-1">
+            View All
+            <iconify-icon icon="solar:alt-arrow-right-linear" class="icon"></iconify-icon>
+          </a>
+        </div>
+        <div class="card-body p-20 d-flex flex-column gap-20">
+          <div *ngFor="let podcaster of podcasters" class="d-flex align-items-center justify-content-between gap-3">
+            <div class="d-flex align-items-center">
+              <img [src]="podcaster.image" alt=""
+                class="w-40-px h-40-px rounded-circle flex-shrink-0 me-12 overflow-hidden">
+              <div class="flex-grow-1">
+                <h6 class="text-md mb-0 fw-medium">{{ podcaster.title }}</h6>
+                <span class="text-sm text-secondary-light fw-medium">{{ podcaster.category }}</span>
+              </div>
+            </div>
+            <div class="d-flex align-items-center gap-8">
+              <div class="d-flex align-items-center gap-1">
+                <ng-container *ngFor="let star of [1,2,3,4,5]; let i = index">
+                  <span [class.text-warning-600]="podcaster.rating >= star"
+                    [class.text-neutral-300]="podcaster.rating < star" class="text-md d-flex line-height-1">
+                    <i class="ri-star-fill"></i>
+                  </span>
+                </ng-container>
+              </div>
+              <span
+                class="text-primary-light text-sm d-block text-end fw-semibold">{{ podcaster.rating.toFixed(2) }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-8">
+      <div class="shadow-7 radius-12 bg-base h-100 overflow-hidden">
+        <div class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center justify-content-between">
+          <h6 class="text-lg fw-semibold mb-0">Performance of Agents</h6>
+          <a href="javascript:void(0)" class="text-primary-600 hover-text-primary d-flex align-items-center gap-1">
+            View All
+            <iconify-icon icon="solar:alt-arrow-right-linear" class="icon"></iconify-icon>
+          </a>
+        </div>
+
+        <div class="card-body p-0">
+          <div class="table-responsive scroll-sm">
+            <table class="table bordered-table table-py-8 mb-0 rounded-0 border-0">
+              <thead>
+                <tr>
+                  <th>Agent Name</th>
+                  <th>ID Number</th>
+                  <th>Total Tickets</th>
+                  <th>Open Tickets</th>
+                  <th>Resolved Ticket</th>
+                  <th>Satisfaction Rate</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let agent of agents">
+                  <td class="text-secondary-light">
+                    <div class="d-flex align-items-center gap-12">
+                      <span class="w-40-px h-40-px radius-4 overflow-hidden rounded-circle">
+                        <img [src]="agent.avatar" alt="Avatar" class="w-100 h-100 object-fit-cover" />
+                      </span>
+                      <span class="text-secondary-light">{{ agent.name }}</span>
+                    </div>
+                  </td>
+                  <td class="text-secondary-light">{{ agent.id }}</td>
+                  <td class="text-secondary-light">{{ agent.totalTickets }}</td>
+                  <td class="text-secondary-light">{{ agent.openTickets }}</td>
+                  <td class="text-secondary-light">{{ agent.resolvedTickets }}</td>
+                  <td>
+                    <div class="max-w-112 mx-auto">
+                      <div class="w-100">
+                        <div class="progress progress-sm rounded-pill" role="progressbar" aria-label="Success example"
+                          [attr.aria-valuenow]="agent.satisfaction" aria-valuemin="0" aria-valuemax="100">
+                          <div class="progress-bar rounded-pill" [ngClass]="agent.progressColor"
+                            [style.width.%]="agent.satisfaction"></div>
+                        </div>
+                      </div>
+                      <span class="mt-8 text-black text-sm fw-medium">{{ agent.satisfaction }}%</span>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="shadow-7 p-0 radius-12 bg-base overflow-hidden">
+        <div
+          class="d-flex align-items-center flex-wrap gap-2 justify-content-between py-12 px-20 border-bottom border-neutral-200">
+          <h6 class="mb-0 fw-bold text-lg">Response Time</h6>
+          <div class="">
+            <select class="form-select form-select-sm w-auto bg-base border text-secondary-light radius-8">
+              <option>Yearly</option>
+              <option>Monthly</option>
+              <option>Weekly</option>
+              <option>Today</option>
+            </select>
+          </div>
+        </div>
+        <div class="card-body p-20">
+          <div class="shadow-7 p-24 radius-12 bg-base h-100">
+            <div class="text-center">
+              <div class="position-relative">
+                <div id="semiCircleGaugeTwo" class="big-semi-circle-gauge d-flex justify-content-center">
+                  <apx-chart [series]="semiCircleGaugeTwo.series" [chart]="semiCircleGaugeTwo.chart"
+                    [plotOptions]="semiCircleGaugeTwo.plotOptions" [fill]="semiCircleGaugeTwo.fill"
+                    [stroke]="semiCircleGaugeTwo.stroke"></apx-chart>
+                </div>
+                <span
+                  class="w-90-px h-90-px rounded-circle bg-neutral-50 d-flex justify-content-center align-items-center position-absolute start-50 translate-middle-x top-50">
+                  <img src="assets/images/homeThirteen/icon/time-icon.svg" alt="Icon">
+                </span>
+              </div>
+              <h3 class="mt-40 mb-0">454h</h3>
+              <span class="text-neutral-800 mt-4">1 hrs : 22 mins</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

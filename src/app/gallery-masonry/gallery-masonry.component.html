@@ -1,0 +1,25 @@
+<div class="dashboard-main-body">
+    <app-breadcrumb [title]="'Gallery Masonry'"></app-breadcrumb>
+    <div class="card h-100 p-0 radius-12 overflow-hidden gallery-scale">
+        <div class="card-body p-24">
+          <div class="masonry-wrapper">
+            <div
+              class="hover-scale-img border radius-16 overflow-hidden p-8"
+              *ngFor="let img of repeatedGalleryImages"
+            >
+              <a
+                [href]="img"
+                class="popup-img w-100 h-100 d-flex radius-12 overflow-hidden"
+              >
+                <img
+                  [src]="img"
+                  alt=""
+                  class="hover-scale-img__img w-100 h-100 object-fit-cover"
+                />
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+</div>

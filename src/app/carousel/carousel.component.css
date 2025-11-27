@@ -1,0 +1,51 @@
+
+
+
+.swiper-button-prev,
+.swiper-button-next {
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: 1px solid #d1d5db;
+  /* neutral-400 equivalent */
+  border-radius: 50%;
+  color: #4b5563;
+  /* neutral-600 equivalent */
+  transition: all 0.3s ease;
+  background: #2563eb;
+  color: white;
+  border-color: #2563eb;
+
+  &::after {
+    display: none;
+    /* Hide default Swiper arrows */
+  }
+
+  .menu-icon {
+    font-size: 1.5rem;
+    /* text-2xl equivalent */
+  }
+}
+
+/* Progress bar styles */
+.slider-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  z-index: 10;
+
+  span {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: white;
+
+    &.active {
+      background: #2563eb;
+      /* primary color */
+    }
+  }
+}

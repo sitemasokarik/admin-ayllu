@@ -1,0 +1,566 @@
+<div class="dashboard-main-body nft-page">
+    <app-breadcrumb [title]="'NFT & Gaming'" [main-title]="'Dashboard'"></app-breadcrumb>
+
+
+    <div class="row gy-4">
+        <div class="col-xxl-8">
+            <div class="row gy-4">
+                <div class="col-12">
+                    <div class="nft-promo-card card radius-12 overflow-hidden position-relative z-1">
+                        <img src="assets/images/nft/nft-gradient-bg.png"
+                            class="position-absolute start-0 top-0 w-100 h-100 z-n1" alt="">
+                        <div class="nft-promo-card__inner d-flex align-items-center">
+                            <div class="nft-promo-card__thumb w-100">
+                                <img src="assets/images/nft/nf-card-img.png" alt=""
+                                    class="w-100 h-100 object-fit-cover">
+                            </div>
+                            <div class="flex-grow-1">
+                                <h4 class="mb-16 text-white">Discover The Largest NFTs Marketplace</h4>
+                                <p class="text-white text-md">The largest NFT (Non-Fungible Token) marketplace is
+                                    OpenSea. Established in 2017, OpenSea has grown to become the leading platform for
+                                    buying, selling, and trading digital assets,</p>
+                                <div class="d-flex align-items-center flex-wrap mt-24 gap-16">
+                                    <a href="#"
+                                        class="btn rounded-pill border br-white text-white radius-8 px-32 py-11 hover-bg-white text-hover-neutral-900">Explore</a>
+                                    <a href="#" class="btn rounded-pill btn-primary-600 radius-8 px-28 py-11">Create
+                                        Now</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <h6 class="mb-16">Trending Bids</h6>
+                    <div class="row gy-4">
+                        <div class="col-lg-4 col-sm-6" *ngFor="let widget of widgets">
+                            <div class="card px-24 py-16 shadow-none radius-12 border h-100"
+                                [ngClass]="widget.bgGradientClass">
+                                <div class="card-body p-0">
+                                    <div class="d-flex flex-wrap align-items-center justify-content-between gap-1">
+                                        <div class="d-flex align-items-center flex-wrap gap-16">
+                                            <span
+                                                class="mb-0 w-40-px h-40-px flex-shrink-0 text-white d-flex justify-content-center align-items-center rounded-circle h6 mb-0"
+                                                [ngClass]="widget.iconBgClass">
+                                                <iconify-icon [icon]="widget.icon" class="icon"></iconify-icon>
+                                            </span>
+
+                                            <div class="flex-grow-1">
+                                                <h6 class="fw-semibold mb-0">{{ widget.count }}</h6>
+                                                <span class="fw-medium text-secondary-light text-md">{{ widget.label
+                                                    }}</span>
+                                                <p
+                                                    class="text-sm mb-0 d-flex align-items-center flex-wrap gap-12 mt-12">
+                                                    <span
+                                                        class="px-6 py-2 rounded-2 fw-medium text-sm d-flex align-items-center gap-8"
+                                                        [ngClass]="[widget.percentageBgClass, widget.percentageTextClass]">
+                                                        {{ widget.percentage }}
+                                                        <i [class]="widget.arrowIconClass"></i>
+                                                    </span>
+                                                    {{ widget.period }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-12">
+                    <div class="mb-16 mt-8 d-flex flex-wrap justify-content-between gap-16">
+                        <h6 class="mb-0">Trending NFTs</h6>
+                        <ul class="nav button-tab nav-pills mb-16 gap-12" id="pills-tab-three" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button
+                                    class="nav-link fw-semibold text-secondary-light rounded-pill px-20 py-6 border border-neutral-300 active"
+                                    id="pills-button-all-tab" data-bs-toggle="pill" data-bs-target="#pills-button-all"
+                                    type="button" role="tab" aria-controls="pills-button-all" aria-selected="false"
+                                    tabindex="-1">All</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button
+                                    class="nav-link fw-semibold text-secondary-light rounded-pill px-20 py-6 border border-neutral-300"
+                                    id="pills-button-art-tab" data-bs-toggle="pill" data-bs-target="#pills-button-art"
+                                    type="button" role="tab" aria-controls="pills-button-art" aria-selected="false"
+                                    tabindex="-1">Art</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button
+                                    class="nav-link fw-semibold text-secondary-light rounded-pill px-20 py-6 border border-neutral-300"
+                                    id="pills-button-music-tab" data-bs-toggle="pill"
+                                    data-bs-target="#pills-button-music" type="button" role="tab"
+                                    aria-controls="pills-button-music" aria-selected="false"
+                                    tabindex="-1">Music</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button
+                                    class="nav-link fw-semibold text-secondary-light rounded-pill px-20 py-6 border border-neutral-300"
+                                    id="pills-button-utility-tab" data-bs-toggle="pill"
+                                    data-bs-target="#pills-button-utility" type="button" role="tab"
+                                    aria-controls="pills-button-utility" aria-selected="true">Utility</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button
+                                    class="nav-link fw-semibold text-secondary-light rounded-pill px-20 py-6 border border-neutral-300"
+                                    id="pills-button-fashion-tab" data-bs-toggle="pill"
+                                    data-bs-target="#pills-button-fashion" type="button" role="tab"
+                                    aria-controls="pills-button-fashion" aria-selected="true">Fashion</button>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="tab-content" id="pills-tab-threeContent">
+                        <div class="tab-pane fade show active" id="pills-button-all" role="tabpanel"
+                            aria-labelledby="pills-button-all-tab" tabindex="0">
+                            <div class="row g-3">
+                                <div class="col-xxl-3 col-sm-6 col-xs-6" *ngFor="let nft of nfts">
+                                    <div class="nft-card bg-base radius-16 overflow-hidden">
+                                        <div class="radius-16 overflow-hidden">
+                                            <img [src]="nft.img" alt="" class="w-100 h-100 object-fit-cover" />
+                                        </div>
+                                        <div class="p-10">
+                                            <h6 class="text-md fw-bold text-primary-light">{{ nft.title }}</h6>
+                                            <div class="d-flex align-items-center gap-8">
+                                                <img [src]="nft.userImg"
+                                                    class="w-28-px h-28-px rounded-circle object-fit-cover" alt="" />
+                                                <span class="text-sm text-secondary-light fw-medium">{{ nft.userName
+                                                    }}</span>
+                                            </div>
+                                            <div
+                                                class="mt-10 d-flex align-items-center justify-content-between gap-8 flex-wrap">
+                                                <span class="text-sm text-secondary-light fw-medium">
+                                                    Price: <span class="text-sm text-primary-light fw-semibold">{{
+                                                        nft.priceEth }}</span>
+                                                </span>
+                                                <span class="text-sm fw-semibold text-primary-600">{{ nft.priceUsd
+                                                    }}</span>
+                                            </div>
+                                            <div class="d-flex align-items-center flex-wrap mt-12 gap-8">
+                                                <a href="#"
+                                                    class="btn rounded-pill border text-neutral-500 border-neutral-500 radius-8 px-12 py-6 bg-hover-neutral-500 text-hover-white flex-grow-1">History</a>
+                                                <a href="#"
+                                                    class="btn rounded-pill btn-primary-600 radius-8 px-12 py-6 flex-grow-1">Buy
+                                                    Now</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="tab-pane fade" id="pills-button-art" role="tabpanel"
+                            aria-labelledby="pills-button-art-tab" tabindex="0">
+                            <div class="row g-3">
+                                <div class="col-xxl-3 col-sm-6 col-xs-6" *ngFor="let nft of nfts">
+                                    <div class="nft-card bg-base radius-16 overflow-hidden">
+                                        <div class="radius-16 overflow-hidden">
+                                            <img [src]="nft.img" alt="" class="w-100 h-100 object-fit-cover" />
+                                        </div>
+                                        <div class="p-10">
+                                            <h6 class="text-md fw-bold text-primary-light">{{ nft.title }}</h6>
+                                            <div class="d-flex align-items-center gap-8">
+                                                <img [src]="nft.userImg"
+                                                    class="w-28-px h-28-px rounded-circle object-fit-cover" alt="" />
+                                                <span class="text-sm text-secondary-light fw-medium">{{ nft.userName
+                                                    }}</span>
+                                            </div>
+                                            <div
+                                                class="mt-10 d-flex align-items-center justify-content-between gap-8 flex-wrap">
+                                                <span class="text-sm text-secondary-light fw-medium">
+                                                    Price: <span class="text-sm text-primary-light fw-semibold">{{
+                                                        nft.priceEth }}</span>
+                                                </span>
+                                                <span class="text-sm fw-semibold text-primary-600">{{ nft.priceUsd
+                                                    }}</span>
+                                            </div>
+                                            <div class="d-flex align-items-center flex-wrap mt-12 gap-8">
+                                                <a href="#"
+                                                    class="btn rounded-pill border text-neutral-500 border-neutral-500 radius-8 px-12 py-6 bg-hover-neutral-500 text-hover-white flex-grow-1">History</a>
+                                                <a href="#"
+                                                    class="btn rounded-pill btn-primary-600 radius-8 px-12 py-6 flex-grow-1">Buy
+                                                    Now</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="pills-button-music" role="tabpanel"
+                            aria-labelledby="pills-button-music-tab" tabindex="0">
+                            <div class="row g-3">
+                                <div class="col-xxl-3 col-sm-6 col-xs-6" *ngFor="let nft of nfts">
+                                    <div class="nft-card bg-base radius-16 overflow-hidden">
+                                        <div class="radius-16 overflow-hidden">
+                                            <img [src]="nft.img" alt="" class="w-100 h-100 object-fit-cover" />
+                                        </div>
+                                        <div class="p-10">
+                                            <h6 class="text-md fw-bold text-primary-light">{{ nft.title }}</h6>
+                                            <div class="d-flex align-items-center gap-8">
+                                                <img [src]="nft.userImg"
+                                                    class="w-28-px h-28-px rounded-circle object-fit-cover" alt="" />
+                                                <span class="text-sm text-secondary-light fw-medium">{{ nft.userName
+                                                    }}</span>
+                                            </div>
+                                            <div
+                                                class="mt-10 d-flex align-items-center justify-content-between gap-8 flex-wrap">
+                                                <span class="text-sm text-secondary-light fw-medium">
+                                                    Price: <span class="text-sm text-primary-light fw-semibold">{{
+                                                        nft.priceEth }}</span>
+                                                </span>
+                                                <span class="text-sm fw-semibold text-primary-600">{{ nft.priceUsd
+                                                    }}</span>
+                                            </div>
+                                            <div class="d-flex align-items-center flex-wrap mt-12 gap-8">
+                                                <a href="#"
+                                                    class="btn rounded-pill border text-neutral-500 border-neutral-500 radius-8 px-12 py-6 bg-hover-neutral-500 text-hover-white flex-grow-1">History</a>
+                                                <a href="#"
+                                                    class="btn rounded-pill btn-primary-600 radius-8 px-12 py-6 flex-grow-1">Buy
+                                                    Now</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="pills-button-utility" role="tabpanel"
+                            aria-labelledby="pills-button-utility-tab" tabindex="0">
+                            <div class="row g-3">
+                                <div class="col-xxl-3 col-sm-6 col-xs-6" *ngFor="let nft of nfts">
+                                    <div class="nft-card bg-base radius-16 overflow-hidden">
+                                        <div class="radius-16 overflow-hidden">
+                                            <img [src]="nft.img" alt="" class="w-100 h-100 object-fit-cover" />
+                                        </div>
+                                        <div class="p-10">
+                                            <h6 class="text-md fw-bold text-primary-light">{{ nft.title }}</h6>
+                                            <div class="d-flex align-items-center gap-8">
+                                                <img [src]="nft.userImg"
+                                                    class="w-28-px h-28-px rounded-circle object-fit-cover" alt="" />
+                                                <span class="text-sm text-secondary-light fw-medium">{{ nft.userName
+                                                    }}</span>
+                                            </div>
+                                            <div
+                                                class="mt-10 d-flex align-items-center justify-content-between gap-8 flex-wrap">
+                                                <span class="text-sm text-secondary-light fw-medium">
+                                                    Price: <span class="text-sm text-primary-light fw-semibold">{{
+                                                        nft.priceEth }}</span>
+                                                </span>
+                                                <span class="text-sm fw-semibold text-primary-600">{{ nft.priceUsd
+                                                    }}</span>
+                                            </div>
+                                            <div class="d-flex align-items-center flex-wrap mt-12 gap-8">
+                                                <a href="#"
+                                                    class="btn rounded-pill border text-neutral-500 border-neutral-500 radius-8 px-12 py-6 bg-hover-neutral-500 text-hover-white flex-grow-1">History</a>
+                                                <a href="#"
+                                                    class="btn rounded-pill btn-primary-600 radius-8 px-12 py-6 flex-grow-1">Buy
+                                                    Now</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="pills-button-fashion" role="tabpanel"
+                            aria-labelledby="pills-button-fashion-tab" tabindex="0">
+                            <div class="row g-3">
+                                <div class="col-xxl-3 col-sm-6 col-xs-6" *ngFor="let nft of nfts">
+                                    <div class="nft-card bg-base radius-16 overflow-hidden">
+                                        <div class="radius-16 overflow-hidden">
+                                            <img [src]="nft.img" alt="" class="w-100 h-100 object-fit-cover" />
+                                        </div>
+                                        <div class="p-10">
+                                            <h6 class="text-md fw-bold text-primary-light">{{ nft.title }}</h6>
+                                            <div class="d-flex align-items-center gap-8">
+                                                <img [src]="nft.userImg"
+                                                    class="w-28-px h-28-px rounded-circle object-fit-cover" alt="" />
+                                                <span class="text-sm text-secondary-light fw-medium">{{ nft.userName
+                                                    }}</span>
+                                            </div>
+                                            <div
+                                                class="mt-10 d-flex align-items-center justify-content-between gap-8 flex-wrap">
+                                                <span class="text-sm text-secondary-light fw-medium">
+                                                    Price: <span class="text-sm text-primary-light fw-semibold">{{
+                                                        nft.priceEth }}</span>
+                                                </span>
+                                                <span class="text-sm fw-semibold text-primary-600">{{ nft.priceUsd
+                                                    }}</span>
+                                            </div>
+                                            <div class="d-flex align-items-center flex-wrap mt-12 gap-8">
+                                                <a href="#"
+                                                    class="btn rounded-pill border text-neutral-500 border-neutral-500 radius-8 px-12 py-6 bg-hover-neutral-500 text-hover-white flex-grow-1">History</a>
+                                                <a href="#"
+                                                    class="btn rounded-pill btn-primary-600 radius-8 px-12 py-6 flex-grow-1">Buy
+                                                    Now</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-12">
+                    <div class="card h-100">
+                        <div class="card-body p-24">
+                            <div class="d-flex align-items-center flex-wrap gap-2 justify-content-between mb-20">
+                                <h6 class="mb-2 fw-bold text-lg mb-0">Recent Bid</h6>
+                                <select
+                                    class="form-select form-select-sm w-auto bg-base border text-secondary-light rounded-pill">
+                                    <option>All Items </option>
+                                    <option>New Item</option>
+                                    <option>Trending Item</option>
+                                    <option>Old Item</option>
+                                </select>
+                            </div>
+                            <div class="table-responsive scroll-sm">
+                                <div class="table-responsive scroll-sm">
+                                    <table class="table bordered-table sm-table mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Items </th>
+                                                <th scope="col">Price</th>
+                                                <th scope="col">Your Offer </th>
+                                                <th scope="col">Recent Offer</th>
+                                                <th scope="col">Time Left</th>
+                                                <th scope="col" class="text-center">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of nftItems">
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <img [src]="item.img" alt=""
+                                                            class="flex-shrink-0 me-12 w-40-px h-40-px rounded-circle me-12" />
+                                                        <div class="flex-grow-1">
+                                                            <h6 class="text-md mb-0 fw-semibold">{{ item.title }}</h6>
+                                                            <span class="text-sm text-secondary-light fw-normal">Owned
+                                                                by {{ item.owner }}</span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>{{ item.price }}</td>
+                                                <td>{{ item.highestBid }}</td>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <img [src]="item.offerImg" alt=""
+                                                            class="flex-shrink-0 me-12 w-40-px h-40-px rounded-circle me-12" />
+                                                        <div class="flex-grow-1">
+                                                            <h6 class="text-md mb-0 fw-semibold text-primary-light">{{
+                                                                item.offerPrice }}</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>{{ item.timeLeft }}</td>
+                                                <td>
+                                                    <div class="d-inline-flex align-items-center gap-12">
+                                                        <button type="button" class="text-xl text-success-600"><i
+                                                                class="ri-edit-line"></i></button>
+                                                        <button type="button"
+                                                            class="text-xl text-danger-600 remove-btn"><i
+                                                                class="ri-delete-bin-6-line"></i></button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xxl-4">
+            <div class="row gy-4">
+                <div class="col-xxl-12 col-md-6">
+                    <div class="card h-100">
+                        <div
+                            class="card-header border-bottom d-flex align-items-center flex-wrap gap-2 justify-content-between">
+                            <h6 class="fw-bold text-lg mb-0">ETH Price</h6>
+                            <select
+                                class="form-select form-select-sm w-auto bg-base border text-secondary-light rounded-pill">
+                                <option>November </option>
+                                <option>December</option>
+                                <option>January</option>
+                                <option>February</option>
+                                <option>March</option>
+                                <option>April</option>
+                                <option>May</option>
+                                <option>June</option>
+                                <option>July</option>
+                                <option>August</option>
+                                <option>September</option>
+                            </select>
+                        </div>
+                        <div class="card-body">
+                            <div id="enrollmentChart" class="apexcharts-tooltip-style-1 yaxies-more">
+                                <apx-chart [series]="enrollmentChart.series" [chart]="enrollmentChart.chart"
+                                    [xaxis]="enrollmentChart.xaxis" [yaxis]="enrollmentChart.yaxis"
+                                    [fill]="enrollmentChart.fill" [grid]="enrollmentChart.grid"
+                                    [plotOptions]="enrollmentChart.plotOptions"
+                                    [dataLabels]="enrollmentChart.dataLabels" [responsive]="enrollmentChart.responsive"
+                                    [stroke]="enrollmentChart.stroke" [colors]="enrollmentChart.colors"
+                                    [legend]="enrollmentChart.legend" [labels]="enrollmentChart.labels">
+                                </apx-chart>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xxl-12 col-md-6">
+                    <div class="card h-100">
+                        <div
+                            class="card-header border-bottom d-flex align-items-center flex-wrap gap-2 justify-content-between">
+                            <h6 class="fw-bold text-lg mb-0">Statistics</h6>
+                            <a href="javascript:void(0)"
+                                class="text-primary-600 hover-text-primary d-flex align-items-center gap-1">
+                                View All
+                                <iconify-icon icon="solar:alt-arrow-right-linear" class="icon"></iconify-icon>
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-1 justify-content-between mb-44">
+                                <div>
+                                    <h5 class="fw-semibold mb-12">145</h5>
+                                    <span class="text-secondary-light fw-normal text-xl">Total Art Sold</span>
+                                </div>
+                                <div id="dailyIconBarChart">
+                                    <apx-chart [series]="dailyIconBarChart.series" [chart]="dailyIconBarChart.chart"
+                                        [xaxis]="dailyIconBarChart.xaxis" [yaxis]="dailyIconBarChart.yaxis"
+                                        [fill]="dailyIconBarChart.fill" [grid]="dailyIconBarChart.grid"
+                                        [plotOptions]="dailyIconBarChart.plotOptions"
+                                        [dataLabels]="dailyIconBarChart.dataLabels"
+                                        [responsive]="dailyIconBarChart.responsive" [stroke]="dailyIconBarChart.stroke"
+                                        [colors]="dailyIconBarChart.colors" [legend]="dailyIconBarChart.legend"
+                                        [labels]="dailyIconBarChart.labels">
+                                    </apx-chart>
+
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center gap-1 justify-content-between">
+                                <div>
+                                    <h5 class="fw-semibold mb-12">750 ETH</h5>
+                                    <span class="text-secondary-light fw-normal text-xl">Total Earnings</span>
+                                </div>
+                                <div id="areaChart">
+                                    <apx-chart [series]="areaChart.series" [chart]="areaChart.chart"
+                                        [xaxis]="areaChart.xaxis" [yaxis]="areaChart.yaxis" [fill]="areaChart.fill"
+                                        [grid]="areaChart.grid" [plotOptions]="areaChart.plotOptions"
+                                        [dataLabels]="areaChart.dataLabels" [responsive]="areaChart.responsive"
+                                        [stroke]="areaChart.stroke" [colors]="areaChart.colors"
+                                        [legend]="areaChart.legend" [labels]="areaChart.labels">
+                                    </apx-chart>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xxl-12 col-md-6">
+                    <div class="card h-100">
+                        <div
+                            class="card-header border-bottom d-flex align-items-center flex-wrap gap-2 justify-content-between">
+                            <h6 class="fw-bold text-lg mb-0">Featured Creators</h6>
+                            <a href="javascript:void(0)"
+                                class="text-primary-600 hover-text-primary d-flex align-items-center gap-1">
+                                View All
+                                <iconify-icon icon="solar:alt-arrow-right-linear" class="icon"></iconify-icon>
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex align-items-center justify-content-between gap-8 flex-wrap">
+                                <div class="d-flex align-items-center">
+                                    <img src="assets/images/nft/nft-items-img1.png" alt=""
+                                        class="flex-shrink-0 me-12 w-40-px h-40-px rounded-circle me-12">
+                                    <div class="flex-grow-1">
+                                        <h6 class="text-md mb-0 fw-semibold">Theresa Webb</h6>
+                                        <span class="text-sm text-secondary-light fw-normal">Owned by ABC</span>
+                                    </div>
+                                </div>
+                                <button type="button"
+                                    class="btn btn-outline-primary-600 px-24 rounded-pill">Follow</button>
+                            </div>
+                            <div class="mt-24">
+                                <div class="row gy-3">
+                                    <div class="col-sm-6 col-xs-6">
+                                        <div class="nft-card bg-base radius-16 overflow-hidden shadow-4">
+                                            <div class="radius-16 overflow-hidden">
+                                                <img src="assets/images/nft/featured-creator1.png" alt=""
+                                                    class="w-100 h-100 object-fit-cover">
+                                            </div>
+                                            <div class="p-12">
+                                                <h6 class="text-md fw-bold text-primary-light mb-12">New Figures</h6>
+                                                <div class="d-flex align-items-center gap-8">
+                                                    <img src="assets/images/nft/bitcoin.png"
+                                                        class="w-28-px h-28-px rounded-circle object-fit-cover" alt="">
+                                                    <span class="text-sm text-secondary-light fw-medium">0.10 BTC</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-xs-6">
+                                        <div class="nft-card bg-base radius-16 overflow-hidden shadow-4">
+                                            <div class="radius-16 overflow-hidden">
+                                                <img src="assets/images/nft/featured-creator2.png" alt=""
+                                                    class="w-100 h-100 object-fit-cover">
+                                            </div>
+                                            <div class="p-12">
+                                                <h6 class="text-md fw-bold text-primary-light mb-12">Abstrac Girl</h6>
+                                                <div class="d-flex align-items-center gap-8">
+                                                    <img src="assets/images/nft/bitcoin.png"
+                                                        class="w-28-px h-28-px rounded-circle object-fit-cover" alt="">
+                                                    <span class="text-sm text-secondary-light fw-medium">0.10 BTC</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xxl-12 col-md-6">
+                    <div class="card h-100">
+                        <div
+                            class="card-header border-bottom d-flex align-items-center flex-wrap gap-2 justify-content-between">
+                            <h6 class="fw-bold text-lg mb-0">Featured Creators</h6>
+                            <a href="javascript:void(0)"
+                                class="text-primary-600 hover-text-primary d-flex align-items-center gap-1">
+                                View All
+                                <iconify-icon icon="solar:alt-arrow-right-linear" class="icon"></iconify-icon>
+                            </a>
+                        </div>
+                        <div class="card-body pt-24">
+                            <div *ngFor="let creator of creators; let last = last" [ngClass]="{
+                            'd-flex align-items-center justify-content-between gap-8 flex-wrap': true,
+                            'mb-32': !last,
+                            'mb-0': last
+                          }">
+                                <div class="d-flex align-items-center">
+                                    <img [src]="creator.img" alt=""
+                                        class="flex-shrink-0 me-12 w-40-px h-40-px rounded-circle me-12" />
+                                    <div class="flex-grow-1">
+                                        <h6 class="text-md mb-0 fw-semibold">{{ creator.name }}</h6>
+                                        <span class="text-sm text-secondary-light fw-normal">{{ creator.username
+                                            }}</span>
+                                    </div>
+                                </div>
+                                <button type="button"
+                                    class="btn bg-primary-600 border-primary-600 text-white px-24 rounded-pill follow-btn transition-2">
+                                    Follow
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>

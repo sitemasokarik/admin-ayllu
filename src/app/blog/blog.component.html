@@ -1,0 +1,44 @@
+<div class="dashboard-main-body">
+    <app-breadcrumb [title]="title"></app-breadcrumb>
+
+    <div class="row gy-4">
+        <div class="col-xxl-3 col-lg-4 col-sm-6" *ngFor="let blog of blogs">
+            <div class="card h-100 p-0 radius-12 overflow-hidden">
+                <div class="card-body p-24">
+                    <a routerLink="/blog-details" class="w-100 max-h-194-px radius-8 overflow-hidden">
+                        <img [src]="blog.image" alt="" class="w-100 h-100 object-fit-cover">
+                    </a>
+                    <div class="mt-20">
+                        <div class="d-flex align-items-center gap-6 justify-content-between flex-wrap mb-16">
+                            <a routerLink="/blog-details"
+                                class="px-20 py-6 bg-neutral-100 rounded-pill bg-hover-neutral-300 text-neutral-600 fw-medium">
+                                {{ blog.category }}
+                            </a>
+                            <div class="d-flex align-items-center gap-8 text-neutral-500 fw-medium">
+                                <i class="ri-calendar-2-line"></i>
+                                {{ blog.date }}
+                            </div>
+                        </div>
+                        <h6 class="mb-16">
+                            <a routerLink="/blog-details"
+                                class="text-line-2 text-hover-primary-600 text-xl transition-2">
+                                {{ blog.title }}
+                            </a>
+                        </h6>
+                        <p class="text-line-3 text-neutral-500">
+                            {{ blog.description }}
+                        </p>
+                        <a routerLink="/blog-details"
+                            class="d-flex align-items-center gap-8 fw-semibold text-neutral-900 text-hover-primary-600 transition-2">
+                            Read More
+                            <i class="ri-arrow-right-double-line text-xl d-flex line-height-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Style Three -->
+        
+    </div>
+</div>

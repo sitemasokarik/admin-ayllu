@@ -1,0 +1,429 @@
+<div class="dashboard-main-body">
+
+  <app-breadcrumb [title]="'Project Managment'" [main-title]="'Project Managment'"></app-breadcrumb>
+  <div class="row gy-4">
+
+    <div class="col-xxl-8">
+      <div class="card h-100 radius-8 border-0">
+        <div class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center justify-content-between">
+          <h6 class="text-lg fw-semibold mb-0">Average Earnings</h6>
+          <div class="">
+            <select class="form-select form-select-sm w-auto bg-base border text-secondary-light radius-8">
+              <option>Yearly</option>
+              <option>Monthly</option>
+              <option>Weekly</option>
+              <option>Today</option>
+            </select>
+          </div>
+        </div>
+        <div class="card-body p-24">
+          <ul class="d-flex flex-wrap align-items-center justify-content-center my-3 gap-3">
+            <li class="d-flex align-items-center gap-2">
+              <span class="w-12-px h-8-px rounded-pill bg-primary-600"></span>
+              <span class="text-secondary-light text-sm fw-semibold">Income:
+                <span class="text-primary-light text-xl fw-bold line-height-1">$26,201</span>
+              </span>
+            </li>
+            <li class="d-flex align-items-center gap-2">
+              <span class="w-12-px h-8-px rounded-pill bg-warning-600"></span>
+              <span class="text-secondary-light text-sm fw-semibold">Expense:
+                <span class="text-primary-light text-xl fw-bold line-height-1"> $3,120</span>
+              </span>
+            </li>
+          </ul>
+          <div id="averageEarningChart" class="apexcharts-tooltip-style-1">
+            <apx-chart [series]="averageEarningChart.series" [chart]="averageEarningChart.chart"
+              [xaxis]="averageEarningChart.xaxis" [dataLabels]="averageEarningChart.dataLabels"
+              [stroke]="averageEarningChart.stroke" [grid]="averageEarningChart.grid"
+              [markers]="averageEarningChart.markers" [tooltip]="averageEarningChart.tooltip"
+              [yaxis]="averageEarningChart.yaxis" [legend]="averageEarningChart.legend"
+              [colors]="averageEarningChart.colors">
+            </apx-chart>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xxl-4">
+      <div class="card h-100 radius-8 border-0">
+        <div class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center justify-content-between">
+          <h6 class="text-lg fw-semibold mb-0">Working Schedule</h6>
+          <div class="">
+            <select class="form-select form-select-sm w-auto bg-base border text-secondary-light radius-8">
+              <option>Jan 2025</option>
+              <option>Feb 2025</option>
+              <option>March 2025</option>
+              <option>April 2025</option>
+              <option>May 2025</option>
+              <option>June 2025</option>
+              <option>July 2025</option>
+              <option>Aug 2025</option>
+              <option>Sep 2025</option>
+              <option>Oct 2025</option>
+              <option>Nov 2025</option>
+              <option>Dec 2025</option>
+            </select>
+          </div>
+        </div>
+        <div class="card-body p-24">
+
+          <div class="d-flex align-items-center gap-16 justify-content-between flex-wrap">
+            <div class="week-item text-center">
+              <span class="text-sm text-neutral-400 fw-medium">Fr</span>
+              <h6 class="text-md mb-0">21</h6>
+            </div>
+            <div class="week-item text-center">
+              <span class="text-sm text-neutral-400 fw-medium">Sa</span>
+              <h6 class="text-md mb-0">22</h6>
+            </div>
+            <div class="week-item text-center">
+              <span class="text-sm text-neutral-400 fw-medium">Su</span>
+              <h6 class="text-md mb-0">23</h6>
+            </div>
+            <div class="week-item text-center">
+              <span class="text-sm text-neutral-400 fw-medium">Mo</span>
+              <h6 class="text-md mb-0">24</h6>
+            </div>
+            <div class="week-item text-center bg-purple rounded-pill py-12 px-16">
+              <span class="text-sm text-white fw-medium">Tu</span>
+              <h6 class="text-md mb-0 text-white">25</h6>
+            </div>
+            <div class="week-item text-center">
+              <span class="text-sm text-neutral-400 fw-medium">We</span>
+              <h6 class="text-md mb-0">26</h6>
+            </div>
+            <div class="week-item text-center">
+              <span class="text-sm text-neutral-400 fw-medium">Th</span>
+              <h6 class="text-md mb-0">27</h6>
+            </div>
+            <div class="text-center">
+              <span class="text-sm text-neutral-400 fw-medium">Fr</span>
+              <h6 class="text-md mb-0">28</h6>
+            </div>
+            <div class="text-center">
+              <span class="text-sm text-neutral-400 fw-medium">Sa</span>
+              <h6 class="text-md mb-0">29</h6>
+            </div>
+            <div class="text-center">
+              <span class="text-sm text-neutral-400 fw-medium">Su</span>
+              <h6 class="text-md mb-0">30</h6>
+            </div>
+          </div>
+
+          <div class="mt-24 d-flex flex-column gap-20">
+            <div
+              class="d-flex align-items-center justify-content-between gap-1 ps-10 border-inline-start border-start-width-3-px border-purple">
+              <div class="">
+                <div class="d-flex align-items-center gap-1">
+                  <h6 class="text-lg mb-0">10:20 - 11:00</h6>
+                  <span class="text-xs text-secondary-light fw-medium">AM</span>
+                </div>
+                <p class="text-sm text-secondary-light fw-medium mb-1">UI UX Dashboard Project Meeting</p>
+                <p class="text-xs text-neutral-400 fw-medium mb-0">Lead by <span class="text-success-600">Jane
+                    Cooper</span> </p>
+              </div>
+              <div class="">
+                <a href="javascript:void(0)" class="btn btn-neutral-200 text-sm text-primary-light py-6 px-16">View
+                </a>
+              </div>
+            </div>
+            <div
+              class="d-flex align-items-center justify-content-between gap-1 ps-10 border-inline-start border-start-width-3-px border-warning-600">
+              <div class="">
+                <div class="d-flex align-items-center gap-1">
+                  <h6 class="text-lg mb-0">10:20 - 11:00</h6>
+                  <span class="text-xs text-secondary-light fw-medium">AM</span>
+                </div>
+                <p class="text-sm text-secondary-light fw-medium mb-1">UI UX Dashboard Project Meeting</p>
+                <p class="text-xs text-neutral-400 fw-medium mb-0">Lead by <span class="text-success-600">Jane
+                    Cooper</span> </p>
+              </div>
+              <div class="">
+                <a href="javascript:void(0)" class="btn btn-neutral-200 text-sm text-primary-light py-6 px-16">View
+                </a>
+              </div>
+            </div>
+            <div
+              class="d-flex align-items-center justify-content-between gap-1 ps-10 border-inline-start border-start-width-3-px border-info-600">
+              <div class="">
+                <div class="d-flex align-items-center gap-1">
+                  <h6 class="text-lg mb-0">10:20 - 11:00</h6>
+                  <span class="text-xs text-secondary-light fw-medium">AM</span>
+                </div>
+                <p class="text-sm text-secondary-light fw-medium mb-1">UI UX Dashboard Project Meeting</p>
+                <p class="text-xs text-neutral-400 fw-medium mb-0">Lead by <span class="text-success-600">Jane
+                    Cooper</span> </p>
+              </div>
+              <div class="">
+                <a href="javascript:void(0)" class="btn btn-neutral-200 text-sm text-primary-light py-6 px-16">View
+                </a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Widgets start -->
+    <div class="col-xxl-3 col-sm-6" *ngFor="let item of dashboardItems">
+      <div class="bg-base p-16 radius-8 position-relative overflow-hidden">
+        <span [ngClass]="item.blurClass" class="position-absolute end-0 top-50"></span>
+
+        <div class="d-flex align-items-center justify-content-between gap-1">
+          <div>
+            <span class="text-secondary-light text-sm fw-medium">{{ item.title }}</span>
+            <h6 class="text-2xl mb-0">{{ item.value }}</h6>
+          </div>
+          <span class="w-40-px h-40-px radius-8 text-white d-flex justify-content-center align-items-center text-xxl"
+            [ngClass]="item.bgColor">
+            <i [class]="item.icon"></i>
+          </span>
+        </div>
+        <a href="javascript:void(0)" class="btn btn-success-100 text-success-600 text-sm py-1 px-16 mt-10">
+          View More
+        </a>
+      </div>
+    </div>
+    <!-- Widgets End -->
+
+    <div class="col-xxl-4 col-sm-6">
+      <div class="card h-100">
+        <div class="card-body p-24">
+          <div class="d-flex align-items-center flex-wrap gap-2 justify-content-between mb-20">
+            <h6 class="mb-2 fw-bold text-lg">My Tasks</h6>
+            <div class="">
+              <select class="form-select form-select-sm w-auto bg-base border text-secondary-light radius-8">
+                <option>All Tasks</option>
+                <option>Pending</option>
+                <option>Completed</option>
+                <option>In Progress</option>
+                <option>Canceled</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="table-responsive scroll-sm">
+            <table class="table bordered-table mb-0 border-neutral-50">
+              <thead>
+                <tr>
+                  <th scope="col" class="border-neutral-50">Project Name</th>
+                  <th scope="col" class="border-neutral-50">Deadline</th>
+                  <th scope="col" class="border-neutral-50">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let project of projects">
+                  <td class="border-neutral-50">{{ project.name }}</td>
+                  <td class="border-neutral-50">{{ project.deadline }}</td>
+                  <td class="border-neutral-50 text-center">
+                    <span [ngClass]="project.statusClass" class="px-16 py-2 radius-4 fw-medium text-sm">
+                      {{ project.status }}
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xxl-4 col-sm-6">
+      <div class="card h-100 radius-8 border-0">
+        <div class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center justify-content-between">
+          <h6 class="text-lg fw-semibold mb-0">Project Analysis</h6>
+          <div class="">
+            <select class="form-select form-select-sm w-auto bg-base border text-secondary-light radius-8">
+              <option>Yearly</option>
+              <option>Monthly</option>
+              <option>Weekly</option>
+              <option>Today</option>
+            </select>
+          </div>
+        </div>
+        <div class="card-body p-24">
+          <ul class="d-flex flex-wrap align-items-center justify-content-center">
+            <li class="d-flex align-items-center gap-2 me-28">
+              <span class="w-12-px h-12-px rounded-circle bg-success-main"></span>
+              <span class="text-secondary-light text-sm fw-medium">Revenue</span>
+            </li>
+            <li class="d-flex align-items-center gap-2 me-28">
+              <span class="w-12-px h-12-px rounded-circle bg-warning-main"></span>
+              <span class="text-secondary-light text-sm fw-medium">Expenses</span>
+            </li>
+            <li class="d-flex align-items-center gap-2">
+              <span class="w-12-px h-12-px rounded-circle bg-purple"></span>
+              <span class="text-secondary-light text-sm fw-medium">Budgets</span>
+            </li>
+          </ul>
+          <div class="mt-40">
+            <div id="projectAnalysisChart" class="margin-16-minus">
+              <apx-chart [series]="projectAnalysisChart.series" [chart]="projectAnalysisChart.chart"
+                [xaxis]="projectAnalysisChart.xaxis" [yaxis]="projectAnalysisChart.yaxis"
+                [dataLabels]="projectAnalysisChart.dataLabels" [stroke]="projectAnalysisChart.stroke"
+                [grid]="projectAnalysisChart.grid" [plotOptions]="projectAnalysisChart.plotOptions"
+                [fill]="projectAnalysisChart.fill" [colors]="projectAnalysisChart.colors"
+                [legend]="projectAnalysisChart.legend">
+              </apx-chart>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xxl-4 col-sm-6">
+      <div class="card h-100">
+        <div class="card-body p-24">
+          <div class="d-flex align-items-center flex-wrap gap-2 justify-content-between mb-20">
+            <h6 class="mb-2 fw-bold text-lg">Team Members</h6>
+            <a href="javascript:void(0)" class="text-primary-600 hover-text-primary d-flex align-items-center gap-1">
+              View All
+              <iconify-icon icon="solar:alt-arrow-right-linear" class="icon"></iconify-icon>
+            </a>
+          </div>
+
+          <div class="table-responsive scroll-sm">
+            <table class="table bordered-table mb-0 border-neutral-100">
+              <thead>
+                <tr>
+                  <th scope="col" class="border-neutral-100">Customer</th>
+                  <th scope="col" class="border-neutral-100">Task</th>
+                  <th scope="col" class="border-neutral-100">Progress</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let user of users">
+                  <td class="border-neutral-100">
+                    <div class="d-flex align-items-center gap-12">
+                      <img [src]="user.image" alt="User"
+                        class="object-fit-cover rounded-circle w-40-px h-40-px radius-8 flex-shrink-0 overflow-hidden">
+                      <div class="flex-grow-1">
+                        <h6 class="text-md mb-0 fw-medium">{{ user.name }}</h6>
+                        <span class="text-sm text-secondary-light fw-medium">{{ user.email }}</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="border-neutral-100">{{ user.task }}</td>
+                  <td class="border-neutral-100">
+                    <div class="max-w-112 mx-auto">
+                      <div class="w-100">
+                        <div class="progress progress-sm rounded-pill" role="progressbar"
+                          [attr.aria-valuenow]="user.progress" aria-valuemin="0" aria-valuemax="100">
+                          <div class="progress-bar rounded-start-pill" [ngClass]="user.progressBarClass"
+                            [style.width.%]="user.progress"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xxl-4 col-sm-6">
+      <div class="shadow-7 radius-12 bg-base h-100 overflow-hidden">
+        <div class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center justify-content-between">
+          <h6 class="text-lg fw-semibold mb-0">Tasks Overview </h6>
+          <div class="">
+            <select class="form-select form-select-sm w-auto bg-base border text-secondary-light radius-8">
+              <option>Yearly</option>
+              <option>Monthly</option>
+              <option>Weekly</option>
+              <option>Today</option>
+            </select>
+          </div>
+        </div>
+        <div class="card-body p-32 mt-20">
+          <div class="position-relative text-center">
+            <div id="taskOverviewChart" class="margin-16-minus y-value-left apexcharts-tooltip-z-none">
+              <apx-chart [series]="taskOverviewChart.series" [chart]="taskOverviewChart.chart"
+                [labels]="taskOverviewChart.labels" [colors]="taskOverviewChart.colors"
+                [stroke]="taskOverviewChart.stroke" [dataLabels]="taskOverviewChart.dataLabels"
+                [legend]="taskOverviewChart.legend" [responsive]="taskOverviewChart.responsive">
+              </apx-chart>
+            </div>
+
+            <div class="text-center position-absolute top-50 start-50 translate-middle">
+              <span class="text-secondary-light">Total Tasks</span>
+              <h6 class="mb-0 mt-1">46</h6>
+            </div>
+          </div>
+        </div>
+
+        <ul class="d-flex flex-wrap align-items-center justify-content-center pb-24 mt-24 gap-28">
+          <li class="d-flex align-items-center gap-2">
+            <span class="w-12-px h-12-px rounded-circle bg-warning-main"></span>
+            <span class="text-secondary-light text-sm fw-medium">Pending</span>
+          </li>
+          <li class="d-flex align-items-center gap-2">
+            <span class="w-12-px h-12-px rounded-circle bg-info-main"></span>
+            <span class="text-secondary-light text-sm fw-medium">In Progress</span>
+          </li>
+          <li class="d-flex align-items-center gap-2">
+            <span class="w-12-px h-12-px rounded-circle bg-purple"></span>
+            <span class="text-secondary-light text-sm fw-medium">Completed</span>
+          </li>
+          <li class="d-flex align-items-center gap-2">
+            <span class="w-12-px h-12-px rounded-circle bg-danger"></span>
+            <span class="text-secondary-light text-sm fw-medium">Cancelled</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="col-xxl-8">
+      <div class="shadow-7 radius-12 bg-base h-100 overflow-hidden">
+        <div class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center justify-content-between">
+          <h6 class="text-lg fw-semibold mb-0">Projects Status</h6>
+          <a href="javascript:void(0)" class="text-primary-600 hover-text-primary d-flex align-items-center gap-1">
+            View All
+            <iconify-icon icon="solar:alt-arrow-right-linear" class="icon"></iconify-icon>
+          </a>
+        </div>
+        <div class="card-body p-24">
+          <div class="table-responsive scroll-sm">
+            <table class="table bordered-table mb-0">
+              <thead>
+                <tr>
+                  <th class="rounded-0">Project Name</th>
+                  <th class="rounded-0">Clients</th>
+                  <th class="rounded-0">Budget</th>
+                  <th class="rounded-0">Duration</th>
+                  <th class="rounded-0">Progress</th>
+                  <th class="rounded-0 text-center">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let project of projectsStatus">
+                  <td class="text-secondary-light">{{ project.name }}</td>
+                  <td class="text-secondary-light">{{ project.client }}</td>
+                  <td class="text-secondary-light">{{ project.budget }}</td>
+                  <td class="text-secondary-light">{{ project.duration }}</td>
+                  <td class="text-secondary-light">
+                    <span class="px-6 py-2 radius-4 fw-semibold text-sm d-inline-flex align-items-center gap-1"
+                      [ngClass]="getTrendClass(project.trend)">
+                      <i [class]="getTrendIcon(project.trend)"></i>
+                      {{ project.progress }}%
+                    </span>
+                  </td>
+                  <td class="text-center">
+                    <span class="px-16 py-2 radius-4 fw-semibold text-sm" [ngClass]="getStatusClasses(project.status)">
+                      {{ project.status }}
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,155 @@
+// Custom variables
+$gradient-deep-two-1: linear-gradient(45deg, #06b6d4, #0ea5e9);
+$gradient-deep-two-2: linear-gradient(45deg, #eab308, #f59e0b);
+$gradient-deep-two-3: linear-gradient(45deg, #8b5cf6, #6366f1);
+$gradient-deep-two-4: linear-gradient(45deg, #22c55e, #16a34a);
+
+// Card gradients
+.gradient-deep-two-1 {
+  background: $gradient-deep-two-1;
+}
+
+.gradient-deep-two-2 {
+  background: $gradient-deep-two-2;
+}
+
+.gradient-deep-two-3 {
+  background: $gradient-deep-two-3;
+}
+
+.gradient-deep-two-4 {
+  background: $gradient-deep-two-4;
+}
+
+// Custom utilities
+.w-48-px {
+  width: 48px;
+}
+
+.h-48-px {
+  height: 48px;
+}
+
+.w-40-px {
+  width: 40px;
+}
+
+.h-40-px {
+  height: 40px;
+}
+
+.w-56-px {
+  width: 56px;
+}
+
+.h-56-px {
+  height: 56px;
+}
+
+.min-w-max-content {
+  min-width: max-content;
+}
+
+// Card styles
+.card {
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+
+  .card-header {
+    padding: 1.25rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .card-body {
+    padding: 1.25rem;
+  }
+}
+
+// Table styles
+.table {
+  &.bordered-table {
+    th, td {
+      padding: 1rem;
+      vertical-align: middle;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  &.sm-table {
+    font-size: 0.875rem;
+  }
+}
+
+// Status badges
+.status-badge {
+  padding: 0.25rem 1rem;
+  border-radius: 9999px;
+  font-weight: 500;
+  font-size: 0.875rem;
+
+  &.active {
+    background-color: rgba(34, 197, 94, 0.1);
+    color: #22c55e;
+  }
+}
+
+// Quick transfer section
+.officer-slider {
+  display: flex;
+  overflow-x: auto;
+  gap: 1rem;
+  padding: 1rem 0;
+
+  &::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+  }
+
+  &__item {
+    flex: 0 0 auto;
+  }
+}
+
+// Form controls
+.form-control {
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 0.5rem 1rem;
+
+  &:focus {
+    border-color: #06b6d4;
+    box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.2);
+  }
+}
+
+// Buttons
+.btn-primary-600 {
+  background-color: #06b6d4;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 2rem;
+
+  &:hover {
+    background-color: darken(#06b6d4, 5%);
+  }
+
+  &:active {
+    background-color: darken(#06b6d4, 10%);
+  }
+}
+
+// Charts
+#balanceStatistics,
+#expenseStatistics {
+  width: 100%;
+  height: 350px;
+}

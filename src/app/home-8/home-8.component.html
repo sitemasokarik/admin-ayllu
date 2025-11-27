@@ -1,0 +1,388 @@
+<div class="dashboard-main-body">
+
+    <app-breadcrumb [title]="title"></app-breadcrumb>
+
+    <div class="row gy-4">
+        <div class="col-xxxl-9">
+            <div class="row gy-4">
+                <div *ngFor="let stat of stats" class="col-xxl-3 col-xl-4 col-sm-6">
+                    <div class="card p-3 shadow-2 radius-8 h-100" [ngClass]="stat.gradientClass">
+                        <div class="card-body p-0">
+                            <div class="d-flex flex-wrap align-items-center justify-content-between gap-1 mb-8">
+                                <div class="d-flex align-items-center gap-2">
+                                    <span
+                                        class="mb-0 w-48-px h-48-px flex-shrink-0 text-white d-flex justify-content-center align-items-center rounded-circle h6 mb-0"
+                                        [ngClass]="[stat.bgClass, stat.textClass]">
+                                        <i [class]="stat.iconClass"></i>
+                                    </span>
+                                    <div>
+                                        <h6 class="fw-semibold mb-2">{{ stat.number }}</h6>
+                                        <span class="fw-medium text-secondary-light text-sm">{{ stat.label }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="text-sm mb-0">
+                                <span [ngClass]="stat.textClass">{{ stat.infoNumber }}</span> {{ stat.infoLabel }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!-- Earning Statistic -->
+                <div class="col-xxl-12">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <div class="d-flex align-items-center flex-wrap gap-2 justify-content-between">
+                                <h6 class="mb-2 fw-bold text-lg mb-0">Earning Statistic</h6>
+                                <select class="form-select form-select-sm w-auto bg-base border-0 text-secondary-light">
+                                    <option>This Month</option>
+                                    <option>This Week</option>
+                                    <option>This Year</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="card-body p-24">
+                            <ul class="d-flex flex-wrap align-items-center justify-content-center my-3 gap-3">
+                                <li class="d-flex align-items-center gap-2">
+                                    <span class="w-12-px h-8-px rounded-pill bg-primary-600"></span>
+                                    <span class="text-secondary-light text-sm fw-semibold">New Patient:
+                                        <span class="text-primary-light fw-bold">50</span>
+                                    </span>
+                                </li>
+                                <li class="d-flex align-items-center gap-2">
+                                    <span class="w-12-px h-8-px rounded-pill bg-warning-600"></span>
+                                    <span class="text-secondary-light text-sm fw-semibold">Old Patient:
+                                        <span class="text-primary-light fw-bold"> 500</span>
+                                    </span>
+                                </li>
+                            </ul>
+                            <div id="enrollmentChart" class="apexcharts-tooltip-style-1">
+                                <apx-chart [series]="enrollmentChart.series" [chart]="enrollmentChart.chart"
+                                    [xaxis]="enrollmentChart.xaxis" [yaxis]="enrollmentChart.yaxis"
+                                    [fill]="enrollmentChart.fill" [grid]="enrollmentChart.grid"
+                                    [plotOptions]="enrollmentChart.plotOptions"
+                                    [dataLabels]="enrollmentChart.dataLabels" [responsive]="enrollmentChart.responsive"
+                                    [stroke]="enrollmentChart.stroke" [colors]="enrollmentChart.colors"
+                                    [legend]="enrollmentChart.legend" [labels]="enrollmentChart.labels">
+                                </apx-chart>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Earning Statistic -->
+
+                <!-- Patient Visited by Depertment -->
+                <div class="col-xxl-6">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <div class="d-flex align-items-center flex-wrap gap-2 justify-content-between">
+                                <h6 class="mb-2 fw-bold text-lg mb-0">Patient Visited by Depertment</h6>
+                            </div>
+                        </div>
+                        <div class="card-body p-24 d-flex align-items-center gap-16">
+                            <div id="radialMultipleBar">
+                                <apx-chart [series]="radialMultipleBar.series" [chart]="radialMultipleBar.chart"
+                                    [xaxis]="radialMultipleBar.xaxis" [yaxis]="radialMultipleBar.yaxis"
+                                    [fill]="radialMultipleBar.fill" [grid]="radialMultipleBar.grid"
+                                    [plotOptions]="radialMultipleBar.plotOptions"
+                                    [dataLabels]="radialMultipleBar.dataLabels"
+                                    [responsive]="radialMultipleBar.responsive" [stroke]="radialMultipleBar.stroke"
+                                    [colors]="radialMultipleBar.colors" [legend]="radialMultipleBar.legend"
+                                    [labels]="radialMultipleBar.labels">
+                                </apx-chart>
+
+                            </div>
+                            <ul class="d-flex flex-column gap-12">
+                                <li>
+                                    <span class="text-lg">Cardiology: <span
+                                            class="text-primary-600 fw-semibold">80%</span> </span>
+                                </li>
+                                <li>
+                                    <span class="text-lg">Psychiatry: <span
+                                            class="text-warning-600 fw-semibold">40%</span> </span>
+                                </li>
+                                <li>
+                                    <span class="text-lg">Pediatrics: <span
+                                            class="text-success-600 fw-semibold">10%</span> </span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- Patient Visited by Depertment -->
+
+                <!-- Patient Visit By Gender -->
+                <div class="col-xxl-6">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <div class="d-flex align-items-center flex-wrap gap-2 justify-content-between">
+                                <h6 class="mb-2 fw-bold text-lg mb-0">Patient Visit By Gender</h6>
+                                <select class="form-select form-select-sm w-auto bg-base border-0 text-secondary-light">
+                                    <option>This Month</option>
+                                    <option>This Week</option>
+                                    <option>This Year</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="card-body p-24">
+                            <ul class="d-flex flex-wrap align-items-center justify-content-center my-3 gap-3">
+                                <li class="d-flex align-items-center gap-2">
+                                    <span class="w-12-px h-8-px rounded-pill bg-warning-600"></span>
+                                    <span class="text-secondary-light text-sm fw-semibold">Male:
+                                        <span class="text-primary-light fw-bold">200</span>
+                                    </span>
+                                </li>
+                                <li class="d-flex align-items-center gap-2">
+                                    <span class="w-12-px h-8-px rounded-pill bg-success-600"></span>
+                                    <span class="text-secondary-light text-sm fw-semibold">Female:
+                                        <span class="text-primary-light fw-bold"> 450</span>
+                                    </span>
+                                </li>
+                            </ul>
+                            <div id="paymentStatusChart" class="margin-16-minus y-value-left">
+                                <apx-chart [series]="paymentStatusChart.series" [chart]="paymentStatusChart.chart"
+                                    [xaxis]="paymentStatusChart.xaxis" [yaxis]="paymentStatusChart.yaxis"
+                                    [fill]="paymentStatusChart.fill" [grid]="paymentStatusChart.grid"
+                                    [plotOptions]="paymentStatusChart.plotOptions"
+                                    [dataLabels]="paymentStatusChart.dataLabels"
+                                    [responsive]="paymentStatusChart.responsive" [stroke]="paymentStatusChart.stroke"
+                                    [colors]="paymentStatusChart.colors" [legend]="paymentStatusChart.legend"
+                                    [labels]="paymentStatusChart.labels">
+                                </apx-chart>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Patient Visit By Gender -->
+
+                <!-- Top performance Start -->
+                <div class="col-xxl-4">
+                    <div class="card">
+                        <div class="card-header border-bottom">
+                            <div class="d-flex align-items-center flex-wrap gap-2 justify-content-between">
+                                <h6 class="mb-2 fw-bold text-lg mb-0">Doctors List</h6>
+                                <a href="javascript:void(0)"
+                                    class="text-primary-600 hover-text-primary d-flex align-items-center gap-1">
+                                    View All
+                                    <iconify-icon icon="solar:alt-arrow-right-linear" class="icon"></iconify-icon>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex flex-column gap-24">
+                                <div *ngFor="let doctor of doctors"
+                                    class="d-flex align-items-center justify-content-between gap-3">
+                                    <div class="d-flex align-items-center">
+                                        <img [src]="doctor.img" alt="{{ doctor.name }}"
+                                            class="w-40-px h-40-px rounded-circle flex-shrink-0 me-12 overflow-hidden" />
+                                        <div class="flex-grow-1">
+                                            <h6 class="text-md mb-0">{{ doctor.name }}</h6>
+                                            <span class="text-sm text-secondary-light fw-medium">{{ doctor.specialty
+                                                }}</span>
+                                        </div>
+                                    </div>
+                                    <span [ngClass]="{
+                                    'bg-success-focus text-success-main': doctor.available,
+                                    'bg-danger-focus text-danger-main': !doctor.available
+                                  }" class="px-10 py-4 radius-8 fw-medium text-sm">
+                                        {{ doctor.available ? 'Available' : 'Not Available' }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- Top performance End -->
+
+                <div class="col-xxl-8">
+                    <div class="card h-100">
+                        <div
+                            class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center justify-content-between">
+                            <h6 class="text-lg fw-semibold mb-0">Latest Appointments</h6>
+                            <a href="javascript:void(0)"
+                                class="text-primary-600 hover-text-primary d-flex align-items-center gap-1">
+                                View All
+                                <iconify-icon icon="solar:alt-arrow-right-linear" class="icon"></iconify-icon>
+                            </a>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive scroll-sm">
+                                <table class="table bordered-table mb-0 rounded-0 border-0">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" class="bg-transparent rounded-0">Name</th>
+                                            <th scope="col" class="bg-transparent rounded-0">ID</th>
+                                            <th scope="col" class="bg-transparent rounded-0">Date</th>
+                                            <th scope="col" class="bg-transparent rounded-0">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let appointment of appointments">
+                                            <td>{{ appointment.name }}</td>
+                                            <td>{{ appointment.id }}</td>
+                                            <td>{{ appointment.date }}</td>
+                                            <td>
+                                                <span [ngClass]="{
+                                          'bg-success-focus text-success-main': appointment.statusClass === 'success',
+                                          'bg-danger-focus text-danger-main': appointment.statusClass === 'danger'
+                                        }" class="px-10 py-4 radius-8 fw-medium text-sm">
+                                                    {{ appointment.status }}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- Latest Performance End -->
+            </div>
+        </div>
+
+        <div class="col-xxxl-3">
+            <div class="row gy-4">
+                <div class="col-xxl-12 col-xl-6">
+                    <div class="card h-100 radius-8 border-0">
+                        <div
+                            class="card-header border-bottom d-flex align-items-center flex-wrap gap-2 justify-content-between">
+                            <h6 class="mb-2 fw-bold text-lg">Total Income</h6>
+                            <div class="">
+                                <select class="form-select form-select-sm w-auto bg-base border-0 text-secondary-light">
+                                    <option>This Month</option>
+                                    <option>This Week</option>
+                                    <option>This Year</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="card-body p-24">
+
+                            <div class="position-relative">
+                                <div id="statisticsDonutChart"
+                                    class="mt-36 flex-grow-1 apexcharts-tooltip-z-none title-style circle-none">
+                                    <apx-chart [series]="statisticsDonutChart.series"
+                                        [chart]="statisticsDonutChart.chart" [labels]="statisticsDonutChart.labels"
+                                        [responsive]="statisticsDonutChart.responsive"
+                                        [legend]="statisticsDonutChart.legend"
+                                        [dataLabels]="statisticsDonutChart.dataLabels"
+                                        [plotOptions]="statisticsDonutChart.plotOptions"
+                                        [fill]="statisticsDonutChart.fill" [stroke]="statisticsDonutChart.stroke"
+                                        [colors]="statisticsDonutChart.colors" [grid]="statisticsDonutChart.grid"
+                                        [tooltip]="statisticsDonutChart.tooltip">
+                                    </apx-chart>
+
+                                </div>
+                                <div class="text-center position-absolute top-50 start-50 translate-middle">
+                                    <span class="text-secondary-light">Income</span>
+                                    <h6 class="">$28,500</h6>
+                                </div>
+                            </div>
+
+                            <ul class="row gy-4 mt-3">
+                                <li class="col-6 d-flex flex-column align-items-center">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span class="w-12-px h-8-px rounded-pill bg-warning-600"></span>
+                                        <span class="text-secondary-light text-sm fw-normal">Net Income</span>
+                                    </div>
+                                    <h6 class="text-primary-light fw-bold mb-0">$50,000</h6>
+                                </li>
+                                <li class="col-6 d-flex flex-column align-items-center">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span class="w-12-px h-8-px rounded-pill bg-success-600"></span>
+                                        <span class="text-secondary-light text-sm fw-normal">Commission </span>
+                                    </div>
+                                    <h6 class="text-primary-light fw-bold mb-0">$20,000</h6>
+                                </li>
+                            </ul>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xxl-12 col-xl-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="d-flex align-items-center flex-wrap gap-2 justify-content-between">
+                                <h6 class="mb-2 fw-bold text-lg mb-0">Available Treatments</h6>
+                                <a href="javascript:void(0)"
+                                    class="text-primary-600 hover-text-primary d-flex align-items-center gap-1">
+                                    View All
+                                    <iconify-icon icon="solar:alt-arrow-right-linear" class="icon"></iconify-icon>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div *ngFor="let treatment of treatments; let last = last"
+                                class="d-flex align-items-center justify-content-between gap-3"
+                                [ngClass]="{'mb-24': !last, 'mb-0': last}">
+
+                                <div class="d-flex align-items-center gap-12">
+                                    <div class="w-40-px h-40-px rounded-circle flex-shrink-0 d-flex justify-content-center align-items-center"
+                                        [ngClass]="treatment.bgClass">
+                                        <img [src]="treatment.icon" alt="" />
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <h6 class="text-md mb-0 fw-normal">{{ treatment.title }}</h6>
+                                        <span class="text-sm text-secondary-light fw-normal">{{ treatment.doctorsCount
+                                            }} Doctors</span>
+                                    </div>
+                                </div>
+
+                                <span class="text-secondary-light">{{ treatment.time }}</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-xxl-12 col-xl-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="d-flex align-items-center flex-wrap gap-2 justify-content-between">
+                                <h6 class="mb-2 fw-bold text-lg mb-0">Health Reports Document</h6>
+                                <a href="javascript:void(0)"
+                                    class="text-primary-600 hover-text-primary d-flex align-items-center gap-1">
+                                    View All
+                                    <iconify-icon icon="solar:alt-arrow-right-linear" class="icon"></iconify-icon>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex flex-column gap-24">
+                                <div class="d-flex align-items-center justify-content-between gap-3"
+                                    *ngFor="let file of files">
+                                    <div class="d-flex align-items-center gap-12">
+                                        <div class="flex-shrink-0">
+                                            <img [src]="file.icon" alt="" />
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <h6 class="text-md mb-0 fw-normal">{{ file.name }}</h6>
+                                            <span class="text-xs text-secondary-light fw-normal">{{ file.size }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex-align gap-12">
+                                        <button type="button"
+                                            class="w-32-px h-32-px d-inline-flex justify-content-center align-items-center bg-danger-100 text-danger-600 bg-hover-danger-600 text-hover-white text-md rounded-circle"
+                                            (click)="onDelete(file.name)">
+                                            <i class="ri-delete-bin-5-line"></i>
+                                        </button>
+                                        <button type="button"
+                                            class="w-32-px h-32-px d-inline-flex justify-content-center align-items-center bg-success-100 text-success-600 bg-hover-success-600 text-hover-white text-md rounded-circle"
+                                            (click)="onDownload(file.name)">
+                                            <i class="ri-download-2-fill"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

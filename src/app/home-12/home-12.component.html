@@ -1,0 +1,520 @@
+<div class="dashboard-main-body">
+
+  <app-breadcrumb [title]="'Banking System'" [main-title]="'Banking System'"></app-breadcrumb>
+  <div class="mb-24">
+    <div class="row gy-4">
+
+      <!-- Card Start -->
+      <div class="col-xxl-4 col-md-6">
+        <div class="shadow-7 p-16 radius-12 bg-base">
+          <div class="row g-3">
+            <div class="col-sm-6 col-xs-6">
+              <div class="py-20 px-24 radius-8 position-relative z-1 h-100 bg-blue-light">
+                <img src="assets/images/home-twelve/icons/booking-card-big-icon1.png" alt="Big Icon"
+                  class="position-absolute end-0 bottom-0 me-8 z-n1">
+                <span class="w-44-px h-44-px radius-8 bg-white d-flex justify-content-center align-items-center">
+                  <img src="assets/images/home-twelve/icons/booking-card-icon1.png" alt="Icon">
+                </span>
+                <span class="d-block mt-12 text-neutral-800">New Booking</span>
+                <h6 class="mt-1 mb-0">170</h6>
+              </div>
+            </div>
+            <div class="col-sm-6 col-xs-6">
+              <div class="py-20 px-24 radius-8 position-relative z-1 h-100 bg-green-light">
+                <img src="assets/images/home-twelve/icons/booking-card-big-icon2.png" alt="Big Icon"
+                  class="position-absolute end-0 bottom-0 me-4 z-n1">
+                <span class="w-44-px h-44-px radius-8 bg-white d-flex justify-content-center align-items-center">
+                  <img src="assets/images/home-twelve/icons/booking-card-icon2.png" alt="Icon">
+                </span>
+                <span class="d-block mt-12 text-neutral-800">Schedule Room</span>
+                <h6 class="mt-1 mb-0">285</h6>
+              </div>
+            </div>
+            <div class="col-sm-6 col-xs-6">
+              <div class="py-20 px-24 radius-8 position-relative z-1 h-100 bg-red-light">
+                <img src="assets/images/home-twelve/icons/booking-card-big-icon3.png" alt="Big Icon"
+                  class="position-absolute end-0 bottom-0 me-8 z-n1">
+                <span class="w-44-px h-44-px radius-8 bg-white d-flex justify-content-center align-items-center">
+                  <img src="assets/images/home-twelve/icons/booking-card-icon3.png" alt="Icon">
+                </span>
+                <span class="d-block mt-12 text-neutral-800">Total Customers</span>
+                <h6 class="mt-1 mb-0">175</h6>
+              </div>
+            </div>
+            <div class="col-sm-6 col-xs-6">
+              <div class="py-20 px-24 radius-8 position-relative z-1 h-100 bg-warning-light">
+                <img src="assets/images/home-twelve/icons/booking-card-big-icon4.png" alt="Big Icon"
+                  class="position-absolute end-0 bottom-0 me-8 z-n1">
+                <span class="w-44-px h-44-px radius-8 bg-white d-flex justify-content-center align-items-center">
+                  <img src="assets/images/home-twelve/icons/booking-card-icon4.png" alt="Icon">
+                </span>
+                <span class="d-block mt-12 text-neutral-800">Total Revenue</span>
+                <h6 class="mt-1 mb-0">$750.00</h6>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Card End -->
+
+      <!-- Semi Circle Gauge start -->
+      <div class="col-xxl-4 col-md-6">
+        <div class="shadow-7 p-24 radius-12 bg-base h-100">
+          <div class="text-center">
+            <div class="position-relative">
+              <div id="semiCircleGaugeTwo" class="big-semi-circle-gauge d-flex justify-content-center">
+                <apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart"
+                  [plotOptions]="chartOptions.plotOptions" [fill]="chartOptions.fill" [stroke]="chartOptions.stroke"
+                  [dataLabels]="chartOptions.plotOptions?.radialBar?.dataLabels">
+                </apx-chart>
+              </div>
+              <span
+                class="w-90-px h-90-px rounded-circle bg-primary-50 d-flex justify-content-center align-items-center position-absolute start-50 translate-middle-x top-50">
+                <img src="assets/images/home-twelve/icons/home.png" alt="Home Icon">
+              </span>
+            </div>
+            <h3 class="mt-40 mb-0">35</h3>
+            <span class="text-neutral-800 mt-4">Available Room Today</span>
+          </div>
+        </div>
+      </div>
+      <!-- Semi Circle Gauge End -->
+
+      <!-- Booking Statistics progress start -->
+      <div class="col-xxl-4">
+        <div class="shadow-7 p-20 radius-12 bg-base h-100">
+          <div class="d-flex align-items-center flex-wrap gap-2 justify-content-between">
+            <h6 class="mb-2 fw-bold text-lg">Booking Statistic</h6>
+            <div class="">
+              <select class="form-select form-select-sm w-auto bg-base border text-secondary-light radius-8 radius-8">
+                <option>Yearly</option>
+                <option>Monthly</option>
+                <option>Weekly</option>
+                <option>Today</option>
+              </select>
+            </div>
+          </div>
+          <div class="position-relative">
+            <div id="statisticBarChart" class="text-style">
+              <div id="statisticBarChart">
+                <apx-chart #chart [series]="statisticBarChart.series" [chart]="statisticBarChart.chart"
+                  [plotOptions]="statisticBarChart.plotOptions" [dataLabels]="statisticBarChart.dataLabels"
+                  [grid]="statisticBarChart.grid" [xaxis]="statisticBarChart.xaxis" [fill]="statisticBarChart.fill"
+                  [legend]="statisticBarChart.legend" [colors]="statisticBarChart.colors"></apx-chart>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Booking Statistics progress End -->
+
+    </div>
+  </div>
+  <div class="row g-4">
+    <div class="col-xl-8">
+      <div class="d-flex flex-column gap-24">
+
+        <!-- Travel Slider Start -->
+        <div>
+          <div>
+            <div class="d-flex align-items-center justify-content-between mb-16">
+              <h6 class="text-lg mb-0">Exclusive Travel Packages</h6>
+              <div class="d-flex align-items-center gap-16">
+                <button type="button" id="instructor-prev"
+                  class="swiper-button-prev d-flex align-items-center rounded-circle border border-neutral-400 text-neutral-600 text-2xl bg-hover-primary-600 hover-text-white justify-content-center w-40-px h-40-px position-relative top-0 start-0 end-0 transform-unset">
+                  <i class="ri-arrow-left-s-line"></i>
+                </button>
+                <button type="button" id="instructor-next"
+                  class="swiper-button-next d-flex align-items-center rounded-circle border border-neutral-400 text-neutral-600 text-2xl bg-hover-primary-600 hover-text-white justify-content-center w-40-px h-40-px position-relative top-0 start-0 end-0 transform-unset">
+                  <i class="ri-arrow-right-s-line"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="swiper travel-slider" #travelSwiper>
+              <div class="swiper-wrapper">
+                <div class="swiper-slide" *ngFor="let pkg of travelPackages">
+                  <div class="bg-base p-6 radius-12 h-100">
+                    <div class="radius-8 overflow-hidden">
+                      <img [src]="pkg.img" alt="Image" class="w-100 h-100 object-fit-cover" />
+                    </div>
+                    <div class="p-8 pt-16">
+                      <h6 class="text-md mb-1">{{ pkg.title }}</h6>
+                      <span class="text-secondary-light">{{ pkg.duration }}</span>
+                      <div class="mt-10 d-flex align-items-center justify-content-between gap-10">
+                        <span class="fw-semibold text-secondary-light text-sm">{{ pkg.price }}</span>
+                        <div class="d-flex align-items-center gap-1">
+                          <span class="text-primary-600 line-height-1 text-md fw-medium">
+                            <i class="ri-user-3-line"></i>
+                          </span>
+                          <span class="text-sm fw-medium">({{ pkg.users }})</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Travel SLider end -->
+
+        <!-- Earning Statistics start -->
+        <div class="card h-100">
+          <div class="card-header pb-0 border-0">
+            <div class="d-flex align-items-center flex-wrap gap-2 justify-content-between">
+              <h6 class="mb-2 fw-bold text-lg mb-0">Earning Statistic</h6>
+              <select class="form-select form-select-sm w-auto bg-base border text-secondary-light radius-8">
+                <option>Yearly</option>
+                <option>Monthly</option>
+                <option>Weekly</option>
+                <option>Today</option>
+              </select>
+            </div>
+          </div>
+          <div class="card-body p-24">
+            <ul class="d-flex flex-wrap align-items-center justify-content-center mb-3 gap-3">
+              <li class="d-flex align-items-center gap-2">
+                <span class="w-12-px h-8-px rounded-pill bg-primary-600"></span>
+                <span class="text-secondary-light text-sm fw-semibold">Income
+                  <span class="text-primary-light fw-bold text-xl ms-1">$26,201</span>
+                </span>
+              </li>
+              <li class="d-flex align-items-center gap-2">
+                <span class="w-12-px h-8-px rounded-pill bg-warning-600"></span>
+                <span class="text-secondary-light text-sm fw-semibold">Expense
+                  <span class="text-primary-light fw-bold text-xl ms-1"> $3,120</span>
+                </span>
+              </li>
+            </ul>
+            <div id="enrollmentChart" class="apexcharts-tooltip-style-1">
+              <apx-chart #chart [series]="enrollmentChart.series" [chart]="enrollmentChart.chart"
+                [stroke]="enrollmentChart.stroke" [grid]="enrollmentChart.grid" [fill]="enrollmentChart.fill"
+                [markers]="enrollmentChart.markers" [xaxis]="enrollmentChart.xaxis" [yaxis]="enrollmentChart.yaxis"
+                [tooltip]="enrollmentChart.tooltip" [legend]="enrollmentChart.legend" [colors]="enrollmentChart.colors">
+              </apx-chart>
+            </div>
+          </div>
+        </div>
+        <!-- Earning Statistics end -->
+
+        <!-- Transaction History Table Start -->
+        <div class="card radius-12 h-100">
+          <div class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center justify-content-between">
+            <h6 class="text-lg fw-semibold mb-0">Transaction History</h6>
+            <a href="javascript:void(0)" class="text-primary-600 hover-text-primary d-flex align-items-center gap-1">
+              View All
+              <iconify-icon icon="solar:alt-arrow-right-linear" class="icon"></iconify-icon>
+            </a>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive scroll-sm">
+              <table class="table bordered-table table-py-8 mb-0 rounded-0 border-0">
+                <thead>
+                  <tr>
+                    <th scope="col" class="rounded-0">Place</th>
+                    <th scope="col" class="rounded-0">ID</th>
+                    <th scope="col" class="rounded-0">Duration</th>
+                    <th scope="col" class="rounded-0">Amount</th>
+                    <th scope="col" class="rounded-0">Date</th>
+                    <th scope="col" class="rounded-0">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let tx of transactions">
+                    <td class="text-secondary-light">
+                      <div class="d-flex align-items-center gap-12">
+                        <span class="w-40-px h-40-px radius-4 overflow-hidden">
+                          <img [src]="tx.imgSrc" alt="Avatar" class="w-100 h-100 object-fit-cover" />
+                        </span>
+                        <span class="text-secondary-light">{{ tx.place }}</span>
+                      </div>
+                    </td>
+                    <td class="text-secondary-light">{{ tx.id }}</td>
+                    <td class="text-secondary-light">{{ tx.duration }}</td>
+                    <td class="text-secondary-light">{{ tx.amount }}</td>
+                    <td class="text-secondary-light">{{ tx.date }}</td>
+                    <td>
+                      <span [ngClass]="{
+                  'bg-success-focus text-success-main': tx.status === 'Completed',
+                  'bg-warning-focus text-warning-main': tx.status === 'Pending'
+                }" class="px-20 py-4 radius-4 fw-medium text-sm">
+                        {{ tx.status }}
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <!-- Transaction History Table end -->
+
+      </div>
+    </div>
+
+
+    <div class="col-xl-4">
+      <div class="d-flex flex-column gap-24">
+
+        <!-- Country Status Start -->
+        <div class="card radius-12 border-0">
+          <div class="card-body">
+            <div class="d-flex align-items-center flex-wrap gap-2 justify-content-between">
+              <h6 class="mb-2 fw-bold text-lg">Countries Status</h6>
+              <div class="">
+                <select class="form-select form-select-sm w-auto bg-base border text-secondary-light radius-8">
+                  <option>Yearly</option>
+                  <option>Monthly</option>
+                  <option>Weekly</option>
+                  <option>Today</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="bg-base px-20">
+            <app-world-map class="radius-8"></app-world-map>
+          </div>
+          <div class="card-body p-24 max-h-266-px scroll-sm overflow-y-auto">
+            <div class="">
+              <div class="d-flex align-items-center justify-content-between gap-3 mb-3 pb-2">
+                <div class="d-flex align-items-center w-100">
+                  <img src="assets/images/flags/flag1.png" alt=""
+                    class="w-40-px h-40-px rounded-circle flex-shrink-0 me-12 overflow-hidden">
+                  <div class="flex-grow-1">
+                    <h6 class="text-sm mb-0">USA</h6>
+                    <span class="text-xs text-secondary-light fw-medium">1,240 Users</span>
+                  </div>
+                </div>
+                <div class="d-flex align-items-center gap-2 w-100">
+                  <div class="w-100 max-w-66 ms-auto">
+                    <div class="progress progress-sm rounded-pill" role="progressbar" aria-label="Success example"
+                      aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                      <div class="progress-bar bg-primary-600 rounded-pill" style="width: 80%;"></div>
+                    </div>
+                  </div>
+                  <span class="text-secondary-light font-xs fw-semibold">80%</span>
+                </div>
+              </div>
+
+              <div class="d-flex align-items-center justify-content-between gap-3 mb-3 pb-2">
+                <div class="d-flex align-items-center w-100">
+                  <img src="assets/images/flags/flag2.png" alt=""
+                    class="w-40-px h-40-px rounded-circle flex-shrink-0 me-12 overflow-hidden">
+                  <div class="flex-grow-1">
+                    <h6 class="text-sm mb-0">Japan</h6>
+                    <span class="text-xs text-secondary-light fw-medium">1,240 Users</span>
+                  </div>
+                </div>
+                <div class="d-flex align-items-center gap-2 w-100">
+                  <div class="w-100 max-w-66 ms-auto">
+                    <div class="progress progress-sm rounded-pill" role="progressbar" aria-label="Success example"
+                      aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                      <div class="progress-bar bg-orange rounded-pill" style="width: 60%;"></div>
+                    </div>
+                  </div>
+                  <span class="text-secondary-light font-xs fw-semibold">60%</span>
+                </div>
+              </div>
+
+              <div class="d-flex align-items-center justify-content-between gap-3 mb-3 pb-2">
+                <div class="d-flex align-items-center w-100">
+                  <img src="assets/images/flags/flag3.png" alt=""
+                    class="w-40-px h-40-px rounded-circle flex-shrink-0 me-12 overflow-hidden">
+                  <div class="flex-grow-1">
+                    <h6 class="text-sm mb-0">France</h6>
+                    <span class="text-xs text-secondary-light fw-medium">1,240 Users</span>
+                  </div>
+                </div>
+                <div class="d-flex align-items-center gap-2 w-100">
+                  <div class="w-100 max-w-66 ms-auto">
+                    <div class="progress progress-sm rounded-pill" role="progressbar" aria-label="Success example"
+                      aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                      <div class="progress-bar bg-yellow rounded-pill" style="width: 49%;"></div>
+                    </div>
+                  </div>
+                  <span class="text-secondary-light font-xs fw-semibold">49%</span>
+                </div>
+              </div>
+
+              <div class="d-flex align-items-center justify-content-between gap-3">
+                <div class="d-flex align-items-center w-100">
+                  <img src="assets/images/flags/flag4.png" alt=""
+                    class="w-40-px h-40-px rounded-circle flex-shrink-0 me-12 overflow-hidden">
+                  <div class="flex-grow-1">
+                    <h6 class="text-sm mb-0">Germany</h6>
+                    <span class="text-xs text-secondary-light fw-medium">1,240 Users</span>
+                  </div>
+                </div>
+                <div class="d-flex align-items-center gap-2 w-100">
+                  <div class="w-100 max-w-66 ms-auto">
+                    <div class="progress progress-sm rounded-pill" role="progressbar" aria-label="Success example"
+                      aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                      <div class="progress-bar bg-success-main rounded-pill" style="width: 100%;"></div>
+                    </div>
+                  </div>
+                  <span class="text-secondary-light font-xs fw-semibold">100%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Country Status End -->
+
+        <!-- Check in checkout Start -->
+        <div class="card radius-12 border-0">
+          <div class="card-body py-48 px-16 d-flex align-items-center justify-content-center gap-100-px">
+            <div class="text-center">
+              <div class="position-relative d-inline-block">
+                <svg class="radial-progress max-w-120-px" data-percentage="70" viewBox="0 0 80 80">
+                  <circle class="incomplete stroke-8-px stroke-green" cx="40" cy="40" r="35"></circle>
+                  <circle class="complete stroke-8-px stroke-green" cx="40" cy="40" r="35"></circle>
+                  <text class="percentage" x="50%" y="57%" transform="matrix(0, 1, -1, 0, 80, 0)"> </text>
+                </svg>
+                <span
+                  class="w-56-px h-56-px rounded-circle bg-neutral-200 text-success-600 d-flex justify-content-center align-items-center position-absolute start-50 top-50 translate-middle">
+                  <i
+                    class="ri-contract-left-fill w-24-px h-24-px bg-success-600 text-md text-white d-flex justify-content-center align-items-center rounded-circle"></i>
+                </span>
+              </div>
+              <div class="mt-24">
+                <h5 class="mb-1">70%</h5>
+                <span class="text-secondary-light">Check In</span>
+              </div>
+            </div>
+            <div class="text-center">
+              <div class="position-relative d-inline-block">
+                <svg class="radial-progress max-w-120-px" data-percentage="30" viewBox="0 0 80 80">
+                  <circle class="incomplete stroke-8-px stroke-warning" cx="40" cy="40" r="35"></circle>
+                  <circle class="complete stroke-8-px stroke-warning" cx="40" cy="40" r="35"></circle>
+                  <text class="percentage" x="50%" y="57%" transform="matrix(0, 1, -1, 0, 80, 0)"> </text>
+                </svg>
+                <span
+                  class="w-56-px h-56-px rounded-circle bg-neutral-200 text-warning-600 d-flex justify-content-center align-items-center position-absolute start-50 top-50 translate-middle">
+                  <i
+                    class="ri-contract-right-fill w-24-px h-24-px bg-warning-600 text-md text-white d-flex justify-content-center align-items-center rounded-circle"></i>
+                </span>
+              </div>
+              <div class="mt-24">
+                <h5 class="mb-1">30%</h5>
+                <span class="text-secondary-light">Check Out</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Check in checkout End -->
+
+        <!-- Spend Overview Progress Start -->
+        <div class="card radius-12 border-0">
+          <div
+            class="d-flex align-items-center flex-wrap gap-2 justify-content-between py-12 px-20 border-bottom border-neutral-200">
+            <h6 class="mb-2 fw-bold text-lg">Spend Overview</h6>
+            <div class="">
+              <select class="form-select form-select-sm w-auto bg-base border text-secondary-light radius-8">
+                <option>Yearly</option>
+                <option>Monthly</option>
+                <option>Weekly</option>
+                <option>Today</option>
+              </select>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="d-flex flex-column gap-20">
+
+              <div class="d-flex align-items-center justify-content-between gap-10">
+                <div class="d-flex align-items-center gap-12">
+                  <span
+                    class="w-40-px h-40-px rounded-circle d-flex justify-content-center align-items-center bg-blue-light-two">
+                    <img src="assets/images/home-twelve/icons/spen-icon1.png" alt="Icon">
+                  </span>
+                  <div class="">
+                    <h6 class="text-sm mb-2">Flights</h6>
+                    <span class="text-xs text-secondary-light">$70,570</span>
+                  </div>
+                </div>
+                <div class="">
+                  <span class="text-primary-light text-sm d-block text-end">
+                    <svg class="radial-progress" data-percentage="20" viewBox="0 0 80 80">
+                      <circle class="incomplete stroke-8-px stroke-blue" cx="40" cy="40" r="35"></circle>
+                      <circle class="complete stroke-8-px stroke-blue" cx="40" cy="40" r="35"></circle>
+                      <text class="percentage" x="50%" y="57%" transform="matrix(0, 1, -1, 0, 80, 0)">20</text>
+                    </svg>
+                  </span>
+                </div>
+              </div>
+
+              <div class="d-flex align-items-center justify-content-between gap-10">
+                <div class="d-flex align-items-center gap-12">
+                  <span
+                    class="w-40-px h-40-px rounded-circle d-flex justify-content-center align-items-center bg-red-light-two">
+                    <img src="assets/images/home-twelve/icons/spen-icon2.png" alt="Icon">
+                  </span>
+                  <div class="">
+                    <h6 class="text-sm mb-2">Hotels</h6>
+                    <span class="text-xs text-secondary-light">$85,570</span>
+                  </div>
+                </div>
+                <div class="">
+                  <span class="text-primary-light text-sm d-block text-end">
+                    <svg class="radial-progress" data-percentage="35" viewBox="0 0 80 80">
+                      <circle class="incomplete stroke-8-px stroke-red" cx="40" cy="40" r="35"></circle>
+                      <circle class="complete stroke-8-px stroke-red" cx="40" cy="40" r="35"></circle>
+                      <text class="percentage" x="50%" y="57%" transform="matrix(0, 1, -1, 0, 80, 0)">35</text>
+                    </svg>
+                  </span>
+                </div>
+              </div>
+
+              <div class="d-flex align-items-center justify-content-between gap-10">
+                <div class="d-flex align-items-center gap-12">
+                  <span
+                    class="w-40-px h-40-px rounded-circle d-flex justify-content-center align-items-center bg-red-light-two">
+                    <img src="assets/images/home-twelve/icons/spen-icon2.png" alt="Icon">
+                  </span>
+                  <div class="">
+                    <h6 class="text-sm mb-2">Trains</h6>
+                    <span class="text-xs text-secondary-light">$15,000</span>
+                  </div>
+                </div>
+                <div class="">
+                  <span class="text-primary-light text-sm d-block text-end">
+                    <svg class="radial-progress" data-percentage="45" viewBox="0 0 80 80">
+                      <circle class="incomplete stroke-8-px stroke-warning" cx="40" cy="40" r="35"></circle>
+                      <circle class="complete stroke-8-px stroke-warning" cx="40" cy="40" r="35"></circle>
+                      <text class="percentage" x="50%" y="57%" transform="matrix(0, 1, -1, 0, 80, 0)">45</text>
+                    </svg>
+                  </span>
+                </div>
+              </div>
+
+              <div class="d-flex align-items-center justify-content-between gap-10">
+                <div class="d-flex align-items-center gap-12">
+                  <span
+                    class="w-40-px h-40-px rounded-circle d-flex justify-content-center align-items-center bg-green-light-two">
+                    <img src="assets/images/home-twelve/icons/spen-icon4.png" alt="Icon">
+                  </span>
+                  <div class="">
+                    <h6 class="text-sm mb-2">Cars</h6>
+                    <span class="text-xs text-secondary-light">$90,000</span>
+                  </div>
+                </div>
+                <div class="">
+                  <span class="text-primary-light text-sm d-block text-end">
+                    <svg class="radial-progress" data-percentage="65" viewBox="0 0 80 80">
+                      <circle class="incomplete stroke-8-px stroke-green" cx="40" cy="40" r="35"></circle>
+                      <circle class="complete stroke-8-px stroke-green" cx="40" cy="40" r="35"></circle>
+                      <text class="percentage" x="50%" y="57%" transform="matrix(0, 1, -1, 0, 80, 0)">65</text>
+                    </svg>
+                  </span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <!-- Spend Overview Progress End -->
+
+      </div>
+    </div>
+  </div>
+</div>

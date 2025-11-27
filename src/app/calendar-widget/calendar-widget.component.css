@@ -1,0 +1,86 @@
+.calendar-title {
+    font-size: 23px !important;
+  font-weight: 700 !important;
+  margin-bottom: 0 !important;
+  }
+  /* Control Layout */
+  .calendar-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  /* View Buttons Group */
+  .view-buttons {
+    display: flex;
+    border: 1px solid #3B82F6;
+    border-radius: 6px;
+    overflow: hidden;
+    height: 32px;
+  }
+  .fc-button-group button {
+    color: #487FFF !important;
+    border: none;
+    padding: 0 12px;
+    font-size: 15px;
+    font-weight: 500;
+    height: 32px;
+    line-height: 32px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .fc-button:hover {
+    background-color: rgb(225, 238, 255);
+  }
+  .fc-button.active {
+    background-color: #487FFF !important;
+    color: white !important;
+  }
+  /* Navigation Buttons Group */
+  .nav-buttons {
+    display: flex;
+    border: 1px solid #487FFF !important;
+    border-radius: 6px;
+    overflow: hidden;
+    height: 32px;
+  }
+  .nav-buttons .fc-button {
+    padding: 0 10px;
+    font-size: 16px;
+  }
+  /* Today Button */
+  .today-button {
+    background-color: #487FFF;
+    color: white;
+    border-radius: 6px;
+    border: none;
+  }
+  .today-button:hover {
+    background-color: #2563EB;
+  }
+  /* Event styling */
+  .fc-event {
+    border: none;
+    border-radius: 8px;
+    padding: 2px 6px;
+    font-size: 12px;
+    font-weight: 500;
+    opacity: 0.9;
+  }
+  .event-red {
+    background-color: #FEE2E2 !important;
+    color: #DC2626 !important;
+    border: 1px solid #FECACA;
+  }
+  .event-yellow {
+    background-color: #FEF9C3 !important;
+    color: #B45309 !important;
+    border: 1px solid #FDE68A;
+  }
+  .event-purple {
+    background-color: #EDE9FE !important;
+    color: #7C3AED !important;
+    border: 1px solid #DDD6FE;
+  }

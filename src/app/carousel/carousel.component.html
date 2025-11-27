@@ -1,0 +1,134 @@
+<div class="dashboard-main-body">
+    <app-breadcrumb [title]="'Components / Carousel'" [main-title]="'Carousel'"></app-breadcrumb>
+
+
+    <div class="row gy-4">
+        <div class="col-sm-6">
+            <div class="card p-0 overflow-hidden position-relative radius-12">
+                <div class="card-header py-16 px-24 bg-base border border-end-0 border-start-0 border-top-0">
+                    <h6 class="text-lg mb-0">Default Carousel</h6>
+                </div>
+                <div class="card-body p-0">
+                    <div class="swiper default-carousel" #defaultCarousel>
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide" *ngFor="let slide of defaultSlider">
+                                <div class="gradient-overlay bottom-0 start-0 h-100 position-relative">
+                                    <img [src]="slide.image" alt="" class="w-100 h-100 object-fit-cover">
+                                    <div
+                                        class="position-absolute start-50 translate-middle-x bottom-0 pb-24 z-1 text-center w-100 max-w-440-px">
+                                        <h5 class="card-title text-white text-lg mb-6">{{ slide.title }}</h5>
+                                        <p class="card-text text-white mx-auto text-sm">{{ slide.description }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="card p-0 overflow-hidden position-relative radius-12">
+                <div class="card-header py-16 px-24 bg-base border border-end-0 border-start-0 border-top-0">
+                    <h6 class="text-lg mb-0">Carousel With Arrows</h6>
+                </div>
+                <div class="card-body p-0 position-relative">
+                    <div class="swiper arrow-carousel" #arrowCarousel>
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide" *ngFor="let slide of arrowSlides">
+                                <div class="gradient-overlay bottom-0 start-0 h-100 position-relative">
+                                    <img [src]="slide.image" alt="" class="w-100 h-100 object-fit-cover">
+                                    <div
+                                        class="position-absolute start-50 translate-middle-x bottom-0 pb-24 z-1 text-center w-100 max-w-440-px">
+                                        <h5 class="card-title text-white text-lg mb-6">{{ slide.title }}</h5>
+                                        <p class="card-text text-white mx-auto text-sm">{{ slide.description }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Custom Navigation Arrows -->
+                    <button type="button" class="swiper-button-prev">
+                        <iconify-icon icon="ic:outline-keyboard-arrow-left" class="menu-icon"></iconify-icon>
+                    </button>
+                    <button type="button" class="swiper-button-next">
+                        <iconify-icon icon="ic:outline-keyboard-arrow-right" class="menu-icon"></iconify-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="card p-0 overflow-hidden position-relative radius-12">
+                <div class="card-header py-16 px-24 bg-base border border-end-0 border-start-0 border-top-0">
+                    <h6 class="text-lg mb-0">Carousel With Pagination</h6>
+                </div>
+                <div class="card-body p-0 position-relative">
+                    <div class="swiper pagination-carousel dots-style-circle dots-positioned" #paginationCarousel>
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide" *ngFor="let slide of paginationSlides">
+                                <div class="gradient-overlay bottom-0 start-0 h-100 position-relative">
+                                    <img [src]="slide.image" alt="" class="w-100 h-100 object-fit-cover">
+                                    <div
+                                        class="position-absolute start-50 translate-middle-x bottom-0 pb-64 z-1 text-center w-100 max-w-440-px">
+                                        <h5 class="card-title text-white text-lg mb-6">{{ slide.title }}</h5>
+                                        <p class="card-text text-white mx-auto text-sm">{{ slide.description }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Pagination -->
+                        <div class="swiper-pagination position-absolute bottom-24 start-0 end-0"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+            <div class="card p-0 overflow-hidden position-relative radius-12">
+                <div class="card-header py-16 px-24 bg-base border border-end-0 border-start-0 border-top-0">
+                    <h6 class="text-lg mb-0">Carousel with progress</h6>
+                </div>
+                <div class="card-body p-0 position-relative">
+                    <div class="swiper progress-carousel" #progressCarousel>
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide" *ngFor="let slide of slides">
+                                <div class="gradient-overlay bottom-0 start-0 h-100 position-relative">
+                                    <img [src]="slide.image" alt="" class="w-100 h-100 object-fit-cover">
+                                    <div
+                                        class="position-absolute start-50 translate-middle-x bottom-0 pb-64 z-1 text-center w-100 max-w-440-px">
+                                        <h5 class="card-title text-white text-lg mb-6">{{ slide.title }}</h5>
+                                        <p class="card-text text-white mx-auto text-sm">{{ slide.desc }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slider-progress">
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="card p-0 overflow-hidden position-relative radius-12">
+                <div class="card-header py-16 px-24 bg-base border border-end-0 border-start-0 border-top-0">
+                    <h6 class="text-lg mb-0">Multiple slides</h6>
+                </div>
+                <div class="card-body py-24 px-16">
+                    <div class="swiper multiple-carousel dots-style-circle" #multipleCarousel>
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide" *ngFor="let slide of multipleSlides">
+                                <div class="mx-8 mb-24 h-100">
+                                    <img [src]="slide" class="w-100 h-100 object-fit-cover" alt="">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Pagination -->
+                        <div class="swiper-pagination mt-16"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
