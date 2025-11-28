@@ -19,15 +19,15 @@ export class Home15Component {
     this.projectAnalysisChart = {
       series: [
         {
-          name: 'Net Profit',
+          name: 'Utilidad Neta',
           data: [44, 100, 40, 56, 30, 58, 50]
         },
         {
-          name: 'Revenue',
+          name: 'Ingresos',
           data: [90, 140, 80, 125, 70, 140, 110]
         },
         {
-          name: 'Free Cash',
+          name: 'Caja Disponible',
           data: [60, 120, 60, 90, 50, 95, 90]
         }
       ],
@@ -60,7 +60,7 @@ export class Home15Component {
         colors: ['transparent']
       },
       xaxis: {
-        categories: ['Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat', 'Sun']
+        categories: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom']
       },
       yaxis: {
         labels: {
@@ -86,7 +86,7 @@ export class Home15Component {
         }
       },
       colors: ['#dc3545', '#ff9f29', '#8252e9', '#144bd6'],
-      labels: ['Health', 'Business', 'Lifestyle', 'Entertainment'],
+      labels: ['Salud', 'Negocios', 'Estilo de vida', 'Entretenimiento'],
       stroke: {
         width: 2
       },
@@ -115,11 +115,11 @@ export class Home15Component {
     this.averageEarningChart = {
       series: [
         {
-          name: 'Income',
+          name: 'Ingresos',
           data: [48, 35, 55, 32, 48, 30, 55, 50, 57]
         },
         {
-          name: 'Expense',
+          name: 'Gastos',
           data: [12, 20, 15, 26, 22, 60, 40, 48, 25]
         }
       ],
@@ -167,7 +167,7 @@ export class Home15Component {
         }
       },
       xaxis: {
-        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+        categories: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Set'],
         labels: {
           style: {
             fontSize: '14px'
@@ -180,7 +180,7 @@ export class Home15Component {
       yaxis: {
         labels: {
           formatter: function (value: number) {
-            return "$" + value + "k";
+            return "S/ " + value + "k";
           },
           style: {
             fontSize: '14px'
@@ -201,30 +201,30 @@ export class Home15Component {
 
   dashboardItems = [
     {
-      title: 'Total Projects',
+      title: 'Total Eventos',
       value: 320,
-      icon: 'ri-file-text-fill',
+      icon: 'ri-calendar-event-fill',
       bgColor: 'bg-danger-600',
       blurClass: 'blur-gradient blur-gradient-1'
     },
     {
-      title: 'Total Clients',
+      title: 'Clientes',
       value: 547,
       icon: 'ri-user-2-fill',
       bgColor: 'bg-success-600',
       blurClass: 'blur-gradient blur-gradient-2'
     },
     {
-      title: 'Team Members',
+      title: 'Colaboradores',
       value: 356,
       icon: 'ri-group-fill',
       bgColor: 'bg-warning-600',
       blurClass: 'blur-gradient blur-gradient-3'
     },
     {
-      title: 'Finished Projects',
+      title: 'Eventos Realizados',
       value: 435,
-      icon: 'ri-file-list-3-fill',
+      icon: 'ri-checkbox-circle-fill',
       bgColor: 'bg-info-600',
       blurClass: 'blur-gradient blur-gradient-4'
     }
@@ -273,96 +273,96 @@ export class Home15Component {
   ];
   projects = [
     {
-      name: 'Web Development',
-      deadline: '10 Jan 2025',
-      status: 'Pending',
+      name: 'Boda - Pérez / García',
+      deadline: '10 Ene 2025',
+      status: 'Pendiente',
       statusClass: 'bg-warning-focus text-warning-main'
     },
     {
-      name: 'UX/UI Design',
-      deadline: '10 Jan 2025',
-      status: 'Completed',
+      name: 'Cumpleaños - Ana Torres',
+      deadline: '15 Ene 2025',
+      status: 'Completado',
       statusClass: 'bg-success-focus text-success-main'
     },
     {
-      name: 'React Development',
-      deadline: '10 Jan 2025',
-      status: 'InProgress',
+      name: 'Quinceaños - López',
+      deadline: '20 Ene 2025',
+      status: 'En Progreso',
       statusClass: 'bg-purple-light text-purple'
     },
     {
-      name: 'Django Development',
-      deadline: '10 Jan 2025',
-      status: 'Pending',
+      name: 'Aniversario - Ramos',
+      deadline: '22 Ene 2025',
+      status: 'Pendiente',
       statusClass: 'bg-warning-focus text-warning-main'
     },
     {
-      name: 'Web Development',
-      deadline: '10 Jan 2025',
-      status: 'Cancelled',
+      name: 'Graduación - Universidad X',
+      deadline: '30 Ene 2025',
+      status: 'Cancelado',
       statusClass: 'bg-danger-focus text-danger-main'
     },
     {
-      name: 'Web Design',
-      deadline: '10 Jan 2025',
-      status: 'InProgress',
+      name: 'Cóctel Corporativo - Empresa Y',
+      deadline: '05 Feb 2025',
+      status: 'En Progreso',
       statusClass: 'bg-purple-light text-purple'
     }
   ];
   projectsStatus = [
     {
-      name: 'UX/UI Design',
-      client: 'Robert Fox',
-      budget: '$24,000',
-      duration: '24 Days',
+      name: 'Boda - Pérez / García',
+      client: 'Familia Pérez',
+      budget: 'S/ 24,000',
+      duration: '24 Días',
       progress: 95,
       trend: 'up',
-      status: 'Pending'
+      status: 'Pendiente'
     },
     {
-      name: 'HTML Developer',
-      client: 'Leslie Alexander',
-      budget: '$32,700',
-      duration: '16 Days',
+      name: 'Cumpleaños - Ana Torres',
+      client: 'Ana Torres',
+      budget: 'S/ 32,700',
+      duration: '16 Días',
       progress: 95,
       trend: 'down',
-      status: 'Completed'
+      status: 'Completado'
     },
     {
-      name: 'React Development',
-      client: 'Devon Lane',
-      budget: '$7,250',
-      duration: '7 Days',
+      name: 'Quinceaños - López',
+      client: 'Familia López',
+      budget: 'S/ 7,250',
+      duration: '7 Días',
       progress: 95,
       trend: 'up',
-      status: 'InProgress'
+      status: 'En Progreso'
     },
     {
-      name: 'Python Research',
-      client: 'Savannah Nguyen',
-      budget: '$24,500',
-      duration: '3 Days',
+      name: 'Aniversario - Ramos',
+      client: 'Familia Ramos',
+      budget: 'S/ 24,500',
+      duration: '3 Días',
       progress: 95,
       trend: 'up',
-      status: 'Pending'
+      status: 'Pendiente'
     },
     {
-      name: 'Laravel Project',
-      client: 'Esther Howard',
-      budget: '$30,000',
-      duration: '5 Days',
+      name: 'Graduación - Universidad X',
+      client: 'Universidad X',
+      budget: 'S/ 30,000',
+      duration: '5 Días',
       progress: 95,
       trend: 'up',
-      status: 'Cancelled'
+      status: 'Cancelado'
     }
   ];
 
   getStatusClasses(status: string): string {
     switch (status) {
-      case 'Pending': return 'bg-warning-focus text-warning-main';
-      case 'Completed': return 'bg-success-focus text-success-main';
-      case 'InProgress': return 'bg-purple-light text-purple';
-      case 'Cancelled': return 'bg-danger-focus text-danger-main';
+      case 'Pendiente': return 'bg-warning-focus text-warning-main';
+      case 'Completado': return 'bg-success-focus text-success-main';
+      case 'En Progreso': return 'bg-purple-light text-purple';
+      case 'Cancelado': return 'bg-danger-focus text-danger-main';
       default: return '';
     }
   }

@@ -108,8 +108,9 @@ export const routes: Routes = [
         path: '',
         component: SideNavComponent,
         children: [
-            { path: '', redirectTo: 'home', pathMatch: 'full' },
-            { path: 'home', component: HomeComponent },
+            { path: '', redirectTo: '/sign-in', pathMatch: 'full' },
+            //{ path: 'home', component: HomeComponent },
+            { path: 'home', component: Home15Component },
             { path: 'add-blog', component: AddBlogComponent },
             { path: 'add-user', component: AddUserComponent },
             { path: 'alert', component: AlertComponent },
@@ -217,7 +218,7 @@ export const routes: Routes = [
     { path: 'sign-up', component: SignUpComponent },
     { path: 'forgot-password', component: ForgotPasswordComponent },
 
-    { path: '', redirectTo: 'home', pathMatch: 'full' },
+    { path: '', redirectTo: '/sign-in', pathMatch: 'full' },
     { path: '**', redirectTo : 'error', pathMatch: 'full'}
 ];
 

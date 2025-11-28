@@ -2,6 +2,7 @@ import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-sign-in',
@@ -27,11 +28,21 @@ export class SignInComponent {
 
     if (this.email !== validEmail) {
       this.errorMessage = 'Email inválido';
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Email inválido'
+      });
       return;
     }
 
     if (this.password !== validPassword) {
       this.errorMessage = 'Contraseña incorrecta';
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Contraseña incorrecta'
+      });
       return;
     }
 

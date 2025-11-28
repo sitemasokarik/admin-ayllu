@@ -5,11 +5,9 @@
     <iconify-icon icon="radix-icons:cross-2"></iconify-icon>
   </button>
   <div>
-    <a routerLink="/home" class="sidebar-logo">
+    <a routerLink="/home" class="sidebar-logo d-flex align-items-center gap-2">
       <img src="assets/images/logo-ayllu.png" alt="site logo" class="light-logo">
-      <!-- AYLLU EVENTOS -->
-      <img src="assets/images/logo-light.png" alt="site logo" class="dark-logo">
-      <img src="assets/images/logo-icon.png" alt="site logo" class="logo-icon">
+      <h6 class="mb-0" style="color:#f47820;font-weight:700">Ayllu</h6>
     </a>
   </div>
   <div class="sidebar-menu-area">
@@ -27,14 +25,8 @@
           <i class="ri-rocket-line text-xl me-6 d-flex w-auto"></i>
           <span>Presupuestador</span>
         </a>
-      </li>  
-         
-      <!-- <li>
-        <a routerLink="/email">
-          <iconify-icon icon="octicon:info-24" class="menu-icon"></iconify-icon>
-          <span>Presupuestador</span>
-        </a>
-      </li>       -->
+      </li>
+
       <li>
         <a routerLink="/table-cotizaciones">
           <iconify-icon icon="mingcute:storage-line" class="menu-icon"></iconify-icon>
@@ -52,25 +44,14 @@
           <i class="ri-rocket-line text-xl me-6 d-flex w-auto"></i>
           <span>Locales</span>
         </a>
-      </li>  
+      </li>
       <li>
         <a routerLink="/servicios">
           <i class="ri-rocket-line text-xl me-6 d-flex w-auto"></i>
           <span>Servicios</span>
         </a>
-      </li>             
-      <!-- <li>
-        <a routerLink="/calendar-main">
-          <iconify-icon icon="solar:calendar-outline" class="menu-icon"></iconify-icon>
-          <span>Calendar</span>
-        </a>
       </li>
-      <li>
-        <a routerLink="/kanban">
-          <iconify-icon icon="material-symbols:map-outline" class="menu-icon"></iconify-icon>
-          <span>Kanban</span>
-        </a>
-      </li>-->
+
       <li class="dropdown">
         <a href="javascript:void(0)">
           <iconify-icon icon="hugeicons:invoice-03" class="menu-icon"></iconify-icon>
@@ -82,22 +63,7 @@
               <i class="ri-circle-fill circle-icon text-primary-600 w-auto"></i> Nosotros
             </a>
           </li>
-          <!-- <li>
-            <a routerLink="/invoice-preview">
-              <i class="ri-circle-fill circle-icon text-warning-main w-auto"></i> Preview
-            </a>
-          </li>
-          <li>
-            <a routerLink="/invoice-add">
-              <i class="ri-circle-fill circle-icon text-info-main w-auto"></i> Add new
-            </a>
-          </li>
-          <li>
-            <a routerLink="/invoice-edit">
-              <i class="ri-circle-fill circle-icon text-danger-main w-auto"></i> Edit
-            </a>
-          </li> -->
-        </ul>
+          </ul>
       </li>
       <!--
       <li class="dropdown">
@@ -495,7 +461,7 @@
 
     </ul>
   </div>
-  
+
 </aside>
 
 <main class="dashboard-main">
@@ -854,7 +820,7 @@
           <div class="dropdown">
             <button class="d-flex justify-content-center align-items-center rounded-circle" type="button"
               data-bs-toggle="dropdown">
-              <img src="assets/images/user_user.png" alt="image" class="w-40-px h-40-px object-fit-cover rounded-circle">
+              <img src="https://cdn0.bioenciclopedia.com/es/posts/2/3/0/leon_32_600_square.jpg" alt="image" class="w-40-px h-40-px object-fit-cover rounded-circle">
             </button>
             <div class="dropdown-menu to-top dropdown-menu-sm">
               <div
@@ -884,7 +850,7 @@
                     <iconify-icon icon="icon-park-outline:setting-two" class="icon text-xl"></iconify-icon> Configuración</a>
                 </li>
                 <li>
-                  <a routerLink="/logout"
+                  <a routerLink="/sign-in"
                     class="dropdown-item text-black px-0 py-8 hover-bg-transparent hover-text-danger d-flex align-items-center gap-3">
                     <iconify-icon icon="lucide:power" class="icon text-xl"></iconify-icon> Cerrar Sesión</a>
                 </li>
