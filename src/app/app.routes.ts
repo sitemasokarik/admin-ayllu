@@ -27,6 +27,7 @@ import { CurrenciesComponent } from './currencies/currencies.component';
 import { DropdownComponent } from './dropdown/dropdown.component';
 import { EmailComponent } from './email/email.component';
 import { ErrorComponent } from './error/error.component';
+import { PresupuestadorComponent } from './presupuestador/presupuestador.component';
 import { FaqComponent } from './faq/faq.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { FormLayoutComponent } from './form-layout/form-layout.component';
@@ -83,6 +84,10 @@ import { TooltipComponent } from './tooltip/tooltip.component';
 import { TypographyComponent } from './typography/typography.component';
 import { UsersGridComponent } from './users-grid/users-grid.component';
 import { UsersListComponent } from './users-list/users-list.component';
+import { LocalesComponent } from './locales/locales.component';
+import { UsersComponent } from './users/users.component';
+import { CotizacionComponent } from './cotizacion/cotizacion.component';
+import { FormsComponent } from './forms/forms.component';
 import { VeiwDetailsComponent } from './veiw-details/veiw-details.component';
 import { VideoGeneratorComponent } from './video-generator/video-generator.component';
 import { VideosComponent } from './videos/videos.component';
@@ -108,8 +113,9 @@ export const routes: Routes = [
         path: '',
         component: SideNavComponent,
         children: [
-            { path: '', redirectTo: 'home', pathMatch: 'full' },
-            { path: 'home', component: HomeComponent },
+            { path: '', redirectTo: '/sign-in', pathMatch: 'full' },
+            //{ path: 'home', component: HomeComponent },
+            { path: 'home', component: Home15Component },
             { path: 'add-blog', component: AddBlogComponent },
             { path: 'add-user', component: AddUserComponent },
             { path: 'alert', component: AlertComponent },
@@ -208,7 +214,11 @@ export const routes: Routes = [
             { path: 'widgets', component: WidgetsComponent },
             { path: 'wizard', component: WizardComponent },
             { path: 'error', component: ErrorComponent },
-
+            { path: 'presupuestador', component: PresupuestadorComponent },
+            { path: 'locales', component: LocalesComponent },
+            { path: 'users', component: UsersComponent },
+            { path: 'table-forms', component: FormsComponent },
+            { path: 'table-cotizaciones', component: CotizacionComponent },
         ]
     },
     { path: 'coming-soon', component: ComingSoonComponent },
@@ -217,7 +227,7 @@ export const routes: Routes = [
     { path: 'sign-up', component: SignUpComponent },
     { path: 'forgot-password', component: ForgotPasswordComponent },
 
-    { path: '', redirectTo: 'home', pathMatch: 'full' },
+    { path: '', redirectTo: '/sign-in', pathMatch: 'full' },
     { path: '**', redirectTo : 'error', pathMatch: 'full'}
 ];
 
