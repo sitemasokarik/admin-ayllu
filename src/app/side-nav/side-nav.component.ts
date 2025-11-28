@@ -44,6 +44,13 @@ export class SideNavComponent implements AfterViewInit, OnInit, OnDestroy {
         this.handleSidebarActiveClass(event);  // Call your function after route change
       }
     });
+    // Run once on init to set active link for the current URL (fix initial load not showing active item)
+    try {
+      const initialNav = new NavigationEnd(0, this.router.url, this.router.url);
+      this.handleSidebarActiveClass(initialNav);
+    } catch (err) {
+      // ignore
+    }
   }
   ngOnDestroy() {
     // Unsubscribe to avoid memory leaks
@@ -150,8 +157,24 @@ export class SideNavComponent implements AfterViewInit, OnInit, OnDestroy {
     let matchedAnchor: HTMLElement | null = null;
 
     allAnchors.forEach((anchor) => {
-      const routerLink = anchor.getAttribute('routerlink');
-      if (routerLink === currentPath) {
+      // Try to read routerLink attribute first (lowercase html), then ng-reflect-router-link and finally href
+      let anchorPath = '';
+      const routerLinkAttr = anchor.getAttribute('routerlink') || anchor.getAttribute('ng-reflect-router-link');
+      if (routerLinkAttr) {
+        anchorPath = routerLinkAttr;
+      } else {
+        // anchor.href returns absolute URL in browsers; extract pathname if possible
+        try {
+          const href = (anchor as HTMLAnchorElement).href;
+          if (href) {
+            anchorPath = new URL(href, window.location.origin).pathname;
+          }
+        } catch (e) {
+          anchorPath = anchor.getAttribute('href') || '';
+        }
+      }
+
+      if (anchorPath === currentPath) {
         anchor.classList.add('active-page');
         anchor.parentElement?.classList.add('active-page');
         matchedAnchor = anchor;
