@@ -18,8 +18,8 @@ export class UserService {
 		return this.http.post(`${this.apiUrl}/create`, userData);
 	}
 
-	// Eliminar usuario
+	// Eliminar usuario (soft delete)
 	delete(id: number): Observable<any> {
-		return this.http.delete(`${this.apiUrl}/delete/${id}`);
+		return this.http.delete(`${this.apiUrl}/${id}`);
 	}
 }

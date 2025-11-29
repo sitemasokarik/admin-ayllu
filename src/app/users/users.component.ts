@@ -3,6 +3,7 @@ import { BreadcrumbComponent } from '../breadcrumb/breadcrumb.component';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../service/user.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-users',
@@ -35,15 +36,41 @@ export class UsersComponent implements OnInit {
   }
 
   deleteUser(usuarioID: number): void {
-    if (confirm('¿Seguro que deseas eliminar este usuario?')) {
-      this.userService.delete(usuarioID).subscribe({
-        next: () => {
-          this.users = this.users.filter(u => u.usuarioID !== usuarioID);
-          console.log('Usuario eliminado');
-        },
-        error: (err) => console.error('Error eliminando usuario', err)
-      });
-    }
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: '¡El usuario será eliminado!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.userService.delete(usuarioID).subscribe({
+          next: () => {
+            // Actualizar la lista de usuarios sin recargar
+            this.users = this.users.filter(u => u.usuarioID !== usuarioID);
+
+            Swal.fire({
+              icon: 'success',
+              title: 'Eliminado',
+              text: 'El usuario ha sido eliminado',
+              timer: 1500,
+              showConfirmButton: false
+            });
+          },
+          error: (err) => {
+            console.error('Error eliminando usuario', err);
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'No se pudo eliminar el usuario'
+            });
+          }
+        });
+      }
+    });
   }
 
   editUser(user: any) {
