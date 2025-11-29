@@ -16,7 +16,7 @@ import Swal from 'sweetalert2';
 })
 export class AddUserComponent {
 
-  title: string = 'Add User';
+  title: string = 'Agregar Usuario';
 
   // Modelo de usuario para el formulario
   user = {
