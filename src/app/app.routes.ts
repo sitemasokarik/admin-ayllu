@@ -113,10 +113,11 @@ export const routes: Routes = [
     {
         path: '',
         component: SideNavComponent,
+        canActivate: [AuthGuard],
         children: [
             { path: '', redirectTo: '/sign-in', pathMatch: 'full' },
             //{ path: 'home', component: HomeComponent },
-            { path: 'home', component: Home15Component, canActivate: [AuthGuard] },
+            { path: 'home', component: Home15Component },
             { path: 'add-blog', component: AddBlogComponent },
             { path: 'add-user', component: AddUserComponent },
             { path: 'alert', component: AlertComponent },

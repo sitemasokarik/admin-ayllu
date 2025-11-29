@@ -1,4 +1,4 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit } from '@angular/core';
+import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BreadcrumbComponent } from '../breadcrumb/breadcrumb.component';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -10,11 +10,10 @@ import { UserService } from '../../service/user.service';
   imports: [BreadcrumbComponent, RouterLink, CommonModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './users.component.html',
-  styleUrls: ['./users.component.css']   // 👈 corregido (styleUrls)
+  styleUrls: ['./users.component.css']
 })
 export class UsersComponent implements OnInit {
-
-  title: string = 'Usuarios';
+  title = 'Usuarios';
   users: any[] = [];
 
   constructor(private userService: UserService) {}
@@ -24,20 +23,32 @@ export class UsersComponent implements OnInit {
   }
 
   loadUsers(): void {
-    this.userService.getAllUsers().subscribe({
-      next: (resp) => {
-        console.log("📌 Usuarios cargados:", resp);
-
-        // Si tu API devuelve algo así:
-        // { success: true, data: [...] }
-        // Entonces sería:
-        // this.users = resp.data;
-
-        this.users = resp; // mantengo igual, según tu API
+    this.userService.getAll().subscribe({
+      next: (res: any) => {
+        console.log('📌 Usuarios cargados:', res);
+        this.users = res.data || [];
       },
       error: (err) => {
-        console.error("❌ Error al cargar usuarios:", err);
+        console.error('❌ Error al cargar usuarios', err);
       }
     });
+  }
+
+  // función para mostrar el estado en texto
+  getStatus(status: string) {
+    return status === 'Active' ? 'Active' : 'Inactive';
+  }
+
+  // opcional: eliminar usuario
+  deleteUser(id: number): void {
+    if (confirm('¿Seguro que deseas eliminar este usuario?')) {
+      this.userService.delete(id).subscribe({
+        next: () => {
+          this.users = this.users.filter(u => u.id !== id);
+          console.log('Usuario eliminado');
+        },
+        error: (err) => console.error('Error eliminando usuario', err)
+      });
+    }
   }
 }
