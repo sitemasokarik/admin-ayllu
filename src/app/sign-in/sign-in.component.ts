@@ -3,6 +3,7 @@ import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
+import { AuthService } from '../../service/auth.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -13,43 +14,67 @@ import Swal from 'sweetalert2';
   styleUrls: ['./sign-in.component.css'],
 })
 export class SignInComponent {
-  title = 'Iniciar sesión';
-  email: string = 'admin@ayllu.com';
-  password: string = 'Password';
-  errorMessage: string = '';
-  showPassword: boolean = false;
 
-  constructor(private readonly router: Router) {}
+  // 🔥 CAMBIADO: email → userName (porque tu API usa userName)
+  userName: string = '';
+  password: string = '';
+
+  showPassword = false;
+
+  constructor(
+    private readonly router: Router,
+    private readonly authService: AuthService
+  ) {}
 
   onSubmit(): void {
-    this.errorMessage = '';
-    const validEmail = 'admin@ayllu.com';
-    const validPassword = 'Password';
 
-    if (this.email !== validEmail) {
-      this.errorMessage = 'Email inválido';
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Email inválido'
-      });
-      return;
-    }
+    const credentials = {
+      userName: this.userName, // 👈 ahora coincide 100% con tu API
+      password: this.password
+    };
 
-    if (this.password !== validPassword) {
-      this.errorMessage = 'Contraseña incorrecta';
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Contraseña incorrecta'
-      });
-      return;
-    }
+    this.authService.login(credentials).subscribe({
+      next: (resp) => {
+        console.log("🟢 Respuesta servidor:", resp);
 
-    this.router.navigate(['/home']);
+        // 👇 Tu API devuelve token dentro de resp.data.token
+        const token = resp?.data?.token;
+
+        console.log("🔐 Token recibido:", token);
+
+        if (!token) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'No se recibió token del servidor'
+          });
+          return;
+        }
+
+        this.authService.saveToken(token);
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Bienvenido',
+          text: 'Inicio de sesión exitoso'
+        });
+
+        this.router.navigate(['/home']);
+      },
+
+      error: (err) => {
+        console.error("❌ Error login:", err);
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Credenciales incorrectas'
+        });
+      }
+    });
   }
 
-  togglePassword(): void {
+  togglePassword() {
     this.showPassword = !this.showPassword;
   }
 }

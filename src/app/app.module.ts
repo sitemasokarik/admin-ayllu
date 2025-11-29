@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
 import { AppComponent } from './app.component';
 import { Home11Component } from './home-11/home-11.component';
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
-import { SwiperModule } from 'swiper/angular';
+// import { SwiperModule } from 'swiper/angular';
 @NgModule({
   declarations: [
     AppComponent,
