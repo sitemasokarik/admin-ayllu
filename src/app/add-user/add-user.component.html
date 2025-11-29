@@ -10,38 +10,38 @@
                             <form (ngSubmit)="saveUser()">
                                 <div class="mb-20">
                                   <label for="nombre" class="form-label fw-semibold text-primary-light text-sm mb-8">
-                                    Full Name <span class="text-danger-600">*</span>
+                                    Nombre completo <span class="text-danger-600">*</span>
                                   </label>
-                                  <input type="text" class="form-control radius-8" id="nombre" placeholder="Enter Full Name" [(ngModel)]="user.nombre" name="nombre">
+                                  <input type="text" class="form-control radius-8" id="nombre" placeholder="Ingrese su nombre completo" [(ngModel)]="user.nombre" name="nombre">
                                 </div>
                               
                                 <div class="mb-20">
                                   <label for="userName" class="form-label fw-semibold text-primary-light text-sm mb-8">
-                                    User Name <span class="text-danger-600">*</span>
+                                    Nombre de usuario <span class="text-danger-600">*</span>
                                   </label>
-                                  <input type="text" class="form-control radius-8" id="userName" placeholder="Enter User Name" [(ngModel)]="user.userName" name="userName">
+                                  <input type="text" class="form-control radius-8" id="userName" placeholder="Ingrese su nombre de usuario" [(ngModel)]="user.userName" name="userName">
                                 </div>
                               
                                 <div class="mb-20">
                                   <label for="email" class="form-label fw-semibold text-primary-light text-sm mb-8">
-                                    Email <span class="text-danger-600">*</span>
+                                    Correo electrónico <span class="text-danger-600">*</span>
                                   </label>
-                                  <input type="email" class="form-control radius-8" id="email" placeholder="Enter email address" [(ngModel)]="user.email" name="email">
+                                  <input type="email" class="form-control radius-8" id="email" placeholder="Ingrese su correo electrónico" [(ngModel)]="user.email" name="email">
                                 </div>
                               
                                 <div class="mb-20">
                                   <label for="password" class="form-label fw-semibold text-primary-light text-sm mb-8">
-                                    Password <span class="text-danger-600">*</span>
+                                    Contraseña <span class="text-danger-600">*</span>
                                   </label>
-                                  <input type="password" class="form-control radius-8" id="password" placeholder="Enter password" [(ngModel)]="user.password" name="password">
+                                  <input type="password" class="form-control radius-8" id="password" placeholder="Ingrese su contraseña" [(ngModel)]="user.password" name="password">
                                 </div>
                               
                                 <div class="mb-20">
                                   <label for="rolID" class="form-label fw-semibold text-primary-light text-sm mb-8">
-                                    Role <span class="text-danger-600">*</span>
+                                    Rol <span class="text-danger-600">*</span>
                                   </label>
                                   <select class="form-control radius-8 form-select" id="rolID" [(ngModel)]="user.rolID" name="rolID">
-                                    <option [value]="1">Admin</option>
+                                    <option [value]="1">Administrador</option>
                                     <option [value]="2">Ejecutivo de Ventas</option>
                                     <option [value]="3">Usuario</option>
                                   </select>
