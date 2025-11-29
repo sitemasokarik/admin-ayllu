@@ -107,6 +107,7 @@ import { GalleryGridDescComponent } from './gallery-grid-desc/gallery-grid-desc.
 import { GalleryMasonryComponent } from './gallery-masonry/gallery-masonry.component';
 import { GalleryHoverEffectComponent } from './gallery-hover-effect/gallery-hover-effect.component';
 import { UserRolePermissionComponent } from './user-role-permission/user-role-permission.component';
+import { AuthGuard } from '../guard/auth.guard';
 
 export const routes: Routes = [
     {
@@ -115,7 +116,7 @@ export const routes: Routes = [
         children: [
             { path: '', redirectTo: '/sign-in', pathMatch: 'full' },
             //{ path: 'home', component: HomeComponent },
-            { path: 'home', component: Home15Component },
+            { path: 'home', component: Home15Component, canActivate: [AuthGuard] },
             { path: 'add-blog', component: AddBlogComponent },
             { path: 'add-user', component: AddUserComponent },
             { path: 'alert', component: AlertComponent },
