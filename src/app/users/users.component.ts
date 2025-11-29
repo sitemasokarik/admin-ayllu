@@ -34,21 +34,20 @@ export class UsersComponent implements OnInit {
     });
   }
 
-  // función para mostrar el estado en texto
-  getStatus(status: string) {
-    return status === 'Active' ? 'Active' : 'Inactive';
-  }
-
-  // opcional: eliminar usuario
-  deleteUser(id: number): void {
+  deleteUser(usuarioID: number): void {
     if (confirm('¿Seguro que deseas eliminar este usuario?')) {
-      this.userService.delete(id).subscribe({
+      this.userService.delete(usuarioID).subscribe({
         next: () => {
-          this.users = this.users.filter(u => u.id !== id);
+          this.users = this.users.filter(u => u.usuarioID !== usuarioID);
           console.log('Usuario eliminado');
         },
         error: (err) => console.error('Error eliminando usuario', err)
       });
     }
+  }
+
+  editUser(user: any) {
+    // Lógica para editar usuario
+    console.log('Editar usuario:', user);
   }
 }

@@ -42,19 +42,16 @@
               <th scope="col">
                 <div class="d-flex align-items-center gap-10">
                   <div class="form-check style-check d-flex align-items-center">
-                    <input class="form-check-input radius-4 border input-form-dark" type="checkbox" name="checkbox"
-                      id="selectAll">
+                    <input class="form-check-input radius-4 border input-form-dark" type="checkbox" id="selectAll">
                   </div>
                   S.L
                 </div>
               </th>
-              <th scope="col">Join Date</th>
-              <th scope="col">Name</th>
+              <th scope="col">Nombre</th>
               <th scope="col">Email</th>
-              <th scope="col">Department</th>
-              <th scope="col">Designation</th>
-              <th scope="col" class="text-center">Status</th>
-              <th scope="col" class="text-center">Action</th>
+              <th scope="col">Rol</th>
+              <th scope="col" class="text-center">Estado</th>
+              <th scope="col" class="text-center">Acciones</th>
             </tr>
           </thead>
           <tbody>
@@ -62,54 +59,52 @@
               <td>
                 <div class="d-flex align-items-center gap-10">
                   <div class="form-check style-check d-flex align-items-center">
-                    <input class="form-check-input radius-4 border border-neutral-400" type="checkbox"
-                      name="checkbox" />
+                    <input class="form-check-input radius-4 border border-neutral-400" type="checkbox" />
                   </div>
-                  {{ user.id | number: '2.0' }}
+                  {{ user.usuarioID | number:'2.0' }}
                 </div>
               </td>
-              <td>{{ user.date }}</td>
               <td>
                 <div class="d-flex align-items-center">
-                  <img [src]="user.imgSrc" alt="{{user.name}}"
-                    class="w-40-px h-40-px rounded-circle flex-shrink-0 me-12 overflow-hidden" />
                   <div class="flex-grow-1">
-                    <span class="text-md mb-0 fw-normal text-secondary-light">{{ user.name }}</span>
+                    <span class="text-md mb-0 fw-normal text-secondary-light">{{ user.nombre }}</span>
                   </div>
                 </div>
               </td>
               <td><span class="text-md mb-0 fw-normal text-secondary-light">{{ user.email }}</span></td>
-              <td>{{ user.department }}</td>
-              <td>{{ user.position }}</td>
+              <td>{{ user.rolID }}</td>
               <td class="text-center">
                 <span [ngClass]="{
-                    'bg-success-focus text-success-600 border border-success-main': user.status === 'Active',
-                    'bg-neutral-200 text-neutral-600 border border-neutral-400': user.status === 'Inactive'
+                    'bg-success-focus text-success-600 border border-success-main': user.estado,
+                    'bg-neutral-200 text-neutral-600 border border-neutral-400': !user.estado
                   }" class="px-24 py-4 radius-4 fw-medium text-sm">
-                  {{ user.status }}
+                  {{ user.estado ? 'Activo' : 'Inactivo' }}
                 </span>
               </td>
               <td class="text-center">
                 <div class="d-flex align-items-center gap-10 justify-content-center">
                   <button type="button"
-                    class="bg-info-focus bg-hover-info-200 text-info-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle">
+                    class="bg-info-focus bg-hover-info-200 text-info-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
+                    title="Ver usuario">
                     <iconify-icon icon="majesticons:eye-line" class="icon text-xl"></iconify-icon>
                   </button>
-                  <button type="button"
-                    class="bg-success-focus text-success-600 bg-hover-success-200 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle">
+                  <button type="button" (click)="editUser(user)"
+                    class="bg-success-focus text-success-600 bg-hover-success-200 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
+                    title="Editar usuario">
                     <iconify-icon icon="lucide:edit" class="menu-icon"></iconify-icon>
                   </button>
-                  <button type="button"
-                    class="remove-item-btn bg-danger-focus bg-hover-danger-200 text-danger-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle">
+                  <button type="button" (click)="deleteUser(user.usuarioID)"
+                    class="remove-item-btn bg-danger-focus bg-hover-danger-200 text-danger-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
+                    title="Eliminar usuario">
                     <iconify-icon icon="fluent:delete-24-regular" class="menu-icon"></iconify-icon>
                   </button>
                 </div>
               </td>
             </tr>
-
           </tbody>
         </table>
       </div>
+
 
       <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mt-24">
         <span>Showing 1 to 10 of 12 entries</span>
