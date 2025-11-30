@@ -1,3 +1,204 @@
 <div class="dashboard-main-body">
- 
+    <app-breadcrumb [title]="title"></app-breadcrumb>
+        
+    <div class="card h-100 p-0 radius-12">
+        <div class="border-bottom bg-base py-16 px-24">
+            
+            <form class="row gy-2" (ngSubmit)="onSubmit()" #presupuestadorForm="ngForm">
+                <h6 class="mb-4 text-xl">Datos Cliente</h6>
+                <div class="col-md-3">
+                    <label class="form-label">Nombre Cliente</label>
+                    <div class="icon-field has-validation">
+                        <span class="icon">
+                        <iconify-icon icon="f7:person"></iconify-icon>
+                        </span>
+                        <input type="text" name="#0" class="form-control" placeholder="Nombres" required>
+                        <div class="invalid-feedback">
+                        Please provide first name
+                        </div>
+                    </div>
+                </div>  
+                <div class="col-md-3">
+                    <label class="form-label">Apellido Cliente</label>
+                    <div class="icon-field has-validation">
+                        <span class="icon">
+                        <iconify-icon icon="f7:person"></iconify-icon>
+                        </span>
+                        <input type="text" name="#0" class="form-control" placeholder="Apellidos" required>
+                        <div class="invalid-feedback">
+                        Please provide first name
+                        </div>
+                    </div>
+                </div>     
+                <div class="col-md-3">
+                    <label class="form-label">Celular 1</label>
+                    <input type="text" class="form-control flex-grow-1" placeholder="(+51) 987 654 321">
+                </div>     
+                <div class="col-md-3">
+                    <label class="form-label">Celular 2</label>
+                    <input type="text" class="form-control flex-grow-1" placeholder="(+51) 987 654 321">
+                </div>                                       
+                <div class="col-md-4">
+                    <label class="form-label">Correo</label>
+                    <div class="icon-field has-validation">
+                        <span class="icon">
+                        <iconify-icon icon="mage:email"></iconify-icon>
+                        </span>
+                        <input type="email" name="#0" class="form-control" placeholder="Correo" required>
+                        <div class="invalid-feedback">
+                        Please provide email address
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Tipo Documento</label>
+                    <select class="form-select">
+                        <option>Seleccionar</option>
+                        <option>DNI</option>
+                        <option>Pasaporte</option>
+                    </select>
+                </div>                
+                <div class="col-md-4">
+                    <label class="form-label">Documento</label>
+                    <input type="text" name="#0" class="form-control" placeholder="Número Documento">
+                </div> 
+                
+                
+                <h6 class="mb-4 text-xl mt-5">Sobre mi Evento</h6>
+
+                <div class="col-md-4">
+                    <label class="form-label">N DE INVITADOS</label>
+                    <input type="text" name="#0" class="form-control" placeholder="">
+                </div>    
+                <div class="col-md-4">
+                    <label class="form-label">FECHA TENTATIVA 1</label>
+                    <input type="date" name="#0" class="form-control">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">FECHA TENTATIVA 2</label>
+                    <input type="date" name="#0" class="form-control">
+                </div> 
+                
+                <h6 class="mb-4 text-xl mt-5"></h6>
+
+                <div class="col-xxl-12">
+                    <div class="card p-0 overflow-hidden position-relative radius-12 h-100">
+                        <div class="card-header  py-16 px-24 bg-base border border-end-0 border-start-0 border-top-0">
+                            <h6 class="text-lg mb-3">Mi Evento</h6>
+                        </div>
+                        <div class="card-body p-24 pt-10">
+                            <div class="row align-items-start">
+                                <ul class="nav button-tab nav-pills mb-16 col-md-3 d-block" id="pills-tab-five" role="tablist">
+                                    <li class="nav-item mb-3" role="presentation">
+                                        <button class="nav-link d-flex gap-2 align-items-center fw-semibold text-primary-light radius-4 px-16 py-10 active" id="pills-vertical-home-tab" data-bs-toggle="pill" data-bs-target="#pills-vertical-home" type="button" role="tab" aria-controls="pills-vertical-home" aria-selected="true">
+                                            <iconify-icon icon="solar:home-smile-angle-outline" class="text-xl"></iconify-icon>
+                                            <span class="line-height-1">Local</span>
+                                        </button>
+                                    </li>
+                                    <li class="nav-item mb-3" role="presentation">
+                                        <button class="nav-link d-flex gap-2 fw-semibold text-primary-light radius-4 px-16 py-10" id="pills-vertical-details-tab" data-bs-toggle="pill" data-bs-target="#pills-vertical-details" type="button" role="tab" aria-controls="pills-vertical-details" aria-selected="false">
+                                            <iconify-icon icon="solar:home-smile-angle-outline" class="text-xl"></iconify-icon>
+                                            <span class="line-height-1">Entremeses</span>                                        
+                                        </button>
+                                    </li>
+                                    <li class="nav-item mb-3" role="presentation">
+                                        <button class="nav-link d-flex gap-2 fw-semibold text-primary-light radius-4 px-16 py-10" id="pills-vertical-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-vertical-profile" type="button" role="tab" aria-controls="pills-vertical-profile" aria-selected="false">
+                                            <iconify-icon icon="solar:home-smile-angle-outline" class="text-xl"></iconify-icon>
+                                            <span class="line-height-1">Entradas</span>                                        
+                                        </button>
+                                    </li>
+                                    <li class="nav-item mb-3" role="presentation">
+                                        <button class="nav-link d-flex gap-2 fw-semibold text-primary-light radius-4 px-16 py-10" id="pills-vertical-settings-tab" data-bs-toggle="pill" data-bs-target="#pills-vertical-settings" type="button" role="tab" aria-controls="pills-vertical-settings" aria-selected="false">
+                                            <iconify-icon icon="solar:home-smile-angle-outline" class="text-xl"></iconify-icon>
+                                            <span class="line-height-1">Fondos</span>                                        
+                                        </button>
+                                    </li>
+                                    <li class="nav-item mb-3" role="presentation">
+                                        <button class="nav-link d-flex gap-2 fw-semibold text-primary-light radius-4 px-16 py-10" id="pills-vertical-settings-tab" data-bs-toggle="pill" data-bs-target="#pills-vertical-settings" type="button" role="tab" aria-controls="pills-vertical-settings" aria-selected="false">
+                                            <iconify-icon icon="solar:home-smile-angle-outline" class="text-xl"></iconify-icon>
+                                            <span class="line-height-1">Mobiliario</span>                                        
+                                        </button>
+                                    </li>  
+                                    <li class="nav-item mb-3" role="presentation">
+                                        <button class="nav-link d-flex gap-2 fw-semibold text-primary-light radius-4 px-16 py-10" id="pills-vertical-settings-tab" data-bs-toggle="pill" data-bs-target="#pills-vertical-settings" type="button" role="tab" aria-controls="pills-vertical-settings" aria-selected="false">
+                                            <iconify-icon icon="solar:home-smile-angle-outline" class="text-xl"></iconify-icon>
+                                            <span class="line-height-1">Centros de Mesa</span>                                        
+                                        </button>
+                                    </li>  
+                                    <li class="nav-item mb-3" role="presentation">
+                                        <button class="nav-link d-flex gap-2 fw-semibold text-primary-light radius-4 px-16 py-10" id="pills-vertical-settings-tab" data-bs-toggle="pill" data-bs-target="#pills-vertical-settings" type="button" role="tab" aria-controls="pills-vertical-settings" aria-selected="false">
+                                            <iconify-icon icon="solar:home-smile-angle-outline" class="text-xl"></iconify-icon>
+                                            <span class="line-height-1">Números de Mesa</span>                                        
+                                        </button>
+                                    </li>     
+                                    <li class="nav-item mb-3" role="presentation">
+                                        <button class="nav-link d-flex gap-2 fw-semibold text-primary-light radius-4 px-16 py-10" id="pills-vertical-settings-tab" data-bs-toggle="pill" data-bs-target="#pills-vertical-settings" type="button" role="tab" aria-controls="pills-vertical-settings" aria-selected="false">
+                                            <iconify-icon icon="solar:home-smile-angle-outline" class="text-xl"></iconify-icon>
+                                            <span class="line-height-1">Servilletas</span>                                        
+                                        </button>
+                                    </li>   
+                                    <li class="nav-item mb-3" role="presentation">
+                                        <button class="nav-link d-flex gap-2 fw-semibold text-primary-light radius-4 px-16 py-10" id="pills-vertical-settings-tab" data-bs-toggle="pill" data-bs-target="#pills-vertical-settings" type="button" role="tab" aria-controls="pills-vertical-settings" aria-selected="false">
+                                            <iconify-icon icon="solar:home-smile-angle-outline" class="text-xl"></iconify-icon>
+                                            <span class="line-height-1">Velas Decorativas</span>                                        
+                                        </button>
+                                    </li>  
+                                    <li class="nav-item mb-3" role="presentation">
+                                        <button class="nav-link d-flex gap-2 fw-semibold text-primary-light radius-4 px-16 py-10" id="pills-vertical-settings-tab" data-bs-toggle="pill" data-bs-target="#pills-vertical-settings" type="button" role="tab" aria-controls="pills-vertical-settings" aria-selected="false">
+                                            <iconify-icon icon="solar:home-smile-angle-outline" class="text-xl"></iconify-icon>
+                                            <span class="line-height-1">Pastel</span>                                        
+                                        </button>
+                                    </li>
+                                    <li class="nav-item mb-3" role="presentation">
+                                        <button class="nav-link d-flex gap-2 fw-semibold text-primary-light radius-4 px-16 py-10" id="pills-vertical-settings-tab" data-bs-toggle="pill" data-bs-target="#pills-vertical-settings" type="button" role="tab" aria-controls="pills-vertical-settings" aria-selected="false">
+                                            <iconify-icon icon="solar:home-smile-angle-outline" class="text-xl"></iconify-icon>
+                                            <span class="line-height-1">Arcos</span>                                        
+                                        </button>
+                                    </li>    
+                                    <li class="nav-item mb-3" role="presentation">
+                                        <button class="nav-link d-flex gap-2 fw-semibold text-primary-light radius-4 px-16 py-10" id="pills-vertical-settings-tab" data-bs-toggle="pill" data-bs-target="#pills-vertical-settings" type="button" role="tab" aria-controls="pills-vertical-settings" aria-selected="false">
+                                            <iconify-icon icon="solar:home-smile-angle-outline" class="text-xl"></iconify-icon>
+                                            <span class="line-height-1">Arreglo Floral</span>                                        
+                                        </button>
+                                    </li> 
+                                    <li class="nav-item mb-3" role="presentation">
+                                        <button class="nav-link d-flex gap-2 fw-semibold text-primary-light radius-4 px-16 py-10" id="pills-vertical-settings-tab" data-bs-toggle="pill" data-bs-target="#pills-vertical-settings" type="button" role="tab" aria-controls="pills-vertical-settings" aria-selected="false">
+                                            <iconify-icon icon="solar:home-smile-angle-outline" class="text-xl"></iconify-icon>
+                                            <span class="line-height-1">Menajeria</span>                                        
+                                        </button>
+                                    </li>                                                                                                                                                                                                                                                                                                                          
+                                </ul>
+                                <div class="tab-content col-md-9 d-block" id="pills-tab-fiveContent">
+                                    <div class="tab-pane fade show active" id="pills-vertical-home" role="tabpanel" aria-labelledby="pills-vertical-home-tab" tabindex="0">
+                                        <div class="flex-grow-1">
+                                            <h6 class="text-lg mb-8">Locales</h6>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="pills-vertical-details" role="tabpanel" aria-labelledby="pills-vertical-details-tab" tabindex="0">
+                                        <div class="flex-grow-1">
+                                            <h6 class="text-lg mb-8">Entremeses</h6>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="pills-vertical-profile" role="tabpanel" aria-labelledby="pills-vertical-profile-tab" tabindex="0">
+                                        <div class="flex-grow-1">
+                                            <h6 class="text-lg mb-8">Entradas</h6>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="pills-vertical-settings" role="tabpanel" aria-labelledby="pills-vertical-settings-tab" tabindex="0">
+                                        <div class="flex-grow-1">
+                                            <h6 class="text-lg mb-8">Fondos</h6>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>  
+                    </div>
+                </div>              
+            </form>
+        </div>
+    </div>
 </div>

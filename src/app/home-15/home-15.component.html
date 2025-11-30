@@ -1,8 +1,39 @@
 <div class="dashboard-main-body">
   <!-- <app-breadcrumb [title]="'Panel de Eventos'" [main-title]="'Panel de Eventos'"></app-breadcrumb> -->
-  <h5>Panel de Eventos</h5>
-  <div class="row gy-4">
-    <div class="col-xxl-8">
+  <h6 class="">Panel de Eventos</h6>
+
+  <div class="row">
+    <!-- Widgets start -->
+    @for (item of dashboardItems; track $index) {
+    <div class="col-xxl-3 col-sm-6">
+      <div class="bg-base p-16 radius-8 position-relative overflow-hidden">
+        <span
+          [ngClass]="item.blurClass"
+          class="position-absolute end-0 top-50"
+        ></span>
+
+        <div class="d-flex align-items-center justify-content-between gap-1">
+          <div>
+            <span class="text-secondary-light text-sm fw-medium">{{
+              item.title
+            }}</span>
+            <h6 class="text-2xl mb-0">{{ item.value }}</h6>
+          </div>
+          <span
+            class="w-40-px h-40-px radius-8 text-white d-flex justify-content-center align-items-center text-xxl"
+            [ngClass]="item.bgColor"
+          >
+            <i [class]="item.icon"></i>
+          </span>
+        </div>
+      </div>
+    </div>
+    }
+    <!-- Widgets End -->    
+  </div>
+  
+  <div class="row gy-4 mt-4">
+    <div class="col-xxl-12">
       <div class="card h-100 radius-8 border-0">
         <div
           class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center justify-content-between"
@@ -32,7 +63,7 @@
                 >
               </span>
             </li>
-            <li class="d-flex align-items-center gap-2">
+            <!-- <li class="d-flex align-items-center gap-2">
               <span class="w-12-px h-8-px rounded-pill bg-warning-600"></span>
               <span class="text-secondary-light text-sm fw-semibold"
                 >Gastos:
@@ -40,7 +71,7 @@
                   S/ 3,120</span
                 >
               </span>
-            </li>
+            </li> -->
           </ul>
           <div id="averageEarningChart" class="apexcharts-tooltip-style-1">
             <apx-chart
@@ -62,7 +93,7 @@
       </div>
     </div>
 
-    <div class="col-xxl-4">
+    <!-- <div class="col-xxl-4">
       <div class="card h-100 radius-8 border-0">
         <div
           class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center justify-content-between"
@@ -234,33 +265,7 @@
       </div>
     </div>
 
-    <!-- Widgets start -->
-    @for (item of dashboardItems; track $index) {
-    <div class="col-xxl-3 col-sm-6">
-      <div class="bg-base p-16 radius-8 position-relative overflow-hidden">
-        <span
-          [ngClass]="item.blurClass"
-          class="position-absolute end-0 top-50"
-        ></span>
 
-        <div class="d-flex align-items-center justify-content-between gap-1">
-          <div>
-            <span class="text-secondary-light text-sm fw-medium">{{
-              item.title
-            }}</span>
-            <h6 class="text-2xl mb-0">{{ item.value }}</h6>
-          </div>
-          <span
-            class="w-40-px h-40-px radius-8 text-white d-flex justify-content-center align-items-center text-xxl"
-            [ngClass]="item.bgColor"
-          >
-            <i [class]="item.icon"></i>
-          </span>
-        </div>
-      </div>
-    </div>
-    }
-    <!-- Widgets End -->
 
     <div class="col-xxl-8 col-sm-6">
       <div class="card h-100">
@@ -452,6 +457,6 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </div>

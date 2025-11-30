@@ -10,5 +10,5 @@ import { BreadcrumbComponent } from '../breadcrumb/breadcrumb.component';
   styleUrl: './company.component.css'
 })
 export class CompanyComponent {
-  title = 'Company';
+  title = 'Empresa';
 }

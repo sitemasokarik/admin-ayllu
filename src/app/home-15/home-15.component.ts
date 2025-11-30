@@ -117,10 +117,6 @@ export class Home15Component {
         {
           name: 'Ingresos',
           data: [48, 35, 55, 32, 48, 30, 55, 50, 57]
-        },
-        {
-          name: 'Gastos',
-          data: [12, 20, 15, 26, 22, 60, 40, 48, 25]
         }
       ],
       chart: {
@@ -201,12 +197,19 @@ export class Home15Component {
 
   dashboardItems = [
     {
-      title: 'Total Eventos',
+      title: 'Cotizaciones',
       value: 320,
       icon: 'ri-calendar-event-fill',
       bgColor: 'bg-danger-600',
       blurClass: 'blur-gradient blur-gradient-1'
     },
+    {
+      title: 'Eventos Realizados',
+      value: 435,
+      icon: 'ri-checkbox-circle-fill',
+      bgColor: 'bg-info-600',
+      blurClass: 'blur-gradient blur-gradient-4'
+    },    
     {
       title: 'Clientes',
       value: 547,
@@ -215,18 +218,11 @@ export class Home15Component {
       blurClass: 'blur-gradient blur-gradient-2'
     },
     {
-      title: 'Colaboradores',
+      title: 'Usuarios',
       value: 356,
       icon: 'ri-group-fill',
       bgColor: 'bg-warning-600',
       blurClass: 'blur-gradient blur-gradient-3'
-    },
-    {
-      title: 'Eventos Realizados',
-      value: 435,
-      icon: 'ri-checkbox-circle-fill',
-      bgColor: 'bg-info-600',
-      blurClass: 'blur-gradient blur-gradient-4'
     }
   ];
   users = [
