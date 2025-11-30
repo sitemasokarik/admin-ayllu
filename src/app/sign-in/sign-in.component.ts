@@ -1,80 +1,78 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import Swal from 'sweetalert2';
-import { AuthService } from '../../service/auth.service';
+import { Component, CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
+import { Router, RouterLink } from "@angular/router";
+import { FormsModule } from "@angular/forms";
+import { CommonModule } from "@angular/common";
+import Swal from "sweetalert2";
+import { AuthService } from "../../service/auth.service";
 
 @Component({
-  selector: 'app-sign-in',
-  standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  templateUrl: './sign-in.component.html',
-  styleUrls: ['./sign-in.component.css'],
+	selector: "app-sign-in",
+	standalone: true,
+	imports: [CommonModule, FormsModule, RouterLink],
+	schemas: [CUSTOM_ELEMENTS_SCHEMA],
+	templateUrl: "./sign-in.component.html",
+	styleUrls: ["./sign-in.component.css"],
 })
 export class SignInComponent {
+	userName: string = "";
+	password: string = "";
+	showPassword = false;
 
-  // 🔥 CAMBIADO: email → userName (porque tu API usa userName)
-  userName: string = '';
-  password: string = '';
+	constructor(private readonly router: Router, private readonly authService: AuthService) {}
 
-  showPassword = false;
+	onSubmit(): void {
+		const credentials = {
+			userName: this.userName,
+			password: this.password,
+		};
 
-  constructor(
-    private readonly router: Router,
-    private readonly authService: AuthService
-  ) {}
+		this.authService.login(credentials).subscribe({
+			next: (resp: any) => {
+				console.log("🟢 Respuesta servidor:", resp);
 
-  onSubmit(): void {
+				// Guardar token
+				const token = resp?.data?.token;
+				if (!token) {
+					Swal.fire({
+						icon: "error",
+						title: "Error",
+						text: "No se recibió token del servidor",
+					});
+					return;
+				}
+				this.authService.saveToken(token);
 
-    const credentials = {
-      userName: this.userName, // 👈 ahora coincide 100% con tu API
-      password: this.password
-    };
+				// Guardar info del usuario logueado
+				const user = resp?.data?.usuario; // 👈 Ajusta según tu API
+				if (user) {
+					this.authService.saveUser(user);
+					// 🔹 Mostrar info del usuario en consola
+					console.log("💻 Usuario logueado:", user);
+				} else {
+					console.warn("⚠️ No se recibió información del usuario en la respuesta");
+				}
 
-    this.authService.login(credentials).subscribe({
-      next: (resp) => {
-        console.log("🟢 Respuesta servidor:", resp);
+				Swal.fire({
+					icon: "success",
+					title: "Bienvenido",
+					text: `Hola ${user?.nombre || this.userName}!`,
+				});
 
-        // 👇 Tu API devuelve token dentro de resp.data.token
-        const token = resp?.data?.token;
+				this.router.navigate(["/home"]);
+			},
 
-        console.log("🔐 Token recibido:", token);
+			error: err => {
+				console.error("❌ Error login:", err);
+				Swal.fire({
+					icon: "error",
+					title: "Error",
+					text: "Credenciales incorrectas",
+				});
+			},
+		});
+	}
 
-        if (!token) {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'No se recibió token del servidor'
-          });
-          return;
-        }
-
-        this.authService.saveToken(token);
-
-        Swal.fire({
-          icon: 'success',
-          title: 'Bienvenido',
-          text: 'Inicio de sesión exitoso'
-        });
-
-        this.router.navigate(['/home']);
-      },
-
-      error: (err) => {
-        console.error("❌ Error login:", err);
-
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Credenciales incorrectas'
-        });
-      }
-    });
-  }
-
-  togglePassword() {
-    this.showPassword = !this.showPassword;
-  }
+	togglePassword() {
+		this.showPassword = !this.showPassword;
+	}
 }

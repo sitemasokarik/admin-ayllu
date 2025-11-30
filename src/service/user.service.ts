@@ -18,8 +18,21 @@ export class UserService {
 		return this.http.post(`${this.apiUrl}/create`, userData);
 	}
 
+	// UserService
+	getById(id: number): Observable<any> {
+		return this.http.get(`${this.apiUrl}/${id}`);
+	}
+
 	// Eliminar usuario (soft delete)
 	delete(id: number): Observable<any> {
 		return this.http.delete(`${this.apiUrl}/${id}`);
+	}
+
+	updateUser(userData: any): Observable<any> {
+		return this.http.put(`${this.apiUrl}/update`, userData);
+	}
+
+	changePassword(passwordData: any): Observable<any> {
+		return this.http.put(`${this.apiUrl}/change-password`, passwordData);
 	}
 }
