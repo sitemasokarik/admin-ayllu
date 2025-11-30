@@ -7,6 +7,7 @@ import Swal from "sweetalert2";
 import * as bootstrap from "bootstrap";
 import { FormsModule } from "@angular/forms";
 import { AuthService } from "../../service/auth.service";
+import DataTable from "datatables.net";
 
 @Component({
 	selector: "app-users",
@@ -22,10 +23,21 @@ export class UsersComponent implements OnInit {
 	selectedUser: any = null; // Usuario seleccionado para ver/editar
 	passwords = { currentPassword: "", newPassword: "", confirmPassword: "" }; // Para cambio de contraseña
 
+	dataTable: any; // Instancia de DataTable
+	private dtInitialized = false; // Marca si DataTable ya se inicializó
+
 	constructor(private userService: UserService, private authService: AuthService) {}
 
 	ngOnInit(): void {
 		this.loadUsers();
+	}
+
+	ngAfterViewChecked(): void {
+		// Inicializamos DataTable solo una vez que hay datos
+		if (!this.dtInitialized && this.users.length > 0) {
+			this.initDataTable();
+			this.dtInitialized = true;
+		}
 	}
 
 	loadUsers(): void {
@@ -33,10 +45,23 @@ export class UsersComponent implements OnInit {
 			next: (res: any) => {
 				console.log("📌 Usuarios cargados:", res);
 				this.users = res.data || [];
+
+				// Si ya estaba inicializado, refrescar DataTable
+				if (this.dataTable) {
+					this.dataTable.clear().draw();
+					this.dataTable.rows.add(this.users).draw();
+				}
 			},
 			error: err => {
 				console.error("❌ Error al cargar usuarios", err);
 			},
+		});
+	}
+
+	initDataTable(): void {
+		this.dataTable = new DataTable("#dataTable", {
+			pageLength: 10,
+			// Configuración adicional si quieres
 		});
 	}
 
