@@ -8,6 +8,7 @@ export class UserService {
 	private apiUrlCategorias = "http://caeteringdcodepe.runasp.net/api/v1/categoria"; // URL completa de tu API
 	private apiUrlProductos = "http://caeteringdcodepe.runasp.net/api/v1/Producto"; // URL completa de tu API
 	private apiUrlClientes = "http://caeteringdcodepe.runasp.net/api/v1/Cliente"; // URL completa de tu API
+	private apiUrlLocales = "http://caeteringdcodepe.runasp.net/api/v1/local"; // URL de tu API de Local
 
 	constructor(private http: HttpClient) {}
 
@@ -75,4 +76,12 @@ export class UserService {
 	getAllClients(): Observable<any> {
 		return this.http.get(`${this.apiUrlClientes}/getall`);
 	}
+
+	//LOCAL METHODS
+	getAllLocales(): Observable<any> {
+		return this.http.get(`${this.apiUrlLocales}/get-all`);
+	}
+	getLocalById(id: number): Observable<any> {
+		return this.http.get(`${this.apiUrlLocales}/get-by-id/${id}`);
+	  }
 }
