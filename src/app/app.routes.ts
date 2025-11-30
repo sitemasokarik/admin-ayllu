@@ -87,6 +87,7 @@ import { UsersListComponent } from './users-list/users-list.component';
 import { LocalesComponent } from './locales/locales.component';
 import { UsersComponent } from './users/users.component';
 import { CotizacionComponent } from './cotizacion/cotizacion.component';
+import { CategoryComponent } from './category/category.component';
 import { FormsComponent } from './forms/forms.component';
 import { VeiwDetailsComponent } from './veiw-details/veiw-details.component';
 import { VideoGeneratorComponent } from './video-generator/video-generator.component';
@@ -108,6 +109,8 @@ import { GalleryMasonryComponent } from './gallery-masonry/gallery-masonry.compo
 import { GalleryHoverEffectComponent } from './gallery-hover-effect/gallery-hover-effect.component';
 import { UserRolePermissionComponent } from './user-role-permission/user-role-permission.component';
 import { AuthGuard } from '../guard/auth.guard';
+import { ProductComponent } from './product/product.component';
+import { ClientsComponent } from './clients/clients.component';
 
 export const routes: Routes = [
     {
@@ -221,6 +224,9 @@ export const routes: Routes = [
             { path: 'users', component: UsersComponent },
             { path: 'table-forms', component: FormsComponent },
             { path: 'table-cotizaciones', component: CotizacionComponent },
+            { path: 'categorys', component: CategoryComponent },
+            { path: 'products', component: ProductComponent },
+            { path: 'clients', component: ClientsComponent },
         ]
     },
     { path: 'coming-soon', component: ComingSoonComponent },

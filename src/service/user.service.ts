@@ -5,6 +5,9 @@ import { Observable } from "rxjs";
 @Injectable({ providedIn: "root" })
 export class UserService {
 	private apiUrl = "http://caeteringdcodepe.runasp.net/api/v1/usuario"; // URL completa de tu API
+	private apiUrlCategorias = "http://caeteringdcodepe.runasp.net/api/v1/categoria"; // URL completa de tu API
+	private apiUrlProductos = "http://caeteringdcodepe.runasp.net/api/v1/Producto"; // URL completa de tu API
+	private apiUrlClientes = "http://caeteringdcodepe.runasp.net/api/v1/Cliente"; // URL completa de tu API
 
 	constructor(private http: HttpClient) {}
 
@@ -35,4 +38,22 @@ export class UserService {
 	changePassword(passwordData: any): Observable<any> {
 		return this.http.put(`${this.apiUrl}/change-password`, passwordData);
 	}
+
+	//CATEGORY METHODS
+	getAllCategorys(): Observable<any> {
+		return this.http.get(`${this.apiUrlCategorias}/getall`);
+	}
+	getCategoryById(id: number): Observable<any> {
+		return this.http.get(`${this.apiUrlCategorias}/getbyid/${id}`);
+	}
+	
+	//PRODUCT METHODS
+	getAllProducts(): Observable<any> {
+		return this.http.get(`${this.apiUrlProductos}/getall`);
+	}
+
+	//CLIENT METHODS
+	getAllClients(): Observable<any> {
+		return this.http.get(`${this.apiUrlClientes}/getall`);
+	}	
 }
