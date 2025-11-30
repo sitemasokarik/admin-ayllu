@@ -10,15 +10,16 @@ import { AuthService } from "../../service/auth.service";
 import DataTable from "datatables.net";
 
 @Component({
-	selector: "app-locales",
+  selector: 'app-services',
 	standalone: true,
 	imports: [BreadcrumbComponent, RouterLink, CommonModule, FormsModule],
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
-	templateUrl: "./locales.component.html",
-	styleUrl: "./locales.component.css",
+  templateUrl: './services.component.html',
+  styleUrl: './services.component.css'
 })
-export class LocalesComponent {
-	title = "Locales";
+
+export class ServicesComponent {
+	title = "Servicios";
 
 	categorys: any[] = [];
 	selectedUser: any = null; // Usuario seleccionado para ver/editar

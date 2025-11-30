@@ -28,7 +28,7 @@ export class ClientsComponent implements OnInit, AfterViewChecked {
   constructor(private userService: UserService, private authService: AuthService) {}
 
   ngOnInit(): void {
-    this.loadClients();
+    this.loadFormulario();
   }
 
   ngAfterViewChecked(): void {
@@ -39,10 +39,10 @@ export class ClientsComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  loadClients(): void {
-    this.userService.getAllClients().subscribe({
+  loadFormulario(): void {
+    this.userService.getAllFormulario().subscribe({
       next: (res: any) => {
-        console.log("📌 Clientes cargados:", res);
+        console.log("📌 Formulario cargados:", res);
         this.clients = res.data || [];
 
         // Si ya estaba inicializado, refrescar DataTable
@@ -52,7 +52,7 @@ export class ClientsComponent implements OnInit, AfterViewChecked {
         }
       },
       error: err => {
-        console.error("❌ Error al cargar Clientes", err);
+        console.error("❌ Error al cargar Formulario", err);
       },
     });
   }

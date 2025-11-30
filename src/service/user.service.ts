@@ -105,4 +105,9 @@ export class UserService {
 	updateEmpresa(empresaData: any): Observable<any> {
 		return this.http.put(`${this.apiUrlEmpresa}/update`, empresaData);
 	}
+
+	//FORMULARIO CONTACTO METHODS
+	getAllFormulario(): Observable<any> {
+		return this.http.get(`${this.apiUrlClientes}/getall`);
+	}
 }
