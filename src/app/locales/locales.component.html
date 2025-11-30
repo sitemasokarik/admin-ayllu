@@ -41,24 +41,24 @@
                   title="Ver Local" (click)="openLocalModal(local)">
                   <i class="bx bx-show text-xl"></i>
                 </button>
-      
-                <!-- <button type="button" (click)="editLocal(local)"
+
+                <button type="button" (click)="editLocal(local)"
                   class="bg-success-focus text-success-600 bg-hover-success-200 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
                   title="Editar Local">
                   <i class="bx bx-edit-alt text-xl"></i>
                 </button>
-      
+
                 <button *ngIf="local.estado" type="button" (click)="deleteLocal(local.localID)"
                   class="remove-item-btn bg-danger-focus bg-hover-danger-200 text-danger-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
                   title="Desactivar Local">
                   <i class="bx bx-block text-xl"></i>
-                </button> -->
+                </button>
               </div>
             </td>
           </tr>
         </tbody>
       </table>
-      
+
     </div>
   </div>
 </div>
@@ -129,15 +129,16 @@
             <div class="col-12">
               <h6 class="fw-semibold text-secondary mb-1">Fotos</h6>
               <div class="d-flex flex-wrap gap-2">
-                <img *ngFor="let foto of selectedLocal.fotosUrls" [src]="foto" class="img-thumbnail" style="width: 100px; height: 100px; object-fit: cover;">
+                <img *ngFor="let foto of selectedLocal.fotosUrls" [src]="foto" class="img-thumbnail"
+                  style="width: 100px; height: 100px; object-fit: cover;">
               </div>
             </div>
 
-               <!-- Términos y Condiciones -->
-               <div class="col-12">
-                <h6 class="fw-semibold text-secondary mb-1">Términos y Condiciones</h6>
-                <p class="mb-0">{{ selectedLocal.terminosCondiciones }}</p>
-              </div>
+            <!-- Términos y Condiciones -->
+            <div class="col-12">
+              <h6 class="fw-semibold text-secondary mb-1">Términos y Condiciones</h6>
+              <p class="mb-0">{{ selectedLocal.terminosCondiciones }}</p>
+            </div>
 
           </div>
         </div>
@@ -146,35 +147,79 @@
   </div>
 </div>
 
-<!-- Modal para editar categoría -->
-<div class="modal fade" id="editCategoryModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-md">
+<!-- Modal para editar Local -->
+<div class="modal fade" id="editLocalModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Editar Categoría</h5>
+        <h5 class="modal-title">Editar Local</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form #editCategoryForm="ngForm" (ngSubmit)="submitEditCategory()" *ngIf="selectedCategory">
+        <form #editLocalForm="ngForm" (ngSubmit)="submitEditLocal()" *ngIf="selectedLocal">
           <div class="row g-3">
             <!-- Nombre -->
             <div class="col-md-6">
               <label class="form-label">Nombre</label>
-              <input type="text" class="form-control" [(ngModel)]="selectedCategory.nombre" name="nombre" required
+              <input type="text" class="form-control" [(ngModel)]="selectedLocal.nombre" name="nombre" required
                 [ngModelOptions]="{ standalone: true }" />
             </div>
 
-            <!-- Descripción -->
+            <!-- Dirección -->
             <div class="col-md-6">
-              <label class="form-label">Descripción</label>
-              <input type="text" class="form-control" [(ngModel)]="selectedCategory.descripcion" name="descripcion"
+              <label class="form-label">Dirección</label>
+              <input type="text" class="form-control" [(ngModel)]="selectedLocal.direccion" name="direccion"
                 [ngModelOptions]="{ standalone: true }" />
+            </div>
+
+            <!-- Capacidad -->
+            <div class="col-md-6">
+              <label class="form-label">Capacidad</label>
+              <input type="number" class="form-control" [(ngModel)]="selectedLocal.capacidad" name="capacidad"
+                [ngModelOptions]="{ standalone: true }" />
+            </div>
+
+            <!-- Precio Alquiler -->
+            <div class="col-md-6">
+              <label class="form-label">Precio Alquiler</label>
+              <input type="number" class="form-control" [(ngModel)]="selectedLocal.precioAlquiler" name="precioAlquiler"
+                [ngModelOptions]="{ standalone: true }" />
+            </div>
+
+            <!-- Horas Evento -->
+            <div class="col-md-6">
+              <label class="form-label">Horas del Evento</label>
+              <input type="number" class="form-control" [(ngModel)]="selectedLocal.horasEvento" name="horasEvento"
+                [ngModelOptions]="{ standalone: true }" />
+            </div>
+
+            <!-- Términos y Condiciones -->
+            <div class="col-md-6">
+              <label class="form-label">Términos y Condiciones</label>
+              <textarea class="form-control" [(ngModel)]="selectedLocal.terminosCondiciones" name="terminosCondiciones"
+                [ngModelOptions]="{ standalone: true }"></textarea>
+            </div>
+
+            <!-- Fotos -->
+            <div class="col-12">
+              <label class="form-label">Fotos</label>
+              <div class="d-flex gap-2 mb-2">
+                <input type="text" class="form-control" placeholder="Ingrese URL de foto" [(ngModel)]="newFotoUrl"
+                  name="newFotoUrl" [ngModelOptions]="{ standalone: true }" />
+                <button type="button" class="btn btn-primary"
+                  (click)="selectedLocal.fotosUrls.push(newFotoUrl); newFotoUrl=''">Agregar</button>
+              </div>
+              <div class="d-flex flex-wrap gap-2 pt-3">
+                <span class="badge bg-secondary" *ngFor="let foto of selectedLocal.fotosUrls; let i = index">
+                  {{ foto }} <i class="bx bx-x cursor-pointer" (click)="selectedLocal.fotosUrls.splice(i,1)"></i>
+                </span>
+              </div>
             </div>
           </div>
 
           <div class="modal-footer mt-3">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-            <button type="submit" class="btn btn-primary" [disabled]="editCategoryForm.invalid">Guardar Cambios</button>
+            <button type="submit" class="btn btn-primary" [disabled]="editLocalForm.invalid">Guardar Cambios</button>
           </div>
         </form>
       </div>

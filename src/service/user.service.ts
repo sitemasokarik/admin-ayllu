@@ -87,4 +87,10 @@ export class UserService {
 	createLocal(localData: any): Observable<any> {
 		return this.http.post(`${this.apiUrlLocales}/create`, localData);
 	}
+	updateLocal(localData: any): Observable<any> {
+		return this.http.put(`${this.apiUrlLocales}/update`, localData);
+	}
+	deleteLocal(id: number): Observable<any> {
+		return this.http.delete(`${this.apiUrlLocales}/delete/${id}`);
+	}
 }
