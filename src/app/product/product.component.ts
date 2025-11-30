@@ -36,32 +36,40 @@ export class ProductComponent implements OnInit {
 		this.loadProductos();
 	}
 
-	ngAfterViewChecked(): void {
-		// Inicializamos DataTable solo una vez que hay datos
-		if (!this.dtInitialized && this.productos.length > 0) {
-			this.initDataTable();
-			this.dtInitialized = true;
-		}
-	}
+	// ngAfterViewChecked(): void {
+	// 	// Inicializamos DataTable solo una vez que hay datos
+	// 	if (!this.dtInitialized && this.productos.length > 0) {
+	// 		this.initDataTable();
+	// 		this.dtInitialized = true;
+	// 	}
+	// }
 
 	loadProductos(): void {
-		this.userService.getAllProducts().subscribe({
-			next: (res: any) => {
-				console.log("📌 Productos cargados:", res);
-				this.productos = res.data || [];
-				this.loading = false;
-				// Si ya estaba inicializado, refrescar DataTable
-				if (this.dataTable) {
-					this.dataTable.clear().draw();
-					this.dataTable.rows.add(this.productos).draw();
-				}
-			},
-			error: err => {
-				console.error("❌ Error al cargar Productos", err);
-				this.loading = false;
-			},
-		});
+	this.loading = true;
+
+	// 🔥 destruir antes de recargar
+	if (this.dataTable) {
+		this.dataTable.destroy();
+		this.dataTable = null;
 	}
+
+	this.userService.getAllProducts().subscribe({
+		next: (res: any) => {
+		this.productos = res.data || [];
+
+		// Esperar a que angular pinte la tabla
+		setTimeout(() => {
+			this.loading = false;
+			this.initOrRefreshTable();   // ✔ correcta inicialización
+		}, 150);
+		},
+		error: err => {
+		console.error("Error:", err);
+		this.loading = false;
+		},
+	});
+	}
+
 
 	initDataTable(): void {
 		this.dataTable = new DataTable("#dataTable", {
@@ -177,14 +185,14 @@ export class ProductComponent implements OnInit {
 		const loggedUser = this.authService.getUser();
 
 		const updateData = {
-			productoID: this.selectedProduct.productoID,
-			nombre: this.selectedProduct.nombre,
-			descripcion: this.selectedProduct.descripcion,
-			precio: Number(this.selectedProduct.precio),
-			precioCosto: Number(this.selectedProduct.precioCosto),
-			imagenUrl: this.selectedProduct.imagenUrl,
-			categoriaID: Number(this.selectedProduct.categoriaID),
-			usuarioModificacion: loggedUser?.nombre || "Admin",
+		productoID: this.selectedProduct.productoID,
+		nombre: this.selectedProduct.nombre,
+		descripcion: this.selectedProduct.descripcion,
+		precio: Number(this.selectedProduct.precio),
+		precioCosto: Number(this.selectedProduct.precioCosto),
+		fotosUrls: [this.selectedProduct.imagenUrl || ""],   // ✔ Array como pide la API
+		categoriaID: Number(this.selectedProduct.categoriaID),
+		usuarioModificacion: loggedUser?.nombre || "Admin",
 		};
 
 		this.userService.updateProduct(updateData).subscribe({
@@ -207,4 +215,18 @@ export class ProductComponent implements OnInit {
 			modal?.hide();
 		}
 	}
+
+
+	initOrRefreshTable() {
+	setTimeout(() => {
+		if (!document.querySelector("#dataTable")) {
+		console.warn("Tabla no está lista todavía...");
+		return;
+		}
+
+		this.dataTable = new DataTable("#dataTable", {
+		pageLength: 10,
+		});
+	}, 100);
+	}	
 }

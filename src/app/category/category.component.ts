@@ -10,182 +10,172 @@ import { AuthService } from "../../service/auth.service";
 import DataTable from "datatables.net";
 
 @Component({
-	selector: "app-category",
-	standalone: true,
-	imports: [BreadcrumbComponent, RouterLink, CommonModule, FormsModule],
-	schemas: [CUSTOM_ELEMENTS_SCHEMA],
-	templateUrl: "./category.component.html",
-	styleUrl: "./category.component.css",
+  selector: "app-category",
+  standalone: true,
+  imports: [BreadcrumbComponent, RouterLink, CommonModule, FormsModule],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  templateUrl: "./category.component.html",
+  styleUrl: "./category.component.css",
 })
-export class CategoryComponent {
-	title = "Categorías";
-	loading: boolean = true;
+export class CategoryComponent implements OnInit {
+  
+  title = "Categorías";
+  loading = true;
 
-	categorys: any[] = [];
-	selectedUser: any = null; // Usuario seleccionado para ver/editar
-	selectedCategory: any = null; // Categoría seleccionada para ver/editar
+  categorys: any[] = [];
+  selectedCategory: any = null;
 
-	dataTable: any; // Instancia de DataTable
-	private dtInitialized = false; // Marca si DataTable ya se inicializó
+  dataTable: any;
 
-	passwords = { currentPassword: "", newPassword: "", confirmPassword: "" }; // Para cambio de contraseña
+  constructor(
+    private userService: UserService,
+    private authService: AuthService
+  ) {}
 
-	constructor(private userService: UserService, private authService: AuthService) {}
+  ngOnInit(): void {
+    this.loadCategorys();
+  }
 
-	ngOnInit(): void {
-		this.loadCategorys();
-	}
-
-	ngAfterViewChecked(): void {
-		// Inicializamos DataTable solo una vez que hay datos
-		if (!this.dtInitialized && this.categorys.length > 0) {
-			this.initDataTable();
-			this.dtInitialized = true;
+	initOrRefreshTable() {
+	setTimeout(() => {
+		if (!document.querySelector("#dataTable")) {
+		console.warn("Tabla no está lista todavía...");
+		return;
 		}
+
+		this.dataTable = new DataTable("#dataTable", {
+		pageLength: 10,
+		});
+	}, 100);
 	}
+
+
 
 	loadCategorys(): void {
-		this.userService.getAllCategorys().subscribe({
-			next: (res: any) => {
-				console.log("📌 Categorias cargados:", res);
-				this.categorys = res.data || [];
-				this.loading = false;
-				// Si ya estaba inicializado, refrescar DataTable
-				if (this.dataTable) {
-					this.dataTable.clear().draw();
-					this.dataTable.rows.add(this.categorys).draw();
-				}
-			},
-			error: err => {
-				console.error("❌ Error al cargar Categorias", err);
-				this.loading = false;
-			},
-		});
+	this.loading = true;   // Mostrar loader y ocultar tabla
+
+	// 🔥 destruir DataTable si existe ANTES de recargar datos
+	if (this.dataTable) {
+		this.dataTable.destroy();
+		this.dataTable = null;
 	}
 
-	initDataTable(): void {
-		this.dataTable = new DataTable("#dataTable", {
-			pageLength: 10,
-			// Configuración adicional si quieres
-		});
+	this.userService.getAllCategorys().subscribe({
+		next: (res: any) => {
+		this.categorys = res.data || [];
+
+		// 🔥 Esperar a que Angular pinte el HTML de la tabla
+		setTimeout(() => {
+			this.loading = false;   // Ocultar loader
+			this.initOrRefreshTable();
+		}, 150);
+		},
+		error: err => {
+		console.error("❌ Error al cargar Categorías", err);
+		this.loading = false;
+		},
+	});
 	}
 
-	deleteCategory(categoriaID: number): void {
-		Swal.fire({
-			title: "¿Estás seguro?",
-			text: "¡La categoría será desactivada!",
-			icon: "warning",
-			showCancelButton: true,
-			confirmButtonColor: "#d33",
-			cancelButtonColor: "#3085d6",
-			confirmButtonText: "Sí, desactivar",
-			cancelButtonText: "Cancelar",
-		}).then(result => {
-			if (result.isConfirmed) {
-				this.userService.deleteCategory(categoriaID).subscribe({
-					next: () => {
-						// Actualizar estado en la tabla sin eliminar el objeto
-						const category = this.categorys.find(c => c.categoriaID === categoriaID);
-						if (category) {
-							category.estado = false; // marcar como inactivo
-						}
 
-						Swal.fire({
-							icon: "success",
-							title: "Categoría desactivada",
-							text: "La categoría ahora está inactiva",
-							timer: 1500,
-							showConfirmButton: false,
-						});
-					},
-					error: err => {
-						console.error("Error desactivando categoría", err);
-						Swal.fire({
-							icon: "error",
-							title: "Error",
-							text: err?.error?.message || "No se pudo desactivar la categoría",
-						});
-					},
-				});
-			}
-		});
-	}
+  deleteCategory(categoriaID: number): void {
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "¡La categoría será desactivada!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Sí, desactivar",
+      cancelButtonText: "Cancelar",
+    }).then(result => {
+      if (result.isConfirmed) {
+        this.userService.deleteCategory(categoriaID).subscribe({
+          next: () => {
+            const category = this.categorys.find(c => c.categoriaID === categoriaID);
+            if (category) category.estado = false;
 
-	// Abrir modal de detalles de categoría
-	openCategoryModal(category: any) {
-		const categoryId = category.categoriaID;
-		this.selectedCategory = null;
+            Swal.fire({
+              icon: "success",
+              title: "Categoría desactivada",
+              timer: 1500,
+              showConfirmButton: false,
+            });
 
-		this.userService.getCategoryById(categoryId).subscribe({
-			next: (res: any) => {
-				this.selectedCategory = res.data;
+            this.initOrRefreshTable();
+          },
+          error: err => {
+            console.error("Error desactivando categoría", err);
+            Swal.fire("Error", err?.error?.message || "No se pudo desactivar", "error");
+          },
+        });
+      }
+    });
+  }
 
-				const modalEl = document.getElementById("categoryModal");
-				if (modalEl) {
-					const modal = new bootstrap.Modal(modalEl);
-					modal.show();
-				}
-			},
-			error: err => {
-				console.error("Error cargando categoría:", err);
-				Swal.fire("Error", "No se pudo cargar la información de la categoría", "error");
-			},
-		});
-	}
-	// Abrir modal para editar categoría
-	editCategory(category: any) {
-		// Limpiar selectedCategory temporalmente
-		this.selectedCategory = null;
+  openCategoryModal(category: any) {
+    this.selectedCategory = null;
 
-		this.userService.getCategoryById(category.categoriaID).subscribe({
-			next: (res: any) => {
-				this.selectedCategory = res.data || res;
-				const modalEl = document.getElementById("editCategoryModal");
-				if (modalEl) {
-					const modal = new bootstrap.Modal(modalEl);
-					modal.show();
-				}
-			},
-			error: err => {
-				console.error("Error obteniendo categoría:", err);
-				Swal.fire("Error", "No se pudo cargar la información de la categoría", "error");
-			},
-		});
-	}
+    this.userService.getCategoryById(category.categoriaID).subscribe({
+      next: (res: any) => {
+        this.selectedCategory = res.data;
 
-	// Enviar datos actualizados
-	submitEditCategory() {
-		if (!this.selectedCategory) return;
+        const modalEl = document.getElementById("categoryModal");
+        if (modalEl) new bootstrap.Modal(modalEl).show();
+      },
+      error: err => {
+        console.error("Error cargando categoría:", err);
+        Swal.fire("Error", "No se pudo cargar la categoría", "error");
+      },
+    });
+  }
 
-		// Obtener usuario logueado
-		const loggedUser = this.authService.getUser();
+  editCategory(category: any) {
+    this.selectedCategory = null;
 
-		const updateData = {
-			categoriaID: Number(this.selectedCategory.categoriaID),
-			nombre: this.selectedCategory.nombre || "",
-			descripcion: this.selectedCategory.descripcion || "",
-			usuarioModificacion: loggedUser?.userName || "Admin",
-		};
+    this.userService.getCategoryById(category.categoriaID).subscribe({
+      next: (res: any) => {
+        this.selectedCategory = res.data;
 
-		this.userService.updateCategory(updateData).subscribe({
-			next: () => {
-				Swal.fire("Éxito", "Categoría actualizada correctamente", "success");
-				this.closeEditCategoryModal();
-				this.loadCategorys(); // refrescar lista
-			},
-			error: err => {
-				console.error("Error actualizando categoría:", err);
-				Swal.fire("Error", "No se pudo actualizar la categoría", "error");
-			},
-		});
-	}
+        const modalEl = document.getElementById("editCategoryModal");
+        if (modalEl) new bootstrap.Modal(modalEl).show();
+      },
+      error: err => {
+        console.error("Error obteniendo categoría:", err);
+        Swal.fire("Error", "No se pudo cargar la categoría", "error");
+      },
+    });
+  }
 
-	// Cerrar modal de edición de categoría
-	closeEditCategoryModal() {
-		const modalEl = document.getElementById("editCategoryModal");
-		if (modalEl) {
-			const modal = bootstrap.Modal.getInstance(modalEl);
-			modal?.hide();
-		}
-	}
+  submitEditCategory() {
+  if (!this.selectedCategory) return;
+
+  const loggedUser = this.authService.getUser();
+
+  const updateData = {
+    categoriaID: Number(this.selectedCategory.categoriaID),
+    nombre: this.selectedCategory.nombre || "",
+    descripcion: this.selectedCategory.descripcion || "",
+    usuarioModificacion: loggedUser?.userName || "Admin",
+  };
+
+  this.userService.updateCategory(updateData).subscribe({
+    next: () => {
+      Swal.fire("Éxito", "Categoría actualizada", "success");
+      this.closeEditCategoryModal();
+
+      this.loadCategorys(); // 🔥 Recargar tabla COMPLETA de forma segura
+    },
+    error: err => {
+      console.error("Error actualizando categoría:", err);
+      Swal.fire("Error", "No se pudo actualizar", "error");
+    },
+  });
+}
+
+
+  closeEditCategoryModal() {
+    const modalEl = document.getElementById("editCategoryModal");
+    if (modalEl) bootstrap.Modal.getInstance(modalEl)?.hide();
+  }
 }

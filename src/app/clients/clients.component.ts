@@ -42,7 +42,7 @@ export class ClientsComponent implements OnInit, AfterViewChecked {
   }
 
   loadFormulario(): void {
-    this.userService.getAllFormulario().subscribe({
+    this.userService.getAllClients().subscribe({
       next: (res: any) => {
         console.log("📌 Formulario cargados:", res);
         this.clients = res.data || [];

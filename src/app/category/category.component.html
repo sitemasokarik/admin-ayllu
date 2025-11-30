@@ -24,7 +24,7 @@
               </div>
             </th>
             <th scope="col">Nombre</th>
-            <th scope="col">Total Productos</th>
+            <th scope="col">Productos</th>
             <th scope="col" class="text-center">Estado</th>
             <th scope="col" class="text-center">Acciones</th>
           </tr>
@@ -44,7 +44,11 @@
               </div>
             </td>
             <td>
-              <span class="text-md mb-0 fw-normal text-secondary-light">{{ category.totalProductos }}</span>
+              <div class="d-flex align-items-center">
+                <div class="flex-grow-1">
+                  <span class="text-md mb-0 fw-normal text-secondary-light">{{ category.totalProductos }}</span>
+                </div>
+              </div>
             </td>
 
             <td class="text-center">

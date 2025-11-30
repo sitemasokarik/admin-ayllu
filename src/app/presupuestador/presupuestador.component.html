@@ -1,4 +1,9 @@
-<div class="dashboard-main-body">
+<div *ngIf="loading" class="d-flex flex-column align-items-center justify-content-center py-80">
+  <div class="spinner-grow text-primary mb-3" style="width: 3rem; height: 3rem;"></div>
+  <p class="text-primary-light">Cargando Datos Necesarios...</p>
+</div>
+
+<div *ngIf="!loading" class="dashboard-main-body">
     <app-breadcrumb [title]="title"></app-breadcrumb>
         
     <div class="card h-100 p-0 radius-12">
@@ -83,9 +88,15 @@
 
                 <div class="col-xxl-12">
                     <div class="card p-0 overflow-hidden position-relative radius-12 h-100">
-                        <div class="card-header  py-16 px-24 bg-base border border-end-0 border-start-0 border-top-0">
+                        <div class="card-header py-16 px-24 bg-base border border-end-0 border-start-0 border-top-0 d-flex align-items-center justify-content-between">
                             <h6 class="text-lg mb-3">Mi Evento</h6>
+
+                            <button class="btn btn-light d-flex align-items-center gap-1" >
+                                <iconify-icon icon="solar:download-linear" class="text-xl"></iconify-icon>
+                                Descargar
+                            </button>
                         </div>
+
                         <div class="card-body p-24 pt-10">
                             <div class="row align-items-start">
                                 <ul class="nav button-tab nav-pills mb-16 col-md-3 d-block" id="pills-tab-five" role="tablist">

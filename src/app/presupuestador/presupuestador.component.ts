@@ -18,7 +18,7 @@ import { UserService } from '../../service/user.service';
 export class PresupuestadorComponent {
 
   title = 'Presupuestador';
-
+  loading: boolean = true;
   locales: any[] = [];
   constructor(private userService: UserService, private authService: AuthService) {}
   
@@ -35,7 +35,7 @@ export class PresupuestadorComponent {
         console.log("📌 Respuesta completa:", res); // <-- imprime toda la respuesta
 
         this.locales = res.data || [];
-
+        this.loading = false;
         console.log("📌 Locales cargados:", this.locales); // <-- imprime solo los locales
       },
       error: err => console.error("❌ Error al cargar locales:", err),

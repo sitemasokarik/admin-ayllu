@@ -11,6 +11,8 @@ export class UserService {
 	private apiUrlLocales = "http://caeteringdcodepe.runasp.net/api/v1/local"; // URL de tu API de Local
 	private apiUrlEmpresa = "http://caeteringdcodepe.runasp.net/api/v1/empresa"; // <-- URL de Empresa
 	private apiUrlBlog = "http://caeteringdcodepe.runasp.net/api/v1/blog";
+	private apiUrlFormulario = "http://caeteringdcodepe.runasp.net/api/v1/contactanos";
+	private apiUrlServicio = "http://caeteringdcodepe.runasp.net/api/v1/ServicioAdicional";
 
 	constructor(private http: HttpClient) {}
 
@@ -125,6 +127,23 @@ export class UserService {
 	}
 	//FORMULARIO CONTACTO METHODS
 	getAllFormulario(): Observable<any> {
-		return this.http.get(`${this.apiUrlClientes}/getall`);
+		return this.http.get(`${this.apiUrlFormulario}/getall`);
 	}
+
+
+	getAllServicios(): Observable<any> {
+		return this.http.get(`${this.apiUrlServicio}/getall`);
+	}
+	getServicioById(id: number): Observable<any> {
+		return this.http.get(`${this.apiUrlServicio}/getbyid/${id}`);
+	}
+	createServicio(localData: any): Observable<any> {
+		return this.http.post(`${this.apiUrlServicio}/create`, localData);
+	}
+	updateServicio(localData: any): Observable<any> {
+		return this.http.put(`${this.apiUrlServicio}/update`, localData);
+	}
+	deleteServicio(id: number): Observable<any> {
+		return this.http.delete(`${this.apiUrlServicio}/delete/${id}`);
+	}	
 }

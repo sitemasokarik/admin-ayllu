@@ -1,4 +1,8 @@
-<div class="dashboard-main-body">
+<div *ngIf="loading" class="d-flex flex-column align-items-center justify-content-center py-80">
+  <div class="spinner-grow text-primary mb-3" style="width: 3rem; height: 3rem;"></div>
+  <p class="text-primary-light">Cargando información...</p>
+</div> 
+<div *ngIf="!loading" class="dashboard-main-body">
   <app-breadcrumb [title]="title"></app-breadcrumb>
   <div class="card basic-data-table">
     <div class="card-body">
@@ -22,7 +26,7 @@
           <tr *ngFor="let cliente of registrosClientes">
             <td>
               <div class="d-flex align-items-center gap-10">
-                {{ cliente.clienteID}}
+                {{ cliente.contactanosID}}
               </div>
             </td>
             <td>
@@ -33,22 +37,23 @@
               </div>
             </td>
             <td>
-              <span class="text-md mb-0 fw-normal text-secondary-light">{{ cliente.email }}</span>
+              <span class="text-md mb-0 fw-normal text-secondary-light">{{ cliente.correo }}</span>
             </td>
             <td>
               <span class="text-md mb-0 fw-normal text-secondary-light">{{ cliente.telefono }}</span>
             </td>
             <td>
-              <span class="text-md mb-0 fw-normal text-secondary-light">{{ cliente.numeroDocumento }}</span>
+              <span class="text-md mb-0 fw-normal text-secondary-light">{{ cliente.servicio }}</span>
             </td>
+            <td>
+              <span class="text-md mb-0 fw-normal text-secondary-light">{{ cliente.mensaje }}</span>
+            </td>   
             <td class="text-center">
-              <span [ngClass]="{
-                  'bg-success-focus text-success-600 border border-success-main': cliente.estado,
-                  'bg-danger-200 text-danger-600 border border-danger-main': !cliente.estado
-                }" class="px-24 py-4 radius-4 fw-medium text-sm">
-                {{ cliente.estado ? "Activo" : "Inactivo" }}
+              <span class="text-md mb-0 fw-normal text-secondary-light">
+                {{ cliente.fechaCreacion | date:'short' }}
               </span>
-            </td>
+            </td>                     
+             
           </tr>
         </tbody>
       </table>

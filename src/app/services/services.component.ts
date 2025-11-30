@@ -17,179 +17,124 @@ import DataTable from "datatables.net";
   templateUrl: './services.component.html',
   styleUrl: './services.component.css'
 })
+export class ServicesComponent implements OnInit {
+  title = "Servicios";
+  loading: boolean = true;
+  servicios: any[] = [];
+  selectedServicio: any = null;
+  dataTable: any;
+  private dtInitialized = false;
+  newFotoUrl: string = '';
 
-export class ServicesComponent {
-	title = "Servicios";
+  constructor(private userService: UserService, private authService: AuthService) {}
 
-	categorys: any[] = [];
-	selectedUser: any = null; // Usuario seleccionado para ver/editar
-	selectedCategory: any = null; // Categoría seleccionada para ver/editar
-	selectedLocal: any = null; // Local seleccionado para ver en modal
-	newFotoUrl: string = ""; // <-- Aquí declaras la variable para ngModel
+  ngOnInit(): void {
+    this.loadServicios();
+  }
 
-	locales: any[] = [];
-	dataTable: any; // Instancia de DataTable
-	private dtInitialized = false; // Marca si DataTable ya se inicializó
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      if (!this.dtInitialized && this.servicios.length > 0) {
+        this.initDataTable();
+        this.dtInitialized = true;
+      }
+    }, 0);
+  }
 
-	passwords = { currentPassword: "", newPassword: "", confirmPassword: "" }; // Para cambio de contraseña
+  loadServicios(): void {
+    this.userService.getAllServicios().subscribe({
+      next: (res: any) => {
+        this.servicios = res.data || [];
+        this.loading = false;
+        if (this.dtInitialized && this.dataTable) {
+          this.dataTable.destroy();
+          setTimeout(() => this.initDataTable(), 0);
+        }
+      },
+      error: err => console.error("Error al cargar servicios:", err),
+    });
+  }
 
-	constructor(private userService: UserService, private authService: AuthService) {}
-	ngOnInit(): void {
-		this.loadLocales();
-	}
+  initDataTable(): void {
+    this.dataTable = new DataTable("#dataTable", {
+      pageLength: 10,
+      columnDefs: [{ orderable: false, targets: -1 }],
+    });
+  }
 
-	ngAfterViewInit(): void {
-		// Inicializar DataTable después de que la vista esté lista
-		setTimeout(() => {
-			if (!this.dtInitialized && this.locales.length > 0) {
-				this.initDataTable();
-				this.dtInitialized = true;
-			}
-		}, 0);
-	}
+  // Modal detalle servicio
+  openServicioModal(servicio: any) {
+    this.selectedServicio = null;
+    this.userService.getServicioById(servicio.servicioID).subscribe({
+      next: (res: any) => {
+        this.selectedServicio = res.data;
+        const modalEl = document.getElementById("servicioModal");
+        if (modalEl) {
+          const modal = new bootstrap.Modal(modalEl);
+          modal.show();
+        }
+      },
+      error: err => Swal.fire("Error", "No se pudo cargar el servicio", "error")
+    });
+  }
 
-	loadLocales(): void {
-		this.userService.getAllLocales().subscribe({
-			next: (res: any) => {
-				this.locales = res.data || [];
+  // Eliminar / desactivar servicio
+  deleteServicio(servicioID: number) {
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "¡El servicio será eliminado!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+    }).then(result => {
+      if (result.isConfirmed) {
+        this.userService.deleteServicio(servicioID).subscribe({
+          next: () => {
+            this.servicios = this.servicios.filter(s => s.servicioID !== servicioID);
+            Swal.fire("Eliminado", "El servicio ha sido eliminado", "success");
+          },
+          error: err => Swal.fire("Error", "No se pudo eliminar el servicio", "error")
+        });
+      }
+    });
+  }
 
-				// Si DataTable ya estaba inicializado, destruimos y reiniciamos
-				if (this.dtInitialized && this.dataTable) {
-					this.dataTable.destroy();
-					setTimeout(() => this.initDataTable(), 0);
-				}
-			},
-			error: err => console.error("Error al cargar locales:", err),
-		});
-	}
 
-	initDataTable(): void {
-		this.dataTable = new DataTable("#dataTable", {
-			pageLength: 10,
-			columnDefs: [
-				{ orderable: false, targets: -1 }, // Desactivar orden en la columna de acciones
-			],
-		});
-	}
-	deleteLocal(localID: number): void {
-		Swal.fire({
-			title: "¿Estás seguro?",
-			text: "¡El local será desactivado!",
-			icon: "warning",
-			showCancelButton: true,
-			confirmButtonColor: "#d33",
-			cancelButtonColor: "#3085d6",
-			confirmButtonText: "Sí, desactivar",
-			cancelButtonText: "Cancelar",
-		}).then(result => {
-			if (result.isConfirmed) {
-				this.userService.deleteLocal(localID).subscribe({
-					next: () => {
-						// Actualizar estado en la tabla sin eliminar el objeto
-						const local = this.locales.find(l => l.localID === localID);
-						if (local) {
-							local.estado = false; // marcar como inactivo
-						}
+// Abrir modal de edición
+editServicio(servicio: any) {
+  this.selectedServicio = { ...servicio, fotosUrls: servicio.fotosUrls || [] }; // asegurar array
+  const modalEl = document.getElementById("editServicioModal");
+  if (modalEl) {
+    const modal = new bootstrap.Modal(modalEl);
+    modal.show();
+  }
+}
 
-						Swal.fire({
-							icon: "success",
-							title: "Local desactivado",
-							text: "El local ahora está inactivo",
-							timer: 1500,
-							showConfirmButton: false,
-						});
-					},
-					error: err => {
-						console.error("Error desactivando local", err);
-						Swal.fire({
-							icon: "error",
-							title: "Error",
-							text: err?.error?.message || "No se pudo desactivar el local",
-						});
-					},
-				});
-			}
-		});
-	}
 
-	// Abrir modal de detalles de local
-	openLocalModal(local: any) {
-		const localId = local.localID;
-		this.selectedLocal = null;
+submitEditServicio() {
+  if (!this.selectedServicio) return;
 
-		this.userService.getLocalById(localId).subscribe({
-			next: (res: any) => {
-				this.selectedLocal = res.data;
+  // Agregar usuario que modifica
+  this.selectedServicio.usuarioModificacion = this.authService.getUser()?.username || "desconocido";
 
-				const modalEl = document.getElementById("localModal");
-				if (modalEl) {
-					const modal = new bootstrap.Modal(modalEl);
-					modal.show();
-				}
-			},
-			error: err => {
-				console.error("Error cargando local:", err);
-				Swal.fire("Error", "No se pudo cargar la información del local", "error");
-			},
-		});
-	}
-	// Abrir modal para editar Local
-	editLocal(local: any) {
-		this.selectedLocal = null; // limpiar temporal
 
-		this.userService.getLocalById(local.localID).subscribe({
-			next: (res: any) => {
-				this.selectedLocal = res.data || res;
-				const modalEl = document.getElementById("editLocalModal");
-				if (modalEl) {
-					const modal = new bootstrap.Modal(modalEl);
-					modal.show();
-				}
-			},
-			error: err => {
-				console.error("Error obteniendo local:", err);
-				Swal.fire("Error", "No se pudo cargar la información del local", "error");
-			},
-		});
-	}
+  this.userService.updateServicio(this.selectedServicio).subscribe({
+    next: () => {
+      Swal.fire("Éxito", "Servicio actualizado correctamente", "success");
+      // Actualizar tabla local
+      const index = this.servicios.findIndex(s => s.servicioID === this.selectedServicio.servicioID);
+      if (index > -1) this.servicios[index] = { ...this.selectedServicio };
+      this.selectedServicio = null;
 
-	// Enviar datos actualizados
-	submitEditLocal() {
-		if (!this.selectedLocal) return;
+      // Cerrar modal
+      const modalEl = document.getElementById("editServicioModal");
+      const modal = bootstrap.Modal.getInstance(modalEl);
+      modal?.hide();
+    },
+    error: err => Swal.fire("Error", "No se pudo actualizar el servicio", "error")
+  });
+}
 
-		const loggedUser = this.authService.getUser();
 
-		const updateData = {
-			localID: Number(this.selectedLocal.localID),
-			nombre: this.selectedLocal.nombre || "",
-			direccion: this.selectedLocal.direccion || "",
-			capacidad: this.selectedLocal.capacidad || 0,
-			precioAlquiler: this.selectedLocal.precioAlquiler || 0,
-			horasEvento: this.selectedLocal.horasEvento || 0,
-			fotosUrls: this.selectedLocal.fotosUrls || [],
-			terminosCondiciones: this.selectedLocal.terminosCondiciones || "",
-			usuarioModificacion: loggedUser?.userName || "Admin",
-		};
-
-		this.userService.updateLocal(updateData).subscribe({
-			next: () => {
-				Swal.fire("Éxito", "Local actualizado correctamente", "success");
-				this.closeEditLocalModal();
-				this.loadLocales(); // refrescar lista
-			},
-			error: err => {
-				console.error("Error actualizando local:", err);
-				Swal.fire("Error", "No se pudo actualizar el local", "error");
-			},
-		});
-	}
-
-	// Cerrar modal de edición
-	closeEditLocalModal() {
-		const modalEl = document.getElementById("editLocalModal");
-		if (modalEl) {
-			const modal = bootstrap.Modal.getInstance(modalEl);
-			modal?.hide();
-		}
-	}
 }

@@ -1,145 +1,126 @@
-<div class="dashboard-main-body">
+<div *ngIf="loading" class="d-flex flex-column align-items-center justify-content-center py-80">
+  <div class="spinner-grow text-primary mb-3" style="width: 3rem; height: 3rem;"></div>
+  <p class="text-primary-light">Cargando información...</p>
+</div>
+
+<div *ngIf="!loading" class="dashboard-main-body">
   <app-breadcrumb [title]="title"></app-breadcrumb>
+
   <div class="card basic-data-table">
     <div class="card-body">
-      <div class="justify-content-start d-flex pb-3">
-        <a routerLink="/add-services"
-          class="btn btn-primary text-sm btn-sm px-12 py-12 radius-8 d-flex align-items-center gap-2">
-          <iconify-icon icon="ic:baseline-plus" class="icon text-xl line-height-1"></iconify-icon>
-          Agregar Servicio
-        </a>
-      </div>
+    <div class="justify-content-start d-flex pb-3">
+      <a routerLink="/add-services"
+        class="btn btn-primary text-sm btn-sm px-12 py-12 radius-8 d-flex align-items-center gap-2">
+        <iconify-icon icon="ic:baseline-plus" class="icon text-xl line-height-1"></iconify-icon>
+        Agregar Servicio
+      </a>
+    </div>      
       <table class="table bordered-table sm-table mb-0" id="dataTable">
         <thead>
           <tr>
             <th>ID</th>
             <th>Nombre</th>
-            <th>Dirección</th>
-            <th>Capacidad</th>
+            <th>Descripción</th>
+            <th>Precio</th>
             <th class="text-center">Estado</th>
             <th class="text-center">Acciones</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let local of locales">
-            <td>{{ local.localID }}</td>
-            <td>{{ local.nombre }}</td>
-            <td>{{ local.direccion }}</td>
-            <td>{{ local.capacidad }}</td>
+          <tr *ngFor="let servicio of servicios">
+            <td>{{ servicio.servicioID }}</td>
+            <td>{{ servicio.nombre }}</td>
+            <td>{{ servicio.descripcion }}</td>
+            <td>{{ servicio.precio }}</td>
             <td class="text-center">
               <span [ngClass]="{
-                  'bg-success-focus text-success-600 border border-success-main': local.estado,
-                  'bg-danger-200 text-danger-600 border border-danger-main': !local.estado
+                  'bg-success-focus text-success-600 border border-success-main': servicio.estado,
+                  'bg-danger-200 text-danger-600 border border-danger-main': !servicio.estado
                 }" class="px-24 py-4 radius-4 fw-medium text-sm">
-                {{ local.estado ? "Activo" : "Inactivo" }}
+                {{ servicio.estado ? "Activo" : "Inactivo" }}
               </span>
             </td>
             <td class="text-center">
               <div class="d-flex align-items-center gap-10 justify-content-center">
+                <!-- Ver Servicio -->
                 <button type="button"
                   class="bg-info-focus bg-hover-info-200 text-info-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
-                  title="Ver Local" (click)="openLocalModal(local)">
+                  title="Ver Servicio" (click)="openServicioModal(servicio)">
                   <i class="bx bx-show text-xl"></i>
                 </button>
 
-                <button type="button" (click)="editLocal(local)"
+                <!-- Editar Servicio -->
+                <button type="button"
                   class="bg-success-focus text-success-600 bg-hover-success-200 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
-                  title="Editar Local">
+                  title="Editar Servicio" (click)="editServicio(servicio)">
                   <i class="bx bx-edit-alt text-xl"></i>
                 </button>
 
-                <button *ngIf="local.estado" type="button" (click)="deleteLocal(local.localID)"
+                <!-- Eliminar Servicio -->
+                <button type="button"
                   class="remove-item-btn bg-danger-focus bg-hover-danger-200 text-danger-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
-                  title="Desactivar Local">
-                  <i class="bx bx-block text-xl"></i>
+                  title="Eliminar Servicio" (click)="deleteServicio(servicio.servicioID)">
+                  <i class="bx bx-trash text-xl"></i>
                 </button>
               </div>
             </td>
+
           </tr>
         </tbody>
       </table>
-
     </div>
   </div>
 </div>
 
-<!-- Modal Bootstrap para Local -->
-<div class="modal fade" id="localModal" tabindex="-1" aria-labelledby="localModalLabel" aria-hidden="true">
+<!-- Modal Bootstrap para Servicio -->
+<div class="modal fade" id="servicioModal" tabindex="-1" aria-labelledby="servicioModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <!-- Header -->
       <div class="modal-header text-white">
-        <h5 class="modal-title" id="localModalLabel">Detalles del Local</h5>
+        <h5 class="modal-title" id="servicioModalLabel">Detalles del Servicio</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
 
       <!-- Body -->
-      <div class="modal-body" *ngIf="selectedLocal">
+      <div class="modal-body" *ngIf="selectedServicio">
         <div class="p-4">
           <div class="row g-3">
             <!-- Nombre -->
             <div class="col-md-6">
               <h6 class="fw-semibold text-secondary mb-1">Nombre</h6>
-              <p class="mb-0">{{ selectedLocal.nombre }}</p>
+              <p class="mb-0">{{ selectedServicio.nombre }}</p>
             </div>
 
-            <!-- Dirección -->
+            <!-- Descripción -->
             <div class="col-md-6">
-              <h6 class="fw-semibold text-secondary mb-1">Dirección</h6>
-              <p class="mb-0">{{ selectedLocal.direccion }}</p>
+              <h6 class="fw-semibold text-secondary mb-1">Descripción</h6>
+              <p class="mb-0">{{ selectedServicio.descripcion }}</p>
             </div>
 
-            <!-- Capacidad -->
+            <!-- Precio -->
             <div class="col-md-6">
-              <h6 class="fw-semibold text-secondary mb-1">Capacidad</h6>
-              <p class="mb-0">{{ selectedLocal.capacidad }}</p>
-            </div>
-
-            <!-- Precio de Alquiler -->
-            <div class="col-md-6">
-              <h6 class="fw-semibold text-secondary mb-1">Precio de Alquiler</h6>
-              <p class="mb-0">{{ selectedLocal.precioAlquiler | currency }}</p>
+              <h6 class="fw-semibold text-secondary mb-1">Precio</h6>
+              <p class="mb-0">{{ selectedServicio.precio }}</p>
             </div>
 
             <!-- Estado -->
             <div class="col-md-6">
               <h6 class="fw-semibold text-secondary mb-1">Estado</h6>
-              <p class="mb-0">{{ selectedLocal.estado ? 'Activo' : 'Inactivo' }}</p>
-            </div>
-
-            <!-- Horas de Evento -->
-            <div class="col-md-6">
-              <h6 class="fw-semibold text-secondary mb-1">Horas de Evento</h6>
-              <p class="mb-0">{{ selectedLocal.horasEvento }}</p>
+              <p class="mb-0">{{ selectedServicio.estado ? 'Activo' : 'Inactivo' }}</p>
             </div>
 
             <!-- Usuario de Creación -->
             <div class="col-md-6">
               <h6 class="fw-semibold text-secondary mb-1">Creado por</h6>
-              <p class="mb-0">{{ selectedLocal.usuarioCreacion || 'N/A' }}</p>
+              <p class="mb-0">{{ selectedServicio.usuarioCreacion || 'N/A' }}</p>
             </div>
 
             <!-- Fecha de Creación -->
             <div class="col-md-6">
               <h6 class="fw-semibold text-secondary mb-1">Fecha de Creación</h6>
-              <p class="mb-0">{{ selectedLocal.fechaCreacion | date:'medium' }}</p>
+              <p class="mb-0">{{ selectedServicio.fechaCreacion | date:'medium' }}</p>
             </div>
-
-            <!-- Fotos -->
-            <div class="col-12">
-              <h6 class="fw-semibold text-secondary mb-1">Fotos</h6>
-              <div class="d-flex flex-wrap gap-2">
-                <img *ngFor="let foto of selectedLocal.fotosUrls" [src]="foto" class="img-thumbnail"
-                  style="width: 100px; height: 100px; object-fit: cover;">
-              </div>
-            </div>
-
-            <!-- Términos y Condiciones -->
-            <div class="col-12">
-              <h6 class="fw-semibold text-secondary mb-1">Términos y Condiciones</h6>
-              <p class="mb-0">{{ selectedLocal.terminosCondiciones }}</p>
-            </div>
-
           </div>
         </div>
       </div>
@@ -147,79 +128,45 @@
   </div>
 </div>
 
-<!-- Modal para editar Local -->
-<div class="modal fade" id="editLocalModal" tabindex="-1" aria-hidden="true">
+<!-- Modal Editar Servicio -->
+<div class="modal fade" id="editServicioModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Editar Local</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h5 class="modal-title">Editar Servicio</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
-      <div class="modal-body">
-        <form #editLocalForm="ngForm" (ngSubmit)="submitEditLocal()" *ngIf="selectedLocal">
+      <div class="modal-body" *ngIf="selectedServicio">
+        <form #editServicioForm="ngForm" (ngSubmit)="submitEditServicio()">
           <div class="row g-3">
-            <!-- Nombre -->
             <div class="col-md-6">
               <label class="form-label">Nombre</label>
-              <input type="text" class="form-control" [(ngModel)]="selectedLocal.nombre" name="nombre" required
-                [ngModelOptions]="{ standalone: true }" />
+              <input type="text" class="form-control" [(ngModel)]="selectedServicio.nombre" name="nombre" required [ngModelOptions]="{standalone: true}">
             </div>
-
-            <!-- Dirección -->
             <div class="col-md-6">
-              <label class="form-label">Dirección</label>
-              <input type="text" class="form-control" [(ngModel)]="selectedLocal.direccion" name="direccion"
-                [ngModelOptions]="{ standalone: true }" />
+              <label class="form-label">Descripción</label>
+              <input type="text" class="form-control" [(ngModel)]="selectedServicio.descripcion" name="descripcion" [ngModelOptions]="{standalone: true}">
             </div>
-
-            <!-- Capacidad -->
             <div class="col-md-6">
-              <label class="form-label">Capacidad</label>
-              <input type="number" class="form-control" [(ngModel)]="selectedLocal.capacidad" name="capacidad"
-                [ngModelOptions]="{ standalone: true }" />
+              <label class="form-label">Precio</label>
+              <input type="number" class="form-control" [(ngModel)]="selectedServicio.precio" name="precio" [ngModelOptions]="{standalone: true}">
             </div>
-
-            <!-- Precio Alquiler -->
-            <div class="col-md-6">
-              <label class="form-label">Precio Alquiler</label>
-              <input type="number" class="form-control" [(ngModel)]="selectedLocal.precioAlquiler" name="precioAlquiler"
-                [ngModelOptions]="{ standalone: true }" />
-            </div>
-
-            <!-- Horas Evento -->
-            <div class="col-md-6">
-              <label class="form-label">Horas del Evento</label>
-              <input type="number" class="form-control" [(ngModel)]="selectedLocal.horasEvento" name="horasEvento"
-                [ngModelOptions]="{ standalone: true }" />
-            </div>
-
-            <!-- Términos y Condiciones -->
-            <div class="col-md-6">
-              <label class="form-label">Términos y Condiciones</label>
-              <textarea class="form-control" [(ngModel)]="selectedLocal.terminosCondiciones" name="terminosCondiciones"
-                [ngModelOptions]="{ standalone: true }"></textarea>
-            </div>
-
-            <!-- Fotos -->
             <div class="col-12">
               <label class="form-label">Fotos</label>
               <div class="d-flex gap-2 mb-2">
-                <input type="text" class="form-control" placeholder="Ingrese URL de foto" [(ngModel)]="newFotoUrl"
-                  name="newFotoUrl" [ngModelOptions]="{ standalone: true }" />
-                <button type="button" class="btn btn-primary"
-                  (click)="selectedLocal.fotosUrls.push(newFotoUrl); newFotoUrl=''">Agregar</button>
+                <input type="text" class="form-control" placeholder="URL de foto" [(ngModel)]="newFotoUrl" name="newFotoUrl" [ngModelOptions]="{standalone:true}">
+                <button type="button" class="btn btn-primary" (click)="selectedServicio.fotosUrls.push(newFotoUrl); newFotoUrl=''">Agregar</button>
               </div>
               <div class="d-flex flex-wrap gap-2 pt-3">
-                <span class="badge bg-secondary" *ngFor="let foto of selectedLocal.fotosUrls; let i = index">
-                  {{ foto }} <i class="bx bx-x cursor-pointer" (click)="selectedLocal.fotosUrls.splice(i,1)"></i>
+                <span class="badge bg-secondary" *ngFor="let foto of selectedServicio.fotosUrls; let i = index">
+                  {{ foto }} <i class="bx bx-x cursor-pointer" (click)="selectedServicio.fotosUrls.splice(i,1)"></i>
                 </span>
               </div>
             </div>
           </div>
-
           <div class="modal-footer mt-3">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-            <button type="submit" class="btn btn-primary" [disabled]="editLocalForm.invalid">Guardar Cambios</button>
+            <button type="submit" class="btn btn-primary" [disabled]="editServicioForm.invalid">Guardar Cambios</button>
           </div>
         </form>
       </div>
