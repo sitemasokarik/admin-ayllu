@@ -1,9 +1,10 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, AfterViewInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BreadcrumbComponent } from '../breadcrumb/breadcrumb.component';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import DataTable from 'datatables.net-dt';
- 
+import $ from 'jquery';
+import 'datatables.net-dt';
+import 'datatables.net-responsive-dt';
 
 @Component({
   selector: 'app-cotizacion',
@@ -13,12 +14,13 @@ import DataTable from 'datatables.net-dt';
   templateUrl: './cotizacion.component.html',
   styleUrl: './cotizacion.component.css'
 })
-export class CotizacionComponent {
+export class CotizacionComponent implements AfterViewInit {
+
   title = 'Cotizaciones';
 
-  table = new DataTable('#myTable');
-  
-  users= [
+  dataTable: any;
+
+  users = [
     {
       id: 1,
       date: '25 Jan 2024',
@@ -29,5 +31,18 @@ export class CotizacionComponent {
       position: 'Manager',
       status: 'Active'
     },
-  ]; 
+  ];
+
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+
+      this.dataTable = $('#myTable').DataTable({
+        responsive: true,
+        language: {
+          url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json'
+        }
+      });
+
+    }, 100);
+  }
 }

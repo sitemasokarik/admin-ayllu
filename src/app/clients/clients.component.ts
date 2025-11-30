@@ -1,44 +1,49 @@
-import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
+import { Component, OnInit, AfterViewInit, CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
 import { BreadcrumbComponent } from "../breadcrumb/breadcrumb.component";
 import { RouterLink } from "@angular/router";
 import { CommonModule } from "@angular/common";
 import { UserService } from "../../service/user.service";
-import Swal from "sweetalert2";
-import * as bootstrap from "bootstrap";
 import { FormsModule } from "@angular/forms";
+import DataTable from 'datatables.net';
 import { AuthService } from "../../service/auth.service";
 
 @Component({
   selector: 'app-clients',
-	standalone: true,
-	imports: [BreadcrumbComponent, RouterLink, CommonModule, FormsModule],
-	schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  standalone: true,
+  imports: [BreadcrumbComponent, RouterLink, CommonModule, FormsModule],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './clients.component.html',
   styleUrl: './clients.component.css'
 })
+export class ClientsComponent implements OnInit {
 
-export class ClientsComponent {
   title = "Clientes";
- 
+  dt: any;
   clients: any[] = [];
-  selectedUser: any = null; // Usuario seleccionado para ver/editar
-  passwords = { currentPassword: "", newPassword: "", confirmPassword: "" }; // Para cambio de contraseña
 
   constructor(private userService: UserService, private authService: AuthService) {}
 
   ngOnInit(): void {
-    this.loadCategorys();
+    this.loadClients();
   }
 
-  loadCategorys(): void {
+  loadClients(): void {
     this.userService.getAllClients().subscribe({
       next: (res: any) => {
-        console.log("📌 Clientes cargados:", res);
         this.clients = res.data || [];
+        console.log("📌 Clientes cargados:", this.clients);
+
+        // 🟢 Espera a que Angular renderice la tabla, luego inicializa DataTable
+        setTimeout(() => {
+          if (this.dt) {
+            this.dt.destroy();
+          }
+          this.dt = new DataTable('#dataTable');
+        }, 50);
       },
       error: err => {
         console.error("❌ Error al cargar Clientes", err);
-      },
+      }
     });
   }
 }

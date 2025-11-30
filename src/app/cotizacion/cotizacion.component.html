@@ -2,23 +2,32 @@
   <app-breadcrumb [title]="title"></app-breadcrumb>
 
   <div class="card h-100 p-0 radius-12">
-    <table id="myTable" class="display">
-        <thead>
-            <tr>
-                <th>Column 1</th>
-                <th>Column 2</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Row 1 Data 1</td>
-                <td>Row 1 Data 2</td>
-            </tr>
-            <tr>
-                <td>Row 2 Data 1</td>
-                <td>Row 2 Data 2</td>
-            </tr>
-        </tbody>
-    </table>
+<table id="myTable" class="display table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Fecha</th>
+      <th>Nombre</th>
+      <th>Email</th>
+      <th>Departamento</th>
+      <th>Posición</th>
+      <th>Estado</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let u of users">
+      <td>{{ u.id }}</td>
+      <td>{{ u.date }}</td>
+      <td>
+        <img [src]="u.imgSrc" width="30"> {{ u.name }}
+      </td>
+      <td>{{ u.email }}</td>
+      <td>{{ u.department }}</td>
+      <td>{{ u.position }}</td>
+      <td>{{ u.status }}</td>
+    </tr>
+  </tbody>
+</table>
+
   </div>
 </div>
