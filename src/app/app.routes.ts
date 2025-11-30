@@ -115,6 +115,8 @@ import { AddCategorysComponent } from './add-categorys/add-categorys.component';
 import { AddProductComponent } from './add-product/add-product.component';
 import { AddLocalComponent } from './add-local/add-local.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
+import { ServicesComponent } from './services/services.component';
+import { AddServicesComponent } from './add-services/add-services.component';
 
 export const routes: Routes = [
     {
@@ -131,6 +133,7 @@ export const routes: Routes = [
             { path: 'add-local', component: AddLocalComponent },
             { path: 'add-product', component: AddProductComponent },
             { path: 'add-categorys', component: AddCategorysComponent },
+            { path: 'add-services', component: AddServicesComponent },
             { path: 'alert', component: AlertComponent },
             { path: 'assign-role', component: AssignRoleComponent },
             { path: 'avatar', component: AvatarComponent },
@@ -236,6 +239,7 @@ export const routes: Routes = [
             { path: 'categorys', component: CategoryComponent },
             { path: 'products', component: ProductComponent },
             { path: 'clients', component: ClientsComponent },
+            { path: 'services', component: ServicesComponent },
         ]
     },
     { path: 'coming-soon', component: ComingSoonComponent },
