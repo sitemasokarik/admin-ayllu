@@ -46,6 +46,9 @@ export class UserService {
 	getCategoryById(id: number): Observable<any> {
 		return this.http.get(`${this.apiUrlCategorias}/getbyid/${id}`);
 	}
+	createCategory(categoryData: any): Observable<any> {
+		return this.http.post(`${this.apiUrlCategorias}/create`, categoryData);
+	}
 	
 	//PRODUCT METHODS
 	getAllProducts(): Observable<any> {
