@@ -113,6 +113,7 @@ import { ProductComponent } from './product/product.component';
 import { ClientsComponent } from './clients/clients.component';
 import { AddCategorysComponent } from './add-categorys/add-categorys.component';
 import { AddProductComponent } from './add-product/add-product.component';
+import { AddLocalComponent } from './add-local/add-local.component';
 
 export const routes: Routes = [
     {
@@ -125,6 +126,7 @@ export const routes: Routes = [
             { path: 'home', component: Home15Component },
             { path: 'add-blog', component: AddBlogComponent },
             { path: 'add-user', component: AddUserComponent },
+            { path: 'add-local', component: AddLocalComponent },
             { path: 'add-product', component: AddProductComponent },
             { path: 'add-categorys', component: AddCategorysComponent },
             { path: 'alert', component: AlertComponent },

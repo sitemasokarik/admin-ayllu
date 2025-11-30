@@ -83,5 +83,8 @@ export class UserService {
 	}
 	getLocalById(id: number): Observable<any> {
 		return this.http.get(`${this.apiUrlLocales}/get-by-id/${id}`);
-	  }
+	}
+	createLocal(localData: any): Observable<any> {
+		return this.http.post(`${this.apiUrlLocales}/create`, localData);
+	}
 }
