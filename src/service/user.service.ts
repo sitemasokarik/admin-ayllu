@@ -46,7 +46,15 @@ export class UserService {
 	getCategoryById(id: number): Observable<any> {
 		return this.http.get(`${this.apiUrlCategorias}/getbyid/${id}`);
 	}
-	
+	createCategory(categoryData: any): Observable<any> {
+		return this.http.post(`${this.apiUrlCategorias}/create`, categoryData);
+	}
+	updateCategory(categoryData: any): Observable<any> {
+		return this.http.put(`${this.apiUrlCategorias}/update`, categoryData);
+	}
+	deleteCategory(id: number): Observable<any> {
+		return this.http.delete(`${this.apiUrlCategorias}/delete/${id}`);
+	}
 	//PRODUCT METHODS
 	getAllProducts(): Observable<any> {
 		return this.http.get(`${this.apiUrlProductos}/getall`);
@@ -55,5 +63,5 @@ export class UserService {
 	//CLIENT METHODS
 	getAllClients(): Observable<any> {
 		return this.http.get(`${this.apiUrlClientes}/getall`);
-	}	
+	}
 }
