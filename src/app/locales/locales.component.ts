@@ -20,6 +20,7 @@ import DataTable from "datatables.net";
 export class LocalesComponent {
 	title = "Locales";
 
+	loading: boolean = true;
 	categorys: any[] = [];
 	selectedUser: any = null; // Usuario seleccionado para ver/editar
 	selectedCategory: any = null; // Categoría seleccionada para ver/editar
@@ -43,23 +44,31 @@ export class LocalesComponent {
 			if (!this.dtInitialized && this.locales.length > 0) {
 				this.initDataTable();
 				this.dtInitialized = true;
+				this.loading = false;
 			}
 		}, 0);
 	}
 
 	loadLocales(): void {
-		this.userService.getAllLocales().subscribe({
-			next: (res: any) => {
-				this.locales = res.data || [];
+	this.userService.getAllLocales().subscribe({
+		next: (res: any) => {
+		this.locales = res.data || [];
 
-				// Si DataTable ya estaba inicializado, destruimos y reiniciamos
-				if (this.dtInitialized && this.dataTable) {
-					this.dataTable.destroy();
-					setTimeout(() => this.initDataTable(), 0);
-				}
-			},
-			error: err => console.error("Error al cargar locales:", err),
-		});
+		if (this.dtInitialized && this.dataTable) {
+			this.dataTable.destroy();
+			setTimeout(() => this.initDataTable(), 0);
+		} else {
+			setTimeout(() => this.initDataTable(), 0);
+			this.dtInitialized = true;
+		}
+
+		this.loading = false;
+		},
+		error: err => {
+		console.error("Error al cargar locales:", err);
+		this.loading = false;
+		},
+	});
 	}
 
 	initDataTable(): void {

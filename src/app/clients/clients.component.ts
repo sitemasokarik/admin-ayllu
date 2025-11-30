@@ -20,6 +20,8 @@ import DataTable from 'datatables.net';
 export class ClientsComponent implements OnInit, AfterViewChecked {
   title = "Clientes";
   clients: any[] = [];
+  loading: boolean = true;
+  
   selectedUser: any = null; // Usuario seleccionado para ver/editar
   passwords = { currentPassword: "", newPassword: "", confirmPassword: "" }; // Para cambio de contraseña
   dataTable: any; // Instancia de DataTable
@@ -44,7 +46,7 @@ export class ClientsComponent implements OnInit, AfterViewChecked {
       next: (res: any) => {
         console.log("📌 Formulario cargados:", res);
         this.clients = res.data || [];
-
+        this.loading = false;
         // Si ya estaba inicializado, refrescar DataTable
         if (this.dataTable) {
           this.dataTable.clear().draw();
@@ -53,6 +55,7 @@ export class ClientsComponent implements OnInit, AfterViewChecked {
       },
       error: err => {
         console.error("❌ Error al cargar Formulario", err);
+        this.loading = false;
       },
     });
   }

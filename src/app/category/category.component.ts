@@ -19,6 +19,7 @@ import DataTable from "datatables.net";
 })
 export class CategoryComponent {
 	title = "Categorías";
+	loading: boolean = true;
 
 	categorys: any[] = [];
 	selectedUser: any = null; // Usuario seleccionado para ver/editar
@@ -48,7 +49,7 @@ export class CategoryComponent {
 			next: (res: any) => {
 				console.log("📌 Categorias cargados:", res);
 				this.categorys = res.data || [];
-
+				this.loading = false;
 				// Si ya estaba inicializado, refrescar DataTable
 				if (this.dataTable) {
 					this.dataTable.clear().draw();
@@ -57,6 +58,7 @@ export class CategoryComponent {
 			},
 			error: err => {
 				console.error("❌ Error al cargar Categorias", err);
+				this.loading = false;
 			},
 		});
 	}
