@@ -18,7 +18,7 @@ import DataTable from 'datatables.net';
 	templateUrl: "./product.component.html",
 	styleUrl: "./product.component.css",
 })
-export class ProductComponent implements OnInit, AfterViewChecked  {
+export class ProductComponent implements OnInit  {
 	title = "Productos";
   categories: any[] = [];
 	productos: any[] = [];
