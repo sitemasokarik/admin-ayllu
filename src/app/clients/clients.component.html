@@ -48,7 +48,6 @@
               <th scope="col" class="text-center">Número</th>
               <th scope="col" class="text-center">Número Documento</th>
               <th scope="col" class="text-center">Estado</th>
-              <th scope="col" class="text-center">Acciones</th>
             </tr>
           </thead>
           <tbody>
@@ -84,27 +83,6 @@
 									}" class="px-24 py-4 radius-4 fw-medium text-sm">
                   {{ cliente.estado ? "Activo" : "Inactivo" }}
                 </span>
-              </td>
-              <td class="text-center">
-                <div class="d-flex align-items-center gap-10 justify-content-center">
-                  <button type="button"
-                    class="bg-info-focus bg-hover-info-200 text-info-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
-                    title="Ver usuario" (click)="openCategoryModal(cliente)">
-                    <i class='bx bx-show text-xl'></i>
-                  </button>
-
-                  <button type="button" (click)="editUser(cliente)"
-                    class="bg-success-focus text-success-600 bg-hover-success-200 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
-                    title="Editar Categoria">
-                    <i class="bx bx-edit-alt text-xl"></i>
-                  </button>
-                  <button *ngIf="cliente.estado" type="button" (click)="deleteUser(cliente.usuarioID)"
-                    class="remove-item-btn bg-danger-focus bg-hover-danger-200 text-danger-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
-                    title="Desactivar usuario">
-                    <i class="bx bx-user-x text-xl"></i>
-                  </button>
-
-                </div>
               </td>
             </tr>
           </tbody>
