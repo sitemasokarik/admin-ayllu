@@ -60,7 +60,7 @@
                   <div class="form-check style-check d-flex align-items-center">
                     <input class="form-check-input radius-4 border border-neutral-400" type="checkbox" />
                   </div>
-                  {{ category.categoriaID}}
+                  {{ category.categoriaID }}
                 </div>
               </td>
               <td>
@@ -73,7 +73,7 @@
               <td>
                 <span class="text-md mb-0 fw-normal text-secondary-light">{{ category.totalProductos }}</span>
               </td>
-              
+
               <td class="text-center">
                 <span [ngClass]="{
 										'bg-success-focus text-success-600 border border-success-main': category.estado,
@@ -87,20 +87,19 @@
                   <button type="button"
                     class="bg-info-focus bg-hover-info-200 text-info-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
                     title="Ver usuario" (click)="openCategoryModal(category)">
-                    <i class='bx bx-show text-xl'></i>
+                    <i class="bx bx-show text-xl"></i>
                   </button>
 
-                  <button type="button" (click)="editUser(category)"
+                  <button type="button" (click)="editCategory(category)"
                     class="bg-success-focus text-success-600 bg-hover-success-200 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
                     title="Editar Categoria">
                     <i class="bx bx-edit-alt text-xl"></i>
                   </button>
-                  <button *ngIf="category.estado" type="button" (click)="deleteUser(category.usuarioID)"
+                  <button *ngIf="category.estado" type="button" (click)="deleteCategory(category.categoriaID)"
                     class="remove-item-btn bg-danger-focus bg-hover-danger-200 text-danger-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
-                    title="Desactivar usuario">
-                    <i class="bx bx-user-x text-xl"></i>
+                    title="Desactivar categoría">
+                    <i class="bx bx-block text-xl"></i>
                   </button>
-
                 </div>
               </td>
             </tr>
@@ -151,78 +150,37 @@
   </div>
 </div>
 
-
-
-<!-- Modal Clásico Bootstrap -->
-<div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
+<!-- Modal Clásico Bootstrap para categoría -->
+<div class="modal fade" id="categoryModal" tabindex="-1" aria-labelledby="categoryModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-md">
     <div class="modal-content">
-
       <!-- Header -->
       <div class="modal-header text-white">
-        <h5 class="modal-title" id="userModalLabel">
-          Detalles del usuario
-        </h5>
+        <h5 class="modal-title" id="categoryModalLabel">Detalles de la categoría</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
 
       <!-- Body -->
-      <div class="modal-body" *ngIf="selectedUser">
+      <div class="modal-body" *ngIf="selectedCategory">
         <div class="p-4">
           <div class="row g-3">
-
-            <!-- Email -->
+            <!-- Nombre -->
             <div class="col-md-6">
-              <h6 class="fw-semibold text-secondary mb-1">Email</h6>
-              <p class="mb-0">{{ selectedUser.email }}</p>
+              <h6 class="fw-semibold text-secondary mb-1">Nombre</h6>
+              <p class="mb-0">{{ selectedCategory.nombre }}</p>
             </div>
 
-            <!-- Usuario -->
+            <!-- Descripción -->
             <div class="col-md-6">
-              <h6 class="fw-semibold text-secondary mb-1">Usuario</h6>
-              <p class="mb-0">{{ selectedUser.userName }}</p>
-            </div>
-
-            <!-- Rol -->
-            <div class="col-md-6">
-              <h6 class="fw-semibold text-secondary mb-1">Rol</h6>
-              <p class="mb-0 text-dark">
-                {{ selectedUser.rolID === 1 ? 'Admin' : (selectedUser.rolID === 2 ? 'Ejecutivo de Ventas' : 'Usuario') }}
-              </p>
-            </div>
-
-            <!-- Estado -->
-            <div class="col-md-6">
-              <h6 class="fw-semibold text-secondary mb-1">Estado</h6>
-              <p class="mb-0" [ngClass]="selectedUser.estado ? 'text-success' : 'text-danger'">
-                {{ selectedUser.estado ? 'Activo' : 'Inactivo' }}
-              </p>
+              <h6 class="fw-semibold text-secondary mb-1">Descripción</h6>
+              <p class="mb-0">{{ selectedCategory.descripcion }}</p>
             </div>
 
             <!-- Creado por -->
             <div class="col-md-6">
               <h6 class="fw-semibold text-secondary mb-1">Creado por</h6>
-              <p class="mb-0">{{ selectedUser.usuarioCreacion }}</p>
+              <p class="mb-0">{{ selectedCategory.usuarioCreacion }}</p>
             </div>
-
-            <!-- Fecha de creación -->
-            <div class="col-md-6">
-              <h6 class="fw-semibold text-secondary mb-1">Fecha de creación</h6>
-              <p class="mb-0">{{ selectedUser.fechaCreacion | date:'medium' }}</p>
-            </div>
-
-            <!-- Fecha de modificación -->
-            <div class="col-md-6">
-              <h6 class="fw-semibold text-secondary mb-1">Fecha de modificación</h6>
-              <p class="mb-0">{{ selectedUser.fechaModificacion ? (selectedUser.fechaModificacion | date:'medium') : '-' }}</p>
-            </div>
-
-            <!-- Fecha de eliminación / inactividad -->
-            <div class="col-md-6">
-              <h6 class="fw-semibold text-secondary mb-1">Fecha de Inactividad</h6>
-              <p class="mb-0">{{ selectedUser.fechaEliminacion ? (selectedUser.fechaEliminacion | date:'medium') : '-' }}</p>
-            </div>
-
           </div>
         </div>
       </div>
@@ -230,100 +188,35 @@
   </div>
 </div>
 
-<!-- Modal para editar usuario -->
-<div class="modal fade" id="editUserModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
+<!-- Modal para editar categoría -->
+<div class="modal fade" id="editCategoryModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-md">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Editar Usuario</h5>
+        <h5 class="modal-title">Editar Categoría</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <!-- Solo mostrar formulario si selectedUser existe -->
-        <form #editUserForm="ngForm" (ngSubmit)="submitEditUser()" *ngIf="selectedUser">
+        <form #editCategoryForm="ngForm" (ngSubmit)="submitEditCategory()" *ngIf="selectedCategory">
           <div class="row g-3">
-
             <!-- Nombre -->
             <div class="col-md-6">
               <label class="form-label">Nombre</label>
-              <input type="text"
-                     class="form-control"
-                     [(ngModel)]="selectedUser.nombre"
-                     name="nombre"
-                     required
-                     [ngModelOptions]="{standalone: true}">
+              <input type="text" class="form-control" [(ngModel)]="selectedCategory.nombre" name="nombre" required
+                [ngModelOptions]="{ standalone: true }" />
             </div>
 
-            <!-- Usuario -->
+            <!-- Descripción -->
             <div class="col-md-6">
-              <label class="form-label">Usuario</label>
-              <input type="text"
-                     class="form-control"
-                     [(ngModel)]="selectedUser.userName"
-                     name="userName"
-                     required
-                     [ngModelOptions]="{standalone: true}">
+              <label class="form-label">Descripción</label>
+              <input type="text" class="form-control" [(ngModel)]="selectedCategory.descripcion" name="descripcion"
+                [ngModelOptions]="{ standalone: true }" />
             </div>
-
-            <!-- Email -->
-            <div class="col-md-6">
-              <label class="form-label">Email</label>
-              <input type="email"
-                     class="form-control"
-                     [(ngModel)]="selectedUser.email"
-                     name="email"
-                     required
-                     [ngModelOptions]="{standalone: true}">
-            </div>
-
-            <!-- Rol -->
-            <!-- <div class="col-md-6">
-              <label class="form-label">Rol</label>
-              <select class="form-select" [(ngModel)]="selectedUser.rolID" name="rolID" required [ngModelOptions]="{standalone: true}">
-                <option [ngValue]="1">Admin</option>
-                <option [ngValue]="2">Ejecutivo de Ventas</option>
-                <option [ngValue]="3">Usuario</option>
-              </select>
-              
-            </div> -->
-
-            <!-- Contraseña Actual -->
-            <div class="col-md-6">
-              <label class="form-label">Contraseña Actual</label>
-              <input type="password"
-                     class="form-control"
-                     [(ngModel)]="passwords.currentPassword"
-                     name="currentPassword"
-                     [ngModelOptions]="{standalone: true}">
-            </div>
-
-            <!-- Nueva Contraseña -->
-            <div class="col-md-6">
-              <label class="form-label">Nueva Contraseña</label>
-              <input type="password"
-                     class="form-control"
-                     [(ngModel)]="passwords.newPassword"
-                     name="newPassword"
-                     [ngModelOptions]="{standalone: true}">
-            </div>
-
-            <!-- Confirmar Nueva Contraseña -->
-            <div class="col-md-6">
-              <label class="form-label">Confirmar Nueva Contraseña</label>
-              <input type="password"
-                     class="form-control"
-                     [(ngModel)]="passwords.confirmPassword"
-                     name="confirmPassword"
-                     [ngModelOptions]="{standalone: true}">
-            </div>
-
           </div>
 
-          <div class="modal-footer">
+          <div class="modal-footer mt-3">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-            <button type="submit" class="btn btn-primary" [disabled]="editUserForm.invalid">
-              Guardar Cambios
-            </button>
+            <button type="submit" class="btn btn-primary" [disabled]="editCategoryForm.invalid">Guardar Cambios</button>
           </div>
         </form>
       </div>
