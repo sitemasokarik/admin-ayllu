@@ -9,43 +9,44 @@ import { FormsModule } from "@angular/forms";
 import { AuthService } from "../../service/auth.service";
 
 @Component({
-  selector: 'app-product',
+	selector: "app-product",
 	standalone: true,
 	imports: [BreadcrumbComponent, RouterLink, CommonModule, FormsModule],
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  templateUrl: './product.component.html',
-  styleUrl: './product.component.css'
+	templateUrl: "./product.component.html",
+	styleUrl: "./product.component.css",
 })
-
 export class ProductComponent {
-  title = "Productos";
- 
-  productos: any[] = [];
-  selectedUser: any = null; // Usuario seleccionado para ver/editar
-  passwords = { currentPassword: "", newPassword: "", confirmPassword: "" }; // Para cambio de contraseña
+	title = "Productos";
+  categories: any[] = [];
+	productos: any[] = [];
+	selectedUser: any = null; // Usuario seleccionado para ver/editar
+	selectedProduct: any = null;
 
-  constructor(private userService: UserService, private authService: AuthService) {}
+	passwords = { currentPassword: "", newPassword: "", confirmPassword: "" }; // Para cambio de contraseña
 
-  ngOnInit(): void {
-    this.loadProductos();
-  }
+	constructor(private userService: UserService, private authService: AuthService) {}
 
-  loadProductos(): void {
-    this.userService.getAllProducts().subscribe({
-      next: (res: any) => {
-        console.log("📌 Productos cargados:", res);
-        this.productos = res.data || [];
-      },
-      error: err => {
-        console.error("❌ Error al cargar Productos", err);
-      },
-    });
-  }
+	ngOnInit(): void {
+		this.loadProductos();
+	}
 
-  deleteUser(usuarioID: number): void {
+	loadProductos(): void {
+		this.userService.getAllProducts().subscribe({
+			next: (res: any) => {
+				console.log("📌 Productos cargados:", res);
+				this.productos = res.data || [];
+			},
+			error: err => {
+				console.error("❌ Error al cargar Productos", err);
+			},
+		});
+	}
+
+  deleteProduct(productoID: number): void {
     Swal.fire({
       title: "¿Estás seguro?",
-      text: "¡El usuario será desactivado!",
+      text: "¡El producto será desactivado!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#d33",
@@ -54,146 +55,129 @@ export class ProductComponent {
       cancelButtonText: "Cancelar",
     }).then(result => {
       if (result.isConfirmed) {
-        this.userService.delete(usuarioID).subscribe({
+        this.userService.deleteProduct(productoID).subscribe({
           next: () => {
             // Actualizar estado en la tabla sin eliminar el objeto
-            const user = this.productos.find(u => u.usuarioID === usuarioID);
-            if (user) {
-              user.estado = false; // marcar como inactivo
+            const product = this.productos.find(p => p.productoID === productoID);
+            if (product) {
+              product.estado = false; // marcar como inactivo
             }
-
+  
             Swal.fire({
               icon: "success",
-              title: "Usuario desactivado",
-              text: "El usuario ahora está inactivo",
+              title: "Producto desactivado",
+              text: "El producto ahora está inactivo",
               timer: 1500,
               showConfirmButton: false,
             });
           },
           error: err => {
-            console.error("Error desactivando usuario", err);
+            console.error("Error desactivando producto", err);
             Swal.fire({
               icon: "error",
               title: "Error",
-              text: "No se pudo desactivar el usuario",
+              text: "No se pudo desactivar el producto",
             });
           },
         });
       }
     });
   }
+  
 
-  // Abrir modal de detalles
-  openCategoryModal(category: any) {
-    const categoryId = category.categoriaID; // ✅ solo el ID
-    this.selectedUser = null;
-
-    this.userService.getCategoryById(categoryId).subscribe({
+	openProductModal(product: any) {
+    const productoId = product.productoID;
+    this.selectedProduct = null;
+  
+    this.userService.getProductById(productoId).subscribe({
       next: (res: any) => {
-        this.selectedUser = res.data;
-
-        const modalEl = document.getElementById("userModal");
-        if (modalEl) {
-          const modal = new bootstrap.Modal(modalEl);
-          modal.show();
-        }
+        this.selectedProduct = res.data;
+  
+        // Obtener el nombre de la categoría
+        this.userService.getCategoryById(this.selectedProduct.categoriaID).subscribe({
+          next: (catRes: any) => {
+            this.selectedProduct.categoryName = catRes.data?.nombre || '-';
+  
+            // Mostrar modal solo después de tener el nombre de la categoría
+            const modalEl = document.getElementById("productModal");
+            if (modalEl) {
+              const modal = new bootstrap.Modal(modalEl);
+              modal.show();
+            }
+          },
+          error: err => {
+            console.error("Error cargando categoría:", err);
+            this.selectedProduct.categoryName = '-';
+          }
+        });
+  
       },
       error: err => {
-        console.error("Error cargando usuario:", err);
-        Swal.fire("Error", "No se pudo cargar la información del usuario", "error");
+        console.error("Error cargando producto:", err);
+        Swal.fire("Error", "No se pudo cargar la información del producto", "error");
+      }
+    });
+  }
+  
+  editProduct(product: any) {
+    this.selectedProduct = null;
+  
+    // Esperar a que las categorías se carguen primero
+    this.userService.getAllCategorys().subscribe({
+      next: (cats: any) => {
+        this.categories = cats.data;
+  
+        // Ahora traemos el producto
+        this.userService.getProductById(product.productoID).subscribe({
+          next: (res: any) => {
+            this.selectedProduct = res.data;
+            this.selectedProduct.categoriaID = Number(this.selectedProduct.categoriaID); // asegurar tipo
+  
+            // Abrir modal
+            const modalEl = document.getElementById("editProductModal");
+            if (modalEl) {
+              const modal = new bootstrap.Modal(modalEl);
+              modal.show();
+            }
+          },
+        });
       },
     });
   }
+  
 
-  // Abrir modal para editar usuario
-  editUser(category: any) {
-    // Limpiamos passwords y selectedUser temporalmente
-    this.passwords = { currentPassword: "", newPassword: "", confirmPassword: "" };
-    this.selectedUser = null; // para evitar errores de binding
+  // Enviar datos actualizados
+  submitEditProduct() {
+    if (!this.selectedProduct) return;
 
-    // Llamamos al backend para traer todos los datos del usuario
-    this.userService.getCategoryById(category.categoriaID).subscribe({
-      next: (res: any) => {
-        // Asignamos el usuario completo a selectedUser
-        this.selectedUser = res.data || res; // dependiendo de cómo venga la API
-        // Abrimos modal
-        const modalEl = document.getElementById("editUserModal");
-        if (modalEl) {
-          const modal = new bootstrap.Modal(modalEl);
-          modal.show();
-        }
-      },
-      error: err => {
-        console.error("Error obteniendo usuario:", err);
-        Swal.fire("Error", "No se pudo cargar la información del usuario", "error");
-      },
-    });
-  }
+    const loggedUser = this.authService.getUser();
 
-  submitEditUser() {
-    if (!this.selectedUser) return;
-
-    // 🔹 Obtener usuario logueado
-    const loggedUser = this.authService.getUser(); // todo el objeto del usuario logueado
-
-    // 1️⃣ Preparar datos generales del usuario
     const updateData = {
-      usuarioID: Number(this.selectedUser.usuarioID),
-      nombre: this.selectedUser.nombre || "",
-      userName: this.selectedUser.userName || "",
-      email: this.selectedUser.email || "",
-      rolID: Number(this.selectedUser.rolID),
-      usuarioModificacion: loggedUser?.userName || "Admin",
+      productoID: this.selectedProduct.productoID,
+      nombre: this.selectedProduct.nombre,
+      descripcion: this.selectedProduct.descripcion,
+      precio: Number(this.selectedProduct.precio),
+      precioCosto: Number(this.selectedProduct.precioCosto),
+      imagenUrl: this.selectedProduct.imagenUrl,
+      categoriaID: Number(this.selectedProduct.categoriaID),
+      usuarioModificacion: loggedUser?.nombre || "Admin",
     };
 
-    // 2️⃣ Llamar a la API de update de datos generales
-    this.userService.updateUser(updateData).subscribe({
+    this.userService.updateProduct(updateData).subscribe({
       next: () => {
-        // 3️⃣ Si hay nueva contraseña, validar y actualizar
-        if (this.passwords.newPassword) {
-          // Validar que coincidan
-          if (this.passwords.newPassword !== this.passwords.confirmPassword) {
-            Swal.fire("Error", "La nueva contraseña y la confirmación no coinciden", "error");
-            return;
-          }
-
-          // Preparar datos para cambiar contraseña
-          const passwordData = {
-            usuarioID: this.selectedUser.usuarioID,
-            currentPassword: this.passwords.currentPassword,
-            newPassword: this.passwords.newPassword,
-            confirmPassword: this.passwords.confirmPassword,
-          };
-
-          // Llamar a la API de cambio de contraseña
-          this.userService.changePassword(passwordData).subscribe({
-            next: () => {
-              Swal.fire("Éxito", "Usuario y contraseña actualizados correctamente", "success");
-              this.closeEditModal();
-              this.loadProductos();
-            },
-            error: err => {
-              console.error("Error cambiando contraseña:", err);
-              Swal.fire("Error", "No se pudo cambiar la contraseña", "error");
-            },
-          });
-        } else {
-          // Si no hay cambio de contraseña, solo confirmamos update de datos
-          Swal.fire("Éxito", "Usuario actualizado correctamente", "success");
-          this.closeEditModal();
-          this.loadProductos();
-        }
+        Swal.fire("Éxito", "Producto actualizado correctamente", "success");
+        this.closeEditModal();
+        this.loadProductos(); // Método para refrescar tabla de productos
       },
-      error: err => {
-        console.error("Error actualizando usuario:", err);
-        Swal.fire("Error", "No se pudo actualizar el usuario", "error");
+      error: (err) => {
+        console.error("Error actualizando producto:", err);
+        Swal.fire("Error", "No se pudo actualizar el producto", "error");
       },
     });
   }
 
-  // Cerrar modal de edición
   closeEditModal() {
-    const modalEl = document.getElementById("editUserModal");
+    const modalEl = document.getElementById("editProductModal");
     if (modalEl) {
       const modal = bootstrap.Modal.getInstance(modalEl);
       modal?.hide();

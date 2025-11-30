@@ -28,10 +28,10 @@
           <option>Inactive</option>
         </select>
       </div>
-      <a routerLink="/add-user"
+      <a routerLink="/add-product"
         class="btn btn-primary text-sm btn-sm px-12 py-12 radius-8 d-flex align-items-center gap-2">
         <iconify-icon icon="ic:baseline-plus" class="icon text-xl line-height-1"></iconify-icon>
-        Nueva Categoría
+        Nuevo Producto
       </a>
     </div>
     <div class="card-body p-24">
@@ -60,7 +60,7 @@
                   <div class="form-check style-check d-flex align-items-center">
                     <input class="form-check-input radius-4 border border-neutral-400" type="checkbox" />
                   </div>
-                  {{ category.productoID}}
+                  {{ category.productoID }}
                 </div>
               </td>
               <td>
@@ -73,7 +73,7 @@
               <td>
                 <span class="text-md mb-0 fw-normal text-secondary-light">{{ category.categoria }}</span>
               </td>
-              
+
               <td class="text-center">
                 <span [ngClass]="{
 										'bg-success-focus text-success-600 border border-success-main': category.estado,
@@ -86,19 +86,19 @@
                 <div class="d-flex align-items-center gap-10 justify-content-center">
                   <button type="button"
                     class="bg-info-focus bg-hover-info-200 text-info-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
-                    title="Ver usuario" (click)="openCategoryModal(category)">
-                    <i class='bx bx-show text-xl'></i>
+                    title="Ver usuario" (click)="openProductModal(category)">
+                    <i class="bx bx-show text-xl"></i>
                   </button>
 
-                  <button type="button" (click)="editUser(category)"
+                  <button type="button" (click)="editProduct(category)"
                     class="bg-success-focus text-success-600 bg-hover-success-200 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
                     title="Editar Categoria">
                     <i class="bx bx-edit-alt text-xl"></i>
                   </button>
-                  <button *ngIf="category.estado" type="button" (click)="deleteUser(category.usuarioID)"
+                  <button *ngIf="category.estado" type="button" (click)="deleteProduct(category.productoID)"
                     class="remove-item-btn bg-danger-focus bg-hover-danger-200 text-danger-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
-                    title="Desactivar usuario">
-                    <i class="bx bx-user-x text-xl"></i>
+                    title="Desactivar producto">
+                    <i class="bx bx-block text-xl"></i>
                   </button>
 
                 </div>
@@ -151,78 +151,74 @@
   </div>
 </div>
 
-
-
 <!-- Modal Clásico Bootstrap -->
-<div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
+<div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
-
       <!-- Header -->
-      <div class="modal-header text-white">
-        <h5 class="modal-title" id="userModalLabel">
-          Detalles del usuario
-        </h5>
+      <div class="modal-header">
+        <h5 class="modal-title" id="productModalLabel">Detalles del Producto</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
 
       <!-- Body -->
-      <div class="modal-body" *ngIf="selectedUser">
+      <div class="modal-body" *ngIf="selectedProduct">
         <div class="p-4">
           <div class="row g-3">
-
-            <!-- Email -->
+            <!-- Nombre -->
             <div class="col-md-6">
-              <h6 class="fw-semibold text-secondary mb-1">Email</h6>
-              <p class="mb-0">{{ selectedUser.email }}</p>
+              <h6 class="fw-semibold text-secondary mb-1">Nombre</h6>
+              <p class="mb-0">{{ selectedProduct.nombre }}</p>
             </div>
 
-            <!-- Usuario -->
+            <!-- Descripción -->
             <div class="col-md-6">
-              <h6 class="fw-semibold text-secondary mb-1">Usuario</h6>
-              <p class="mb-0">{{ selectedUser.userName }}</p>
+              <h6 class="fw-semibold text-secondary mb-1">Descripción</h6>
+              <p class="mb-0">{{ selectedProduct.descripcion }}</p>
             </div>
 
-            <!-- Rol -->
+            <!-- Precio -->
             <div class="col-md-6">
-              <h6 class="fw-semibold text-secondary mb-1">Rol</h6>
-              <p class="mb-0 text-dark">
-                {{ selectedUser.rolID === 1 ? 'Admin' : (selectedUser.rolID === 2 ? 'Ejecutivo de Ventas' : 'Usuario') }}
-              </p>
+              <h6 class="fw-semibold text-secondary mb-1">Precio</h6>
+              <p class="mb-0">{{ selectedProduct.precio | currency }}</p>
             </div>
 
-            <!-- Estado -->
+            <!-- Precio de Costo -->
             <div class="col-md-6">
-              <h6 class="fw-semibold text-secondary mb-1">Estado</h6>
-              <p class="mb-0" [ngClass]="selectedUser.estado ? 'text-success' : 'text-danger'">
-                {{ selectedUser.estado ? 'Activo' : 'Inactivo' }}
-              </p>
+              <h6 class="fw-semibold text-secondary mb-1">Precio Costo</h6>
+              <p class="mb-0">{{ selectedProduct.precioCosto | currency }}</p>
             </div>
+
+
+            <!-- Categoría -->
+            <div class="col-md-6">
+              <h6 class="fw-semibold text-secondary mb-1">Categoría</h6>
+              <p class="mb-0">{{ selectedProduct.categoryName }}</p>
+            </div>
+
 
             <!-- Creado por -->
             <div class="col-md-6">
               <h6 class="fw-semibold text-secondary mb-1">Creado por</h6>
-              <p class="mb-0">{{ selectedUser.usuarioCreacion }}</p>
+              <p class="mb-0">{{ selectedProduct.usuarioCreacion }}</p>
             </div>
 
-            <!-- Fecha de creación -->
+            <!-- Imagen -->
             <div class="col-md-6">
-              <h6 class="fw-semibold text-secondary mb-1">Fecha de creación</h6>
-              <p class="mb-0">{{ selectedUser.fechaCreacion | date:'medium' }}</p>
+              <h6 class="fw-semibold text-secondary mb-1">Imagen</h6>
+              <img *ngIf="selectedProduct.imagenUrl" [src]="selectedProduct.imagenUrl" alt="Producto"
+                class="img-fluid rounded" />
+              <p *ngIf="!selectedProduct.imagenUrl">-</p>
             </div>
 
-            <!-- Fecha de modificación -->
+
+            <!-- Estado -->
             <div class="col-md-6">
-              <h6 class="fw-semibold text-secondary mb-1">Fecha de modificación</h6>
-              <p class="mb-0">{{ selectedUser.fechaModificacion ? (selectedUser.fechaModificacion | date:'medium') : '-' }}</p>
+              <h6 class="fw-semibold text-secondary mb-1">Estado</h6>
+              <p class="mb-0" [ngClass]="selectedProduct.estado ? 'text-success' : 'text-danger'">
+                {{ selectedProduct.estado ? "Activo" : "Inactivo" }}
+              </p>
             </div>
-
-            <!-- Fecha de eliminación / inactividad -->
-            <div class="col-md-6">
-              <h6 class="fw-semibold text-secondary mb-1">Fecha de Inactividad</h6>
-              <p class="mb-0">{{ selectedUser.fechaEliminacion ? (selectedUser.fechaEliminacion | date:'medium') : '-' }}</p>
-            </div>
-
           </div>
         </div>
       </div>
@@ -230,100 +226,66 @@
   </div>
 </div>
 
-<!-- Modal para editar usuario -->
-<div class="modal fade" id="editUserModal" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="editProductModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Editar Usuario</h5>
+        <h5 class="modal-title">Editar Producto</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
-        <!-- Solo mostrar formulario si selectedUser existe -->
-        <form #editUserForm="ngForm" (ngSubmit)="submitEditUser()" *ngIf="selectedUser">
-          <div class="row g-3">
 
+      <div class="modal-body">
+        <form #editProductForm="ngForm" (ngSubmit)="submitEditProduct()" *ngIf="selectedProduct">
+          <div class="row g-3">
             <!-- Nombre -->
             <div class="col-md-6">
               <label class="form-label">Nombre</label>
-              <input type="text"
-                     class="form-control"
-                     [(ngModel)]="selectedUser.nombre"
-                     name="nombre"
-                     required
-                     [ngModelOptions]="{standalone: true}">
+              <input type="text" class="form-control" [(ngModel)]="selectedProduct.nombre" name="nombre" required
+                [ngModelOptions]="{standalone:true}" />
             </div>
 
-            <!-- Usuario -->
+            <!-- Descripción -->
             <div class="col-md-6">
-              <label class="form-label">Usuario</label>
-              <input type="text"
-                     class="form-control"
-                     [(ngModel)]="selectedUser.userName"
-                     name="userName"
-                     required
-                     [ngModelOptions]="{standalone: true}">
+              <label class="form-label">Descripción</label>
+              <textarea class="form-control" [(ngModel)]="selectedProduct.descripcion" name="descripcion" required
+                [ngModelOptions]="{standalone:true}"></textarea>
             </div>
 
-            <!-- Email -->
+            <!-- Precio -->
             <div class="col-md-6">
-              <label class="form-label">Email</label>
-              <input type="email"
-                     class="form-control"
-                     [(ngModel)]="selectedUser.email"
-                     name="email"
-                     required
-                     [ngModelOptions]="{standalone: true}">
+              <label class="form-label">Precio Venta</label>
+              <input type="number" class="form-control" [(ngModel)]="selectedProduct.precio" name="precio" required
+                [ngModelOptions]="{standalone:true}" />
             </div>
 
-            <!-- Rol -->
-            <!-- <div class="col-md-6">
-              <label class="form-label">Rol</label>
-              <select class="form-select" [(ngModel)]="selectedUser.rolID" name="rolID" required [ngModelOptions]="{standalone: true}">
-                <option [ngValue]="1">Admin</option>
-                <option [ngValue]="2">Ejecutivo de Ventas</option>
-                <option [ngValue]="3">Usuario</option>
+            <!-- Precio Costo -->
+            <div class="col-md-6">
+              <label class="form-label">Precio Costo</label>
+              <input type="number" class="form-control" [(ngModel)]="selectedProduct.precioCosto" name="precioCosto"
+                required [ngModelOptions]="{standalone:true}" />
+            </div>
+
+            <!-- URL Imagen -->
+            <div class="col-md-6">
+              <label class="form-label">Imagen URL</label>
+              <input type="text" class="form-control" [(ngModel)]="selectedProduct.imagenUrl" name="imagenUrl"
+                [ngModelOptions]="{standalone:true}" />
+            </div>
+
+            <!-- Categoría -->
+            <div class="col-md-6">
+              <label class="form-label">Categoría</label>
+              <select class="form-select" [(ngModel)]="selectedProduct.categoriaID" name="categoriaID" required>
+                <option value="" disabled selected>Seleccione una categoría</option>
+                <option *ngFor="let cat of categories" [value]="cat.categoriaID">{{ cat.nombre }}</option>
               </select>
-              
-            </div> -->
-
-            <!-- Contraseña Actual -->
-            <div class="col-md-6">
-              <label class="form-label">Contraseña Actual</label>
-              <input type="password"
-                     class="form-control"
-                     [(ngModel)]="passwords.currentPassword"
-                     name="currentPassword"
-                     [ngModelOptions]="{standalone: true}">
-            </div>
-
-            <!-- Nueva Contraseña -->
-            <div class="col-md-6">
-              <label class="form-label">Nueva Contraseña</label>
-              <input type="password"
-                     class="form-control"
-                     [(ngModel)]="passwords.newPassword"
-                     name="newPassword"
-                     [ngModelOptions]="{standalone: true}">
-            </div>
-
-            <!-- Confirmar Nueva Contraseña -->
-            <div class="col-md-6">
-              <label class="form-label">Confirmar Nueva Contraseña</label>
-              <input type="password"
-                     class="form-control"
-                     [(ngModel)]="passwords.confirmPassword"
-                     name="confirmPassword"
-                     [ngModelOptions]="{standalone: true}">
             </div>
 
           </div>
 
-          <div class="modal-footer">
+          <div class="modal-footer mt-3">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-            <button type="submit" class="btn btn-primary" [disabled]="editUserForm.invalid">
-              Guardar Cambios
-            </button>
+            <button type="submit" class="btn btn-primary" [disabled]="editProductForm.invalid">Guardar Cambios</button>
           </div>
         </form>
       </div>
