@@ -2,6 +2,8 @@ import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BreadcrumbComponent } from '../breadcrumb/breadcrumb.component';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import DataTable from 'datatables.net-dt';
+ 
 
 @Component({
   selector: 'app-cotizacion',
@@ -14,6 +16,8 @@ import { CommonModule } from '@angular/common';
 export class CotizacionComponent {
   title = 'Cotizaciones';
 
+  table = new DataTable('#myTable');
+  
   users= [
     {
       id: 1,
