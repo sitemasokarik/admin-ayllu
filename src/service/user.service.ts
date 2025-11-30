@@ -59,6 +59,9 @@ export class UserService {
 	getAllProducts(): Observable<any> {
 		return this.http.get(`${this.apiUrlProductos}/getall`);
 	}
+	createProduct(productData: any): Observable<any> {
+		return this.http.post(`${this.apiUrlProductos}/create`, productData);
+	}
 
 	//CLIENT METHODS
 	getAllClients(): Observable<any> {
