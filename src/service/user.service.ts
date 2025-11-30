@@ -9,6 +9,8 @@ export class UserService {
 	private apiUrlProductos = "http://caeteringdcodepe.runasp.net/api/v1/Producto"; // URL completa de tu API
 	private apiUrlClientes = "http://caeteringdcodepe.runasp.net/api/v1/Cliente"; // URL completa de tu API
 	private apiUrlLocales = "http://caeteringdcodepe.runasp.net/api/v1/local"; // URL de tu API de Local
+	private apiUrlEmpresa = "http://caeteringdcodepe.runasp.net/api/v1/empresa"; // <-- URL de Empresa
+	private apiUrlBlog = "http://caeteringdcodepe.runasp.net/api/v1/blog";
 
 	constructor(private http: HttpClient) {}
 
@@ -92,5 +94,37 @@ export class UserService {
 	}
 	deleteLocal(id: number): Observable<any> {
 		return this.http.delete(`${this.apiUrlLocales}/delete/${id}`);
+	}
+
+	//EMPRESA METHODS
+	getAllEmpresas(): Observable<any> {
+		return this.http.get(`${this.apiUrlEmpresa}/getall`);
+	}
+	getEmpresaById(id: number): Observable<any> {
+		return this.http.get(`${this.apiUrlEmpresa}/getbyid/${id}`);
+	}
+	updateEmpresa(empresaData: any): Observable<any> {
+		return this.http.put(`${this.apiUrlEmpresa}/update`, empresaData);
+	}
+
+	//BLOG METHODS
+	getAllBlogs(): Observable<any> {
+		return this.http.get(`${this.apiUrlBlog}/getall`);
+	}
+	getBlogById(id: number): Observable<any> {
+		return this.http.get(`${this.apiUrlBlog}/getbyid/${id}`);
+	}
+	createBlog(blogData: any): Observable<any> {
+		return this.http.post(`${this.apiUrlBlog}/create`, blogData);
+	}
+	updateBlog(blogData: any): Observable<any> {
+		return this.http.put(`${this.apiUrlBlog}/update`, blogData);
+	}
+	deleteBlog(id: number): Observable<any> {
+		return this.http.delete(`${this.apiUrlBlog}/delete/${id}`);
+	}
+	//FORMULARIO CONTACTO METHODS
+	getAllFormulario(): Observable<any> {
+		return this.http.get(`${this.apiUrlClientes}/getall`);
 	}
 }

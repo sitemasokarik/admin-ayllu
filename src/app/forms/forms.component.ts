@@ -12,18 +12,8 @@ import { CommonModule } from '@angular/common';
   styleUrl: './forms.component.css'
 })
 export class FormsComponent {
-  title = 'Forms';
+  title = "Formulario";
+  registrosClientes: any[] = [];
 
-  users= [
-    {
-      id: 1,
-      date: '25 Jan 2024',
-      imgSrc: 'assets/images/user-list/user-list1.png',
-      name: 'Kathryn Murphy',
-      email: 'osgoodwy@gmail.com',
-      department: 'HR',
-      position: 'Manager',
-      status: 'Active'
-    },
-  ]; 
+  
 }

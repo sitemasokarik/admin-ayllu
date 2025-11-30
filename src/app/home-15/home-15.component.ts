@@ -198,28 +198,28 @@ export class Home15Component {
   dashboardItems = [
     {
       title: 'Cotizaciones',
-      value: 320,
+      value: 1,
       icon: 'ri-calendar-event-fill',
       bgColor: 'bg-danger-600',
       blurClass: 'blur-gradient blur-gradient-1'
     },
     {
       title: 'Eventos Realizados',
-      value: 435,
+      value: 1,
       icon: 'ri-checkbox-circle-fill',
       bgColor: 'bg-info-600',
       blurClass: 'blur-gradient blur-gradient-4'
     },    
     {
       title: 'Clientes',
-      value: 547,
+      value: 5,
       icon: 'ri-user-2-fill',
       bgColor: 'bg-success-600',
       blurClass: 'blur-gradient blur-gradient-2'
     },
     {
       title: 'Usuarios',
-      value: 356,
+      value: 3,
       icon: 'ri-group-fill',
       bgColor: 'bg-warning-600',
       blurClass: 'blur-gradient blur-gradient-3'

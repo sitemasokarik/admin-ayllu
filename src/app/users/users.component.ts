@@ -23,6 +23,8 @@ export class UsersComponent implements OnInit {
 	selectedUser: any = null; // Usuario seleccionado para ver/editar
 	passwords = { currentPassword: "", newPassword: "", confirmPassword: "" }; // Para cambio de contraseña
 
+	loading: boolean = true;
+
 	dataTable: any; // Instancia de DataTable
 	private dtInitialized = false; // Marca si DataTable ya se inicializó
 
@@ -45,7 +47,8 @@ export class UsersComponent implements OnInit {
 			next: (res: any) => {
 				console.log("📌 Usuarios cargados:", res);
 				this.users = res.data || [];
-
+				this.loading = false;
+				
 				// Si ya estaba inicializado, refrescar DataTable
 				if (this.dataTable) {
 					this.dataTable.clear().draw();
@@ -54,6 +57,7 @@ export class UsersComponent implements OnInit {
 			},
 			error: err => {
 				console.error("❌ Error al cargar usuarios", err);
+				this.loading = false;
 			},
 		});
 	}

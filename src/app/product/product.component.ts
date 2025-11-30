@@ -21,6 +21,8 @@ export class ProductComponent implements OnInit {
 	title = "Productos";
 	categories: any[] = [];
 	productos: any[] = [];
+	loading: boolean = true;
+
 	selectedUser: any = null; // Usuario seleccionado para ver/editar
 	selectedProduct: any = null;
 	dataTable: any; // Instancia de DataTable
@@ -47,7 +49,7 @@ export class ProductComponent implements OnInit {
 			next: (res: any) => {
 				console.log("📌 Productos cargados:", res);
 				this.productos = res.data || [];
-
+				this.loading = false;
 				// Si ya estaba inicializado, refrescar DataTable
 				if (this.dataTable) {
 					this.dataTable.clear().draw();
@@ -56,6 +58,7 @@ export class ProductComponent implements OnInit {
 			},
 			error: err => {
 				console.error("❌ Error al cargar Productos", err);
+				this.loading = false;
 			},
 		});
 	}

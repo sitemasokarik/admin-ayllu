@@ -20,6 +20,8 @@ import DataTable from 'datatables.net';
 export class ClientsComponent implements OnInit, AfterViewChecked {
   title = "Clientes";
   clients: any[] = [];
+  loading: boolean = true;
+  
   selectedUser: any = null; // Usuario seleccionado para ver/editar
   passwords = { currentPassword: "", newPassword: "", confirmPassword: "" }; // Para cambio de contraseña
   dataTable: any; // Instancia de DataTable
@@ -28,7 +30,7 @@ export class ClientsComponent implements OnInit, AfterViewChecked {
   constructor(private userService: UserService, private authService: AuthService) {}
 
   ngOnInit(): void {
-    this.loadClients();
+    this.loadFormulario();
   }
 
   ngAfterViewChecked(): void {
@@ -39,12 +41,12 @@ export class ClientsComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  loadClients(): void {
-    this.userService.getAllClients().subscribe({
+  loadFormulario(): void {
+    this.userService.getAllFormulario().subscribe({
       next: (res: any) => {
-        console.log("📌 Clientes cargados:", res);
+        console.log("📌 Formulario cargados:", res);
         this.clients = res.data || [];
-
+        this.loading = false;
         // Si ya estaba inicializado, refrescar DataTable
         if (this.dataTable) {
           this.dataTable.clear().draw();
@@ -52,7 +54,8 @@ export class ClientsComponent implements OnInit, AfterViewChecked {
         }
       },
       error: err => {
-        console.error("❌ Error al cargar Clientes", err);
+        console.error("❌ Error al cargar Formulario", err);
+        this.loading = false;
       },
     });
   }
