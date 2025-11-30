@@ -114,6 +114,7 @@ import { ClientsComponent } from './clients/clients.component';
 import { AddCategorysComponent } from './add-categorys/add-categorys.component';
 import { AddProductComponent } from './add-product/add-product.component';
 import { AddLocalComponent } from './add-local/add-local.component';
+import { LandingPageComponent } from './landing-page/landing-page.component';
 
 export const routes: Routes = [
     {
@@ -124,6 +125,7 @@ export const routes: Routes = [
             { path: '', redirectTo: '/sign-in', pathMatch: 'full' },
             //{ path: 'home', component: HomeComponent },
             { path: 'home', component: Home15Component },
+            { path: 'landing-page', component: LandingPageComponent },
             { path: 'add-blog', component: AddBlogComponent },
             { path: 'add-user', component: AddUserComponent },
             { path: 'add-local', component: AddLocalComponent },
