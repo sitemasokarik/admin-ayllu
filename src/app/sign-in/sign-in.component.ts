@@ -17,60 +17,61 @@ export class SignInComponent {
 	userName: string = "";
 	password: string = "";
 	showPassword = false;
+	loading: boolean = false;
 
 	constructor(private readonly router: Router, private readonly authService: AuthService) {}
 
 	onSubmit(): void {
-		const credentials = {
-			userName: this.userName,
-			password: this.password,
-		};
+	this.loading = true; // 🔹 Activar loading
 
-		this.authService.login(credentials).subscribe({
-			next: (resp: any) => {
-				console.log("🟢 Respuesta servidor:", resp);
+	const credentials = {
+		userName: this.userName,
+		password: this.password,
+	};
 
-				// Guardar token
-				const token = resp?.data?.token;
-				if (!token) {
-					Swal.fire({
-						icon: "error",
-						title: "Error",
-						text: "No se recibió token del servidor",
-					});
-					return;
-				}
-				this.authService.saveToken(token);
+	this.authService.login(credentials).subscribe({
+		next: (resp: any) => {
+		this.loading = false; // 🔹 Desactivar loading
 
-				// Guardar info del usuario logueado
-				const user = resp?.data?.usuario; // 👈 Ajusta según tu API
-				if (user) {
-					this.authService.saveUser(user);
-					// 🔹 Mostrar info del usuario en consola
-					console.log("💻 Usuario logueado:", user);
-				} else {
-					console.warn("⚠️ No se recibió información del usuario en la respuesta");
-				}
+		console.log("🟢 Respuesta servidor:", resp);
 
-				Swal.fire({
-					icon: "success",
-					title: "Bienvenido",
-					text: `Hola ${user?.nombre || this.userName}!`,
-				});
+		const token = resp?.data?.token;
+		if (!token) {
+			Swal.fire({
+			icon: "error",
+			title: "Error",
+			text: "No se recibió token del servidor",
+			});
+			return;
+		}
 
-				this.router.navigate(["/home"]);
-			},
+		this.authService.saveToken(token);
 
-			error: err => {
-				console.error("❌ Error login:", err);
-				Swal.fire({
-					icon: "error",
-					title: "Error",
-					text: "Credenciales incorrectas",
-				});
-			},
+		const user = resp?.data?.usuario;
+		if (user) this.authService.saveUser(user);
+
+		Swal.fire({
+			icon: "success",
+			title: "Bienvenido",
+			text: `Hola ${user?.nombre || this.userName}!`,
 		});
+
+		this.router.navigate(["/home"]);
+		},
+
+		error: err => {
+		this.loading = false; // 🔹 Desactivar loading
+
+		console.error("❌ Error login:", err);
+		Swal.fire({
+			icon: "error",
+			title: "Error",
+			text: "Credenciales incorrectas",
+		});
+		},
+	});
 	}
+
 
 	togglePassword() {
 		this.showPassword = !this.showPassword;
