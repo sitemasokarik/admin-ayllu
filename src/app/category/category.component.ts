@@ -7,6 +7,7 @@ import Swal from "sweetalert2";
 import * as bootstrap from "bootstrap";
 import { FormsModule } from "@angular/forms";
 import { AuthService } from "../../service/auth.service";
+import DataTable from 'datatables.net';
 
 @Component({
 	selector: "app-category",
@@ -23,25 +24,49 @@ export class CategoryComponent {
 	selectedUser: any = null; // Usuario seleccionado para ver/editar
 	selectedCategory: any = null; // Categoría seleccionada para ver/editar
 
+	dataTable: any; // Instancia de DataTable
+	private dtInitialized = false; // Marca si DataTable ya se inicializó
+
 	passwords = { currentPassword: "", newPassword: "", confirmPassword: "" }; // Para cambio de contraseña
 
 	constructor(private userService: UserService, private authService: AuthService) {}
 
 	ngOnInit(): void {
 		this.loadCategorys();
-	}
-
-	loadCategorys(): void {
+	  }
+	
+	  ngAfterViewChecked(): void {
+		// Inicializamos DataTable solo una vez que hay datos
+		if (!this.dtInitialized && this.categorys.length > 0) {
+		  this.initDataTable();
+		  this.dtInitialized = true;
+		}
+	  }
+	
+	  loadCategorys(): void {
 		this.userService.getAllCategorys().subscribe({
-			next: (res: any) => {
-				console.log("📌 Categorias cargados:", res);
-				this.categorys = res.data || [];
-			},
-			error: err => {
-				console.error("❌ Error al cargar Categorias", err);
-			},
+		  next: (res: any) => {
+			console.log("📌 Categorias cargados:", res);
+			this.categorys = res.data || [];
+	
+			// Si ya estaba inicializado, refrescar DataTable
+			if (this.dataTable) {
+			  this.dataTable.clear().draw();
+			  this.dataTable.rows.add(this.categorys).draw();
+			}
+		  },
+		  error: err => {
+			console.error("❌ Error al cargar Categorias", err);
+		  },
 		});
-	}
+	  }
+	
+	  initDataTable(): void {
+		this.dataTable = new DataTable('#dataTable', {
+		  pageLength: 10,
+		  // Configuración adicional si quieres
+		});
+	  }
 
 	deleteCategory(categoriaID: number): void {
 		Swal.fire({
