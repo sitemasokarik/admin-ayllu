@@ -196,6 +196,7 @@ export const routes: Routes = [
             { path: 'progress', component: ProgressComponent },
             { path: 'radio', component: RadioComponent },
             { path: 'role-access', component: RoleAccessComponent },
+            { path: 'table-data', component: TableDataComponent },
 
             { path: 'star-rating', component: StarRatingComponent },
             { path: 'starred', component: StarredComponent },

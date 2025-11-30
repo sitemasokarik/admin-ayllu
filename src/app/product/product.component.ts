@@ -1,4 +1,4 @@
-import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
+import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA, AfterViewInit, AfterViewChecked } from "@angular/core";
 import { BreadcrumbComponent } from "../breadcrumb/breadcrumb.component";
 import { RouterLink } from "@angular/router";
 import { CommonModule } from "@angular/common";
@@ -7,6 +7,8 @@ import Swal from "sweetalert2";
 import * as bootstrap from "bootstrap";
 import { FormsModule } from "@angular/forms";
 import { AuthService } from "../../service/auth.service";
+import DataTable from 'datatables.net';
+
 
 @Component({
 	selector: "app-product",
@@ -16,32 +18,56 @@ import { AuthService } from "../../service/auth.service";
 	templateUrl: "./product.component.html",
 	styleUrl: "./product.component.css",
 })
-export class ProductComponent {
+export class ProductComponent implements OnInit, AfterViewChecked  {
 	title = "Productos";
   categories: any[] = [];
 	productos: any[] = [];
 	selectedUser: any = null; // Usuario seleccionado para ver/editar
 	selectedProduct: any = null;
+  dataTable: any; // Instancia de DataTable
+  private dtInitialized = false; // Marca si DataTable ya se inicializó
+
 
 	passwords = { currentPassword: "", newPassword: "", confirmPassword: "" }; // Para cambio de contraseña
 
 	constructor(private userService: UserService, private authService: AuthService) {}
 
-	ngOnInit(): void {
-		this.loadProductos();
-	}
+  ngOnInit(): void {
+    this.loadProductos();
+  }
 
-	loadProductos(): void {
-		this.userService.getAllProducts().subscribe({
-			next: (res: any) => {
-				console.log("📌 Productos cargados:", res);
-				this.productos = res.data || [];
-			},
-			error: err => {
-				console.error("❌ Error al cargar Productos", err);
-			},
-		});
-	}
+  ngAfterViewChecked(): void {
+    // Inicializamos DataTable solo una vez que hay datos
+    if (!this.dtInitialized && this.productos.length > 0) {
+      this.initDataTable();
+      this.dtInitialized = true;
+    }
+  }
+
+  loadProductos(): void {
+    this.userService.getAllProducts().subscribe({
+      next: (res: any) => {
+        console.log("📌 Productos cargados:", res);
+        this.productos = res.data || [];
+
+        // Si ya estaba inicializado, refrescar DataTable
+        if (this.dataTable) {
+          this.dataTable.clear().draw();
+          this.dataTable.rows.add(this.productos).draw();
+        }
+      },
+      error: err => {
+        console.error("❌ Error al cargar Productos", err);
+      },
+    });
+  }
+
+  initDataTable(): void {
+    this.dataTable = new DataTable('#dataTable', {
+      pageLength: 10,
+      // Configuración adicional si quieres
+    });
+  }
 
   deleteProduct(productoID: number): void {
     Swal.fire({
