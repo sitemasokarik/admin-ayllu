@@ -16,6 +16,7 @@ export class LandingPageComponent implements OnInit {
 
   blogForm: FormGroup;
   blogID!: number;
+  loading: boolean = true;
 
   constructor(private fb: FormBuilder, private userService: UserService) {
 
@@ -45,9 +46,11 @@ export class LandingPageComponent implements OnInit {
 
         data.valores?.forEach((v: any) => this.addValor(v));
         data.imagenesUrls?.forEach((url: string) => this.addImagen(url));
+        this.loading = false;
       },
       error: err => {
         console.error(err);
+        this.loading = false;
         Swal.fire('Error', 'No se pudo cargar el blog', 'error');
       }
     });

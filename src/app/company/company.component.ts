@@ -18,6 +18,8 @@ export class CompanyComponent implements OnInit {
 	companyForm: FormGroup;
 	empresaID!: number; // guardamos el ID de la empresa
 
+	loading: boolean = true;
+
 	constructor(private userService: UserService, private fb: FormBuilder) {
 		// Inicializamos el formulario con validaciones
 		this.companyForm = this.fb.group({
@@ -53,6 +55,7 @@ export class CompanyComponent implements OnInit {
 			},
 			error: err => {
 				console.error("❌ Error al obtener empresas", err);
+				this.loading = false; // Apaga loading aunque falle
 			},
 		});
 	}
@@ -82,9 +85,11 @@ export class CompanyComponent implements OnInit {
 						logo: data.logo,
 					});
 				}
+				this.loading = false;
 			},
 			error: err => {
 				console.error("Error al cargar la empresa", err);
+				this.loading = false;
 				Swal.fire("Error", "No se pudo cargar la información de la empresa", "error");
 			},
 		});

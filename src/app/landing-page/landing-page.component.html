@@ -1,4 +1,8 @@
-<div class="dashboard-main-body">
+<div *ngIf="loading" class="d-flex flex-column align-items-center justify-content-center py-80">
+  <div class="spinner-grow text-primary mb-3" style="width: 3rem; height: 3rem;"></div>
+  <p class="text-primary-light">Cargando información...</p>
+</div> 
+<div *ngIf="!loading" class="dashboard-main-body">
     <app-breadcrumb [title]="'Configuración - Landing Page'" [main-title]="'Landing Page'">
     </app-breadcrumb>
 
