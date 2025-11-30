@@ -1,77 +1,70 @@
 <div class="dashboard-main-body">
-  <app-breadcrumb [title]="'Configuración - Empresa'" [main-title]="'Empresa'"></app-breadcrumb>
-
-
+    <app-breadcrumb [title]="'Configuración - Empresa'" [main-title]="'Empresa'"></app-breadcrumb>
+  
     <div class="card h-100 p-0 radius-12 overflow-hidden">
-        <div class="card-body p-40">
-            <form action="#">
-                <div class="row">
-                    <div class="col-sm-4">
-                        <div class="mb-20">
-                            <label for="razonSocial" class="form-label fw-semibold text-primary-light text-sm mb-8">Razon Social
-                                </label>
-                            <input type="text" class="form-control radius-8" id="razonSocial" placeholder="Razon Social">
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="mb-20">
-                            <label for="nombreComercial" class="form-label fw-semibold text-primary-light text-sm mb-8">Nombre Comercial
-                                </label>
-                            <input type="text" class="form-control radius-8" id="nombreComercial"
-                                placeholder="Nombre Comercial">
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="mb-20">
-                            <label for="Ruc" class="form-label fw-semibold text-primary-light text-sm mb-8">Ruc
-                                </label>
-                            <input type="text" class="form-control radius-8" id="Ruc" placeholder="Ruc">
-                        </div>
-                    </div>   
-                    <div class="col-sm-4">
-                        <div class="mb-20">
-                            <label for="email" class="form-label fw-semibold text-primary-light text-sm mb-8">Correo
-                                </label>
-                            <input type="text" class="form-control radius-8" id="email" placeholder="Correo">
-                        </div>
-                    </div>                                      
-                    <div class="col-sm-4">
-                        <div class="mb-20">
-                            <label for="telefono" class="form-label fw-semibold text-primary-light text-sm mb-8">Número Contacto</label>
-                            <input type="number" class="form-control radius-8" id="telefono"
-                                placeholder="Número de Contacto">
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="mb-20">
-                            <label for="direccion" class="form-label fw-semibold text-primary-light text-sm mb-8">
-                                Dirección Contacto</label>
-                            <input type="text" class="form-control radius-8" id="direccion" placeholder="Dirección">
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="mb-20">
-                            <label for="facebook" class="form-label fw-semibold text-primary-light text-sm mb-8"> Link Facebook
-                                </label>
-                            <input type="text" class="form-control radius-8" id="facebook" placeholder="Link Facebook">
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="mb-20">
-                            <label for="instagram" class="form-label fw-semibold text-primary-light text-sm mb-8">
-                                Link Instagram </label>
-                            <input type="text" class="form-control radius-8" id="instagram"
-                                placeholder="Link Instagram">
-                        </div>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-center gap-3 mt-24">
-                        <button type="submit"
-                            class="btn btn-primary border border-primary-600 text-md px-24 py-12 radius-8">
-                            Guardar Cambios
-                        </button>
-                    </div>
+      <div class="card-body p-40">
+        <form [formGroup]="companyForm" (ngSubmit)="saveChanges()">
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="mb-20">
+                <label for="razonSocial" class="form-label fw-semibold text-primary-light text-sm mb-8">Razon Social</label>
+                <input type="text" class="form-control radius-8" id="razonSocial" placeholder="Razon Social" formControlName="razonSocial">
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="mb-20">
+                <label for="nombreComercial" class="form-label fw-semibold text-primary-light text-sm mb-8">Nombre Comercial</label>
+                <input type="text" class="form-control radius-8" id="nombreComercial" placeholder="Nombre Comercial" formControlName="nombreComercial">
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="mb-20">
+                <label for="Ruc" class="form-label fw-semibold text-primary-light text-sm mb-8">Ruc</label>
+                <input type="text" class="form-control radius-8" id="Ruc" placeholder="Ruc" formControlName="ruc">
+              </div>
+            </div>   
+            <div class="col-sm-4">
+              <div class="mb-20">
+                <label for="email" class="form-label fw-semibold text-primary-light text-sm mb-8">Correo</label>
+                <input type="text" class="form-control radius-8" id="email" placeholder="Correo" formControlName="email">
+              </div>
+            </div>                                      
+            <div class="col-sm-4">
+                <div class="mb-20">
+                  <label for="telefono" class="form-label fw-semibold text-primary-light text-sm mb-8">Número Contacto</label>
+                  <input type="text" class="form-control radius-8" id="telefono" placeholder="Número de Contacto" formControlName="telefono">
+                  <div *ngIf="companyForm.get('telefono')?.invalid && companyForm.get('telefono')?.touched" class="text-danger text-sm mt-1">
+                    El teléfono debe tener exactamente 9 dígitos.
+                  </div>
                 </div>
-            </form>
-        </div>
+              </div>
+              
+            <div class="col-sm-4">
+              <div class="mb-20">
+                <label for="direccion" class="form-label fw-semibold text-primary-light text-sm mb-8">Dirección Contacto</label>
+                <input type="text" class="form-control radius-8" id="direccion" placeholder="Dirección" formControlName="direccion">
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="mb-20">
+                <label for="facebook" class="form-label fw-semibold text-primary-light text-sm mb-8">Link Facebook</label>
+                <input type="text" class="form-control radius-8" id="facebook" placeholder="Link Facebook" formControlName="facebook">
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="mb-20">
+                <label for="instagram" class="form-label fw-semibold text-primary-light text-sm mb-8">Link Instagram</label>
+                <input type="text" class="form-control radius-8" id="instagram" placeholder="Link Instagram" formControlName="instagram">
+              </div>
+            </div>
+            <div class="d-flex align-items-center justify-content-center gap-3 mt-24">
+              <button type="submit" class="btn btn-primary border border-primary-600 text-md px-24 py-12 radius-8">
+                Guardar Cambios
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
-</div>
+  </div>
+  
