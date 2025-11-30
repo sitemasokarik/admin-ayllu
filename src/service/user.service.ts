@@ -59,10 +59,18 @@ export class UserService {
 	getAllProducts(): Observable<any> {
 		return this.http.get(`${this.apiUrlProductos}/getall`);
 	}
+	getProductById(productoId: number): Observable<any> {
+		return this.http.get(`${this.apiUrlProductos}/getbyid/${productoId}`);
+	}
 	createProduct(productData: any): Observable<any> {
 		return this.http.post(`${this.apiUrlProductos}/create`, productData);
 	}
-
+	updateProduct(productData: any): Observable<any> {
+		return this.http.put(`${this.apiUrlProductos}/update`, productData);
+	}
+	deleteProduct(id: number): Observable<any> {
+		return this.http.delete(`${this.apiUrlProductos}/delete/${id}`);
+	}
 	//CLIENT METHODS
 	getAllClients(): Observable<any> {
 		return this.http.get(`${this.apiUrlClientes}/getall`);
