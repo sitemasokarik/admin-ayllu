@@ -107,13 +107,15 @@ import { GalleryGridDescComponent } from './gallery-grid-desc/gallery-grid-desc.
 import { GalleryMasonryComponent } from './gallery-masonry/gallery-masonry.component';
 import { GalleryHoverEffectComponent } from './gallery-hover-effect/gallery-hover-effect.component';
 import { UserRolePermissionComponent } from './user-role-permission/user-role-permission.component';
+import { authGuard, publicGuard } from './core/auth/auth.guard';
 
 export const routes: Routes = [
     {
         path: '',
         component: SideNavComponent,
+        canActivate: [authGuard],
         children: [
-            { path: '', redirectTo: '/sign-in', pathMatch: 'full' },
+            { path: '', redirectTo: '/home', pathMatch: 'full' },
             //{ path: 'home', component: HomeComponent },
             { path: 'home', component: Home15Component },
             { path: 'add-blog', component: AddBlogComponent },
@@ -216,18 +218,21 @@ export const routes: Routes = [
             { path: 'error', component: ErrorComponent },
             { path: 'presupuestador', component: PresupuestadorComponent },
             { path: 'locales', component: LocalesComponent },
-            { path: 'users', component: UsersComponent },
+            //{ path: 'users', component: UsersComponent },
             { path: 'table-forms', component: FormsComponent },
             { path: 'table-cotizaciones', component: CotizacionComponent },
+            {
+              path: 'usuarios',
+              loadComponent: () => import('./users/users.container'),
+            },
         ]
     },
     { path: 'coming-soon', component: ComingSoonComponent },
     { path: 'maintenance', component: MaintenanceComponent },
-    { path: 'sign-in', component: SignInComponent },
-    { path: 'sign-up', component: SignUpComponent },
-    { path: 'forgot-password', component: ForgotPasswordComponent },
+    { path: 'sign-in', component: SignInComponent, canActivate: [publicGuard] },
+    { path: 'sign-up', component: SignUpComponent, canActivate: [publicGuard] },
+    { path: 'forgot-password', component: ForgotPasswordComponent, canActivate: [publicGuard] },
 
-    { path: '', redirectTo: '/sign-in', pathMatch: 'full' },
-    { path: '**', redirectTo : 'error', pathMatch: 'full'}
+    { path: '**', redirectTo: 'sign-in', pathMatch: 'full'}
 ];
 

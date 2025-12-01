@@ -1,7 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { appConfig } from './app/app.config';
 import { AppComponent } from './app/app.component';
-import Iconify from '@iconify/iconify';
+import { provideHttpClient } from '@angular/common/http';
 
-bootstrapApplication(AppComponent, appConfig)
+const mergedConfig = { ...appConfig, providers: [...(appConfig.providers ?? []), provideHttpClient()] };
+
+bootstrapApplication(AppComponent, mergedConfig)
   .catch((err) => console.error(err));
