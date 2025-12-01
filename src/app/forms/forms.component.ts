@@ -1,4 +1,4 @@
-import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA, AfterViewChecked } from "@angular/core";
+import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
 import { BreadcrumbComponent } from "../breadcrumb/breadcrumb.component";
 import { RouterLink } from "@angular/router";
 import { CommonModule } from "@angular/common";
@@ -7,13 +7,13 @@ import Swal from "sweetalert2";
 import * as bootstrap from "bootstrap";
 import { FormsModule } from "@angular/forms";
 import { AuthService } from "../../service/auth.service";
-import DataTable from 'datatables.net';
+import DataTable from "datatables.net";
 
 @Component({
   selector: 'app-forms',
-  standalone: true,
-  imports: [BreadcrumbComponent, RouterLink, CommonModule],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+	standalone: true,
+	imports: [BreadcrumbComponent, RouterLink, CommonModule, FormsModule],
+	schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './forms.component.html',
   styleUrl: './forms.component.css'
 })

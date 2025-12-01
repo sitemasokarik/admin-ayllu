@@ -13,6 +13,7 @@ export class UserService {
 	private apiUrlBlog = "http://caeteringdcodepe.runasp.net/api/v1/blog";
 	private apiUrlFormulario = "http://caeteringdcodepe.runasp.net/api/v1/contactanos";
 	private apiUrlServicio = "http://caeteringdcodepe.runasp.net/api/v1/ServicioAdicional";
+	private apiUrlCotizacion = "http://caeteringdcodepe.runasp.net/api/v1/cotizacion";
 
 	constructor(private http: HttpClient) {}
 
@@ -83,10 +84,10 @@ export class UserService {
 
 	//LOCAL METHODS
 	getAllLocales(): Observable<any> {
-		return this.http.get(`${this.apiUrlLocales}/get-all`);
+		return this.http.get(`${this.apiUrlLocales}/getall`);
 	}
 	getLocalById(id: number): Observable<any> {
-		return this.http.get(`${this.apiUrlLocales}/get-by-id/${id}`);
+		return this.http.get(`${this.apiUrlLocales}/getbyid/${id}`);
 	}
 	createLocal(localData: any): Observable<any> {
 		return this.http.post(`${this.apiUrlLocales}/create`, localData);
@@ -146,4 +147,21 @@ export class UserService {
 	deleteServicio(id: number): Observable<any> {
 		return this.http.delete(`${this.apiUrlServicio}/delete/${id}`);
 	}	
+
+
+	getAllCotizaciones(): Observable<any> {
+		return this.http.get(`${this.apiUrlCotizacion}/getall`);
+	}	
+	getCotizacionesById(id: number): Observable<any> {
+		return this.http.get(`${this.apiUrlCotizacion}/getbyid/${id}`);
+	}
+	createCotizaciones(localData: any): Observable<any> {
+		return this.http.post(`${this.apiUrlCotizacion}/create`, localData);
+	}
+	updateCotizaciones(localData: any): Observable<any> {
+		return this.http.put(`${this.apiUrlCotizacion}/update`, localData);
+	}
+	deleteCotizaciones(id: number): Observable<any> {
+		return this.http.delete(`${this.apiUrlCotizacion}/delete/${id}`);
+	}		
 }

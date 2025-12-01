@@ -22,13 +22,14 @@ export class AddProductComponent implements OnInit {
     descripcion: "",
     precio: 0,
     precioCosto: 0,
-    imagenUrl: "",
+    fotosUrls: [] as string[],
     categoriaID: 0,
     usuarioCreacion: "",
     estado: true
   };
 
   categories: any[] = []; // <-- Aquí guardaremos las categorías para el select
+  imageUrl: string = "";
 
   constructor(
     private userService: UserService,
@@ -56,17 +57,14 @@ export class AddProductComponent implements OnInit {
   }
 
   saveProduct(): void {
-    if (!this.product.nombre || !this.product.descripcion || !this.product.precio || !this.product.categoriaID) {
-      Swal.fire({
-        icon: "error",
-        title: "Campos incompletos",
-        text: "Por favor, completa todos los campos obligatorios",
-      });
-      return;
-    }
+
+    // Asegurar que fotosUrls sea un array
+    this.product.fotosUrls = this.imageUrl ? [this.imageUrl] : [];
 
     this.userService.createProduct(this.product).subscribe({
       next: res => {
+        console.log("RESPUESTA BACKEND:", res);
+
         if (res.success) {
           Swal.fire({
             icon: "success",
@@ -75,24 +73,16 @@ export class AddProductComponent implements OnInit {
             timer: 1500,
             showConfirmButton: false,
           }).then(() => this.router.navigate(['/products']));
-        } else {
-          Swal.fire({
-            icon: "error",
-            title: "Error",
-            text: res.message || "Error al crear producto",
-          });
         }
       },
       error: err => {
         console.error("Error creando producto:", err);
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: err?.error?.message || "Error al crear producto",
-        });
-      },
+        Swal.fire("Error", err?.error?.message || "Error al crear producto", "error");
+      }
     });
   }
+
+
 
   goToProducts(): void {
     this.router.navigate(['/products']);

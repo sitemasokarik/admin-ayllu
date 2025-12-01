@@ -9,7 +9,7 @@
     <div class="card h-100 p-0 radius-12">
         <div class="border-bottom bg-base py-16 px-24">
             
-            <form class="row gy-2" (ngSubmit)="onSubmit()" #presupuestadorForm="ngForm">
+            <form class="row gy-2" (ngSubmit)="onSubmit()">
                 <h6 class="mb-4 text-xl">Datos Cliente</h6>
                 <div class="col-md-3">
                     <label class="form-label">Nombre Cliente</label>
@@ -17,8 +17,14 @@
                         <span class="icon">
                         <iconify-icon icon="f7:person"></iconify-icon>
                         </span>
-                        <input type="text" name="#0" class="form-control" placeholder="Nombres" required>
-                        <div class="invalid-feedback">
+<input 
+  type="text" 
+  [(ngModel)]="presupuesto.cliente.nombre" 
+  name="cli_nombre"
+  (input)="save()" 
+  class="form-control" 
+  placeholder="Nombres" 
+  required>                        <div class="invalid-feedback">
                         Please provide first name
                         </div>
                     </div>
@@ -29,7 +35,14 @@
                         <span class="icon">
                         <iconify-icon icon="f7:person"></iconify-icon>
                         </span>
-                        <input type="text" name="#0" class="form-control" placeholder="Apellidos" required>
+<input 
+  type="text" 
+  [(ngModel)]="presupuesto.cliente.apellido" 
+  name="cli_apellido"
+  (input)="save()" 
+  class="form-control" 
+  placeholder="Apellidos" 
+  required>
                         <div class="invalid-feedback">
                         Please provide first name
                         </div>
@@ -37,11 +50,23 @@
                 </div>     
                 <div class="col-md-3">
                     <label class="form-label">Celular 1</label>
-                    <input type="text" class="form-control flex-grow-1" placeholder="(+51) 987 654 321">
+<input 
+  type="text" 
+  [(ngModel)]="presupuesto.cliente.telefono1"
+  name="cli_tel1"
+  (input)="save()" 
+  class="form-control" 
+  placeholder="(+51) 987 654 321">
                 </div>     
                 <div class="col-md-3">
                     <label class="form-label">Celular 2</label>
-                    <input type="text" class="form-control flex-grow-1" placeholder="(+51) 987 654 321">
+<input 
+  type="text" 
+  [(ngModel)]="presupuesto.cliente.telefono2"
+  name="cli_tel2"
+  (input)="save()" 
+  class="form-control" 
+  placeholder="(+51) 987 654 321">
                 </div>                                       
                 <div class="col-md-4">
                     <label class="form-label">Correo</label>
@@ -49,7 +74,14 @@
                         <span class="icon">
                         <iconify-icon icon="mage:email"></iconify-icon>
                         </span>
-                        <input type="email" name="#0" class="form-control" placeholder="Correo" required>
+<input 
+  type="email" 
+  [(ngModel)]="presupuesto.cliente.correo"
+  name="cli_correo"
+  (input)="save()" 
+  class="form-control" 
+  placeholder="Correo" 
+  required>
                         <div class="invalid-feedback">
                         Please provide email address
                         </div>
@@ -57,32 +89,80 @@
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Tipo Documento</label>
-                    <select class="form-select">
-                        <option>Seleccionar</option>
-                        <option>DNI</option>
-                        <option>Pasaporte</option>
-                    </select>
+<select 
+  class="form-select"
+  [(ngModel)]="presupuesto.cliente.tipoDocumento"
+  name="cli_tipo_doc"
+  (change)="save()"
+>
+    <option>Seleccionar</option>
+    <option>DNI</option>
+    <option>Pasaporte</option>
+</select>
+
                 </div>                
                 <div class="col-md-4">
                     <label class="form-label">Documento</label>
-                    <input type="text" name="#0" class="form-control" placeholder="Número Documento">
+<input 
+  type="text" 
+  [(ngModel)]="presupuesto.cliente.documento"
+  name="cli_doc"
+  (input)="save()" 
+  class="form-control" 
+  placeholder="Número Documento">
                 </div> 
                 
                 
                 <h6 class="mb-4 text-xl mt-5">Sobre mi Evento</h6>
-
-                <div class="col-md-4">
-                    <label class="form-label">N DE INVITADOS</label>
-                    <input type="text" name="#0" class="form-control" placeholder="">
-                </div>    
-                <div class="col-md-4">
-                    <label class="form-label">FECHA TENTATIVA 1</label>
-                    <input type="date" name="#0" class="form-control">
+                <div class="col-md-3">
+                    <label class="form-label">Tipo de Evento</label>
+                    <select 
+                        class="form-select"
+                        [(ngModel)]="presupuesto.evento.tipo"
+                        name="evento_tipo"
+                        (change)="save()"
+                    >
+                        <option value="">Seleccionar</option>
+                        <option>Boda</option>
+                        <option>Quinceañero</option>
+                        <option>Aniversario</option>
+                        <option>Corporativo</option>
+                    </select>
                 </div>
-                <div class="col-md-4">
-                    <label class="form-label">FECHA TENTATIVA 2</label>
-                    <input type="date" name="#0" class="form-control">
-                </div> 
+
+<div class="col-md-3">
+  <label class="form-label">N° DE INVITADOS</label>
+  <input 
+    type="number" 
+    [(ngModel)]="presupuesto.evento.invitados"
+    name="evento_invitados"
+    (input)="save()" 
+    class="form-control"
+  >
+</div>
+  
+<div class="col-md-3">
+  <label class="form-label">FECHA TENTATIVA 1</label>
+  <input 
+    type="date" 
+    [(ngModel)]="presupuesto.evento.fecha1"
+    name="evento_fecha1"
+    (change)="save()" 
+    class="form-control"
+  >
+</div>
+
+<div class="col-md-3">
+  <label class="form-label">FECHA TENTATIVA 2</label>
+  <input 
+    type="date" 
+    [(ngModel)]="presupuesto.evento.fecha2"
+    name="evento_fecha2"
+    (change)="save()" 
+    class="form-control"
+  >
+</div>
+
                 
                 <h6 class="mb-4 text-xl mt-5"></h6>
 
@@ -91,10 +171,7 @@
                         <div class="card-header py-16 px-24 bg-base border border-end-0 border-start-0 border-top-0 d-flex align-items-center justify-content-between">
                             <h6 class="text-lg mb-3">Mi Evento</h6>
 
-                            <button class="btn btn-light d-flex align-items-center gap-1" >
-                                <iconify-icon icon="solar:download-linear" class="text-xl"></iconify-icon>
-                                Descargar
-                            </button>
+
                         </div>
 
                         <div class="card-body p-24 pt-10">
@@ -106,78 +183,31 @@
                                             <span class="line-height-1">Local</span>
                                         </button>
                                     </li>
-                                    <li class="nav-item mb-3" role="presentation">
-                                        <button class="nav-link d-flex gap-2 fw-semibold text-primary-light radius-4 px-16 py-10" id="pills-vertical-details-tab" data-bs-toggle="pill" data-bs-target="#pills-vertical-details" type="button" role="tab" aria-controls="pills-vertical-details" aria-selected="false">
+                                    <li class="nav-item mb-3"
+                                        role="presentation"
+                                        *ngFor="let cat of categories; let i = index">
+                                        <button
+                                            class="nav-link d-flex gap-2 fw-semibold text-primary-light radius-4 px-16 py-10"
+                                            [class.active]="false"   
+                                            data-bs-toggle="pill"
+                                            [attr.data-bs-target]="'#tab-'+cat.categoriaID">
+                                            
                                             <iconify-icon icon="solar:home-smile-angle-outline" class="text-xl"></iconify-icon>
-                                            <span class="line-height-1">Entremeses</span>                                        
+                                            <span>{{ cat.nombre }}</span>
                                         </button>
                                     </li>
                                     <li class="nav-item mb-3" role="presentation">
-                                        <button class="nav-link d-flex gap-2 fw-semibold text-primary-light radius-4 px-16 py-10" id="pills-vertical-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-vertical-profile" type="button" role="tab" aria-controls="pills-vertical-profile" aria-selected="false">
+                                        <button class="nav-link d-flex gap-2 align-items-center fw-semibold text-primary-light radius-4 px-16 py-10 " id="pills-vertical-servicios-tab" data-bs-toggle="pill" data-bs-target="#pills-vertical-servicios" type="button" role="tab" aria-controls="pills-vertical-servicios" aria-selected="true">
                                             <iconify-icon icon="solar:home-smile-angle-outline" class="text-xl"></iconify-icon>
-                                            <span class="line-height-1">Entradas</span>                                        
-                                        </button>
-                                    </li>
-                                    <li class="nav-item mb-3" role="presentation">
-                                        <button class="nav-link d-flex gap-2 fw-semibold text-primary-light radius-4 px-16 py-10" id="pills-vertical-settings-tab" data-bs-toggle="pill" data-bs-target="#pills-vertical-settings" type="button" role="tab" aria-controls="pills-vertical-settings" aria-selected="false">
-                                            <iconify-icon icon="solar:home-smile-angle-outline" class="text-xl"></iconify-icon>
-                                            <span class="line-height-1">Fondos</span>                                        
-                                        </button>
-                                    </li>
-                                    <li class="nav-item mb-3" role="presentation">
-                                        <button class="nav-link d-flex gap-2 fw-semibold text-primary-light radius-4 px-16 py-10" id="pills-vertical-settings-tab" data-bs-toggle="pill" data-bs-target="#pills-vertical-settings" type="button" role="tab" aria-controls="pills-vertical-settings" aria-selected="false">
-                                            <iconify-icon icon="solar:home-smile-angle-outline" class="text-xl"></iconify-icon>
-                                            <span class="line-height-1">Mobiliario</span>                                        
-                                        </button>
-                                    </li>  
-                                    <li class="nav-item mb-3" role="presentation">
-                                        <button class="nav-link d-flex gap-2 fw-semibold text-primary-light radius-4 px-16 py-10" id="pills-vertical-settings-tab" data-bs-toggle="pill" data-bs-target="#pills-vertical-settings" type="button" role="tab" aria-controls="pills-vertical-settings" aria-selected="false">
-                                            <iconify-icon icon="solar:home-smile-angle-outline" class="text-xl"></iconify-icon>
-                                            <span class="line-height-1">Centros de Mesa</span>                                        
-                                        </button>
-                                    </li>  
-                                    <li class="nav-item mb-3" role="presentation">
-                                        <button class="nav-link d-flex gap-2 fw-semibold text-primary-light radius-4 px-16 py-10" id="pills-vertical-settings-tab" data-bs-toggle="pill" data-bs-target="#pills-vertical-settings" type="button" role="tab" aria-controls="pills-vertical-settings" aria-selected="false">
-                                            <iconify-icon icon="solar:home-smile-angle-outline" class="text-xl"></iconify-icon>
-                                            <span class="line-height-1">Números de Mesa</span>                                        
-                                        </button>
-                                    </li>     
-                                    <li class="nav-item mb-3" role="presentation">
-                                        <button class="nav-link d-flex gap-2 fw-semibold text-primary-light radius-4 px-16 py-10" id="pills-vertical-settings-tab" data-bs-toggle="pill" data-bs-target="#pills-vertical-settings" type="button" role="tab" aria-controls="pills-vertical-settings" aria-selected="false">
-                                            <iconify-icon icon="solar:home-smile-angle-outline" class="text-xl"></iconify-icon>
-                                            <span class="line-height-1">Servilletas</span>                                        
+                                            <span class="line-height-1">Servicios Adicionales</span>
                                         </button>
                                     </li>   
                                     <li class="nav-item mb-3" role="presentation">
-                                        <button class="nav-link d-flex gap-2 fw-semibold text-primary-light radius-4 px-16 py-10" id="pills-vertical-settings-tab" data-bs-toggle="pill" data-bs-target="#pills-vertical-settings" type="button" role="tab" aria-controls="pills-vertical-settings" aria-selected="false">
+                                        <button class="nav-link d-flex gap-2 align-items-center fw-semibold text-primary-light radius-4 px-16 py-10 " id="pills-vertical-personal-tab" data-bs-toggle="pill" data-bs-target="#pills-vertical-personal" type="button" role="tab" aria-controls="pills-vertical-personal" aria-selected="true">
                                             <iconify-icon icon="solar:home-smile-angle-outline" class="text-xl"></iconify-icon>
-                                            <span class="line-height-1">Velas Decorativas</span>                                        
+                                            <span class="line-height-1">Personal del Evento</span>
                                         </button>
-                                    </li>  
-                                    <li class="nav-item mb-3" role="presentation">
-                                        <button class="nav-link d-flex gap-2 fw-semibold text-primary-light radius-4 px-16 py-10" id="pills-vertical-settings-tab" data-bs-toggle="pill" data-bs-target="#pills-vertical-settings" type="button" role="tab" aria-controls="pills-vertical-settings" aria-selected="false">
-                                            <iconify-icon icon="solar:home-smile-angle-outline" class="text-xl"></iconify-icon>
-                                            <span class="line-height-1">Pastel</span>                                        
-                                        </button>
-                                    </li>
-                                    <li class="nav-item mb-3" role="presentation">
-                                        <button class="nav-link d-flex gap-2 fw-semibold text-primary-light radius-4 px-16 py-10" id="pills-vertical-settings-tab" data-bs-toggle="pill" data-bs-target="#pills-vertical-settings" type="button" role="tab" aria-controls="pills-vertical-settings" aria-selected="false">
-                                            <iconify-icon icon="solar:home-smile-angle-outline" class="text-xl"></iconify-icon>
-                                            <span class="line-height-1">Arcos</span>                                        
-                                        </button>
-                                    </li>    
-                                    <li class="nav-item mb-3" role="presentation">
-                                        <button class="nav-link d-flex gap-2 fw-semibold text-primary-light radius-4 px-16 py-10" id="pills-vertical-settings-tab" data-bs-toggle="pill" data-bs-target="#pills-vertical-settings" type="button" role="tab" aria-controls="pills-vertical-settings" aria-selected="false">
-                                            <iconify-icon icon="solar:home-smile-angle-outline" class="text-xl"></iconify-icon>
-                                            <span class="line-height-1">Arreglo Floral</span>                                        
-                                        </button>
-                                    </li> 
-                                    <li class="nav-item mb-3" role="presentation">
-                                        <button class="nav-link d-flex gap-2 fw-semibold text-primary-light radius-4 px-16 py-10" id="pills-vertical-settings-tab" data-bs-toggle="pill" data-bs-target="#pills-vertical-settings" type="button" role="tab" aria-controls="pills-vertical-settings" aria-selected="false">
-                                            <iconify-icon icon="solar:home-smile-angle-outline" class="text-xl"></iconify-icon>
-                                            <span class="line-height-1">Menajeria</span>                                        
-                                        </button>
-                                    </li>                                                                                                                                                                                                                                                                                                                          
+                                    </li>                                                                                                                                                                                                                                                                                                                   
                                 </ul>
                                 <div class="tab-content col-md-9 d-block" id="pills-tab-fiveContent">
                                     <div class="tab-pane fade show active" id="pills-vertical-home" role="tabpanel" aria-labelledby="pills-vertical-home-tab" tabindex="0">
@@ -199,38 +229,197 @@
                                                                 style="width: 100%; height: 250px; object-fit: cover; border-radius: 6px;">
                                                         </div>
 
-                                                        <button class="btn btn-primary mt-3 w-100">
-                                                            Seleccionar Local
-                                                        </button>
+                                                        <button (click)="selectLocal(local)" class="btn btn-primary mt-3 w-100">Seleccionar Local</button>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
 
                                     </div>
-                                    <div class="tab-pane fade" id="pills-vertical-details" role="tabpanel" aria-labelledby="pills-vertical-details-tab" tabindex="0">
+                                    <div class=" tab-pane fade"
+                                        *ngFor="let cat of categories"
+                                        [attr.id]="'tab-'+cat.categoriaID"
+                                        role="tabpanel">
+
                                         <div class="flex-grow-1">
-                                            <h6 class="text-lg mb-8">Entremeses</h6>
-                                            
+                                            <h6 class="text-lg my-3">{{ cat.nombre }}</h6>
+
+                                            <div class="row" *ngIf="getProductsByCategory(cat.categoriaID)?.length > 0; else noProducts">
+                                                <div class="col-md-3 mb-3"
+                                                    *ngFor="let p of getProductsByCategory(cat.categoriaID)">
+                                                    
+                                                    <div class="card radius-12 p-3">
+                                                        <h6 class="fw-bold">{{ p.nombre }}</h6>
+                                                        <p><strong>Precio:</strong> {{ p.precio }}</p>
+                                                        <p><strong>Descripción:</strong> {{ p.descripcion }}</p>
+                                                        <div class="d-flex gap-3 mt-2 overflow-x-scroll">
+                                                            <img *ngFor="let foto of p.fotosUrls"
+                                                                [src]="foto"
+                                                                style="width: 100%; height: 200px; object-fit: cover; border-radius: 6px;">
+                                                        </div>                                                        
+                                                        <button type="button" class="btn btn-primary w-100 mt-2"
+                                                                (click)="addProducto(cat, p)">
+                                                            Agregar al evento
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <ng-template #noProducts>
+                                                <p class="text-muted fst-italic">No hay productos para esta categoría</p>
+                                            </ng-template>
                                         </div>
                                     </div>
-                                    <div class="tab-pane fade" id="pills-vertical-profile" role="tabpanel" aria-labelledby="pills-vertical-profile-tab" tabindex="0">
+                                    <div class="tab-pane fade show" id="pills-vertical-servicios" role="tabpanel" aria-labelledby="pills-vertical-servicios-tab" tabindex="0">
                                         <div class="flex-grow-1">
-                                            <h6 class="text-lg mb-8">Entradas</h6>
-                                            
+                                            <h6 class="text-lg my-3">Servicios Adicionales</h6>
+
+                                            <div class="row">
+                                                <div class="col-md-3 mb-3" *ngFor="let servicio of serviciosAdicionales">
+                                                    <div class="card radius-12 p-3">
+                                                        <h6 class="fw-bold">{{ servicio.nombre }}</h6>
+                                                        <p class="mb-1"><strong>Descripcion:</strong> {{ servicio.descripcion }}</p>
+                                                        <!-- <p class="mb-1"><strong>Capacidad:</strong> {{ servicio.capacidad }}</p>
+                                                        <p class="mb-1"><strong>Horas Evento:</strong> {{ servicio.horasEvento }}</p> -->
+
+                                                        <!-- Mostrar fotos -->
+                                                        <div class="d-flex gap-2 mt-2 overflow-x-scroll">
+                                                            <img *ngFor="let foto of servicio.fotosUrls"
+                                                                [src]="foto"
+                                                                style="width: 100%; height: 250px; object-fit: cover; border-radius: 6px;">
+                                                        </div>
+
+                                                        <button type="button" class="btn btn-primary mt-3 w-100"
+                                                                (click)="addAdicional(servicio)">
+                                                            Añadir
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="tab-pane fade" id="pills-vertical-settings" role="tabpanel" aria-labelledby="pills-vertical-settings-tab" tabindex="0">
+
+                                    </div>    
+                                    <div class="tab-pane fade show" id="pills-vertical-personal" role="tabpanel" aria-labelledby="pills-vertical-personal-tab" tabindex="0">
                                         <div class="flex-grow-1">
-                                            <h6 class="text-lg mb-8">Fondos</h6>
-                                            
+                                            <h6 class="text-lg my-3">Personal del Evento</h6>
+
+                                            <div class="row">
+                                                <div class="col-md-3 mb-3" *ngFor="let servicio of paquetePersonal">
+                                                    <div class="card radius-12 p-3">
+                                                        <h6 class="fw-bold">{{ servicio.nombre }}</h6>
+                                                        <p class="mb-1"><strong>Descripcion:</strong> {{ servicio.descripcion }}</p>
+                                                        <!-- <p class="mb-1"><strong>Capacidad:</strong> {{ servicio.capacidad }}</p>
+                                                        <p class="mb-1"><strong>Horas Evento:</strong> {{ servicio.horasEvento }}</p> -->
+
+                                                        <!-- Mostrar fotos -->
+                                                        <div class="d-flex gap-2 mt-2 overflow-x-scroll">
+                                                            <img *ngFor="let foto of servicio.fotosUrls"
+                                                                [src]="foto"
+                                                                style="width: 100%; height: 250px; object-fit: cover; border-radius: 6px;">
+                                                        </div>
+
+                                                        <button class="btn btn-primary mt-3 w-100">
+                                                            Añadir
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
+
+                                    </div>                                                                    
                                 </div>
                             </div>
                         </div>  
                     </div>
-                </div>              
+                </div> 
+                
+                <div class="col-12 mt-4">
+                    <div class="card radius-12 p-5 shadow-sm " style="background:#fafafa;">
+                         <div class="card-header py-16 px-24 border border-end-0 border-start-0 border-top-0 d-flex align-items-center justify-content-between">
+                            <h5 class="fw-bold ">Resumen del Presupuesto</h5>
+                            <button class="btn btn-light d-flex align-items-center gap-1" >
+                                <iconify-icon icon="solar:download-linear" class="text-xl"></iconify-icon>
+                                Descargar
+                            </button>
+                         </div>                            
+                        <!-- LOCAL -->
+                        <div class="my-5">
+                            <h6 class="text-dark fw-bold mb-1">Local seleccionado</h6>
+                            <div class="ps-2">
+                                <p class="m-0">
+                                    <b>{{ resumen.local?.nombre || '—' }}</b>
+                                </p>
+                            </div>
+                        </div>
+
+                        
+
+                        <!-- CATEGORÍAS -->
+                        <h6 class="fw-bold text-dark mb-3">Servicios Incluidos</h6>
+
+                        <div class="row g-3 ps-2">
+
+                            <div class="col-md-2">
+                                <p class="m-0 text-secondary">Coctel</p>
+                                <h6 class="fw-bold">{{ resumen.coctel?.nombre || '—' }}</h6>
+                            </div>
+
+                            <div class="col-md-4">
+                                <p class="m-0 text-secondary">Entrada</p>
+                                <h6 class="fw-bold">{{ resumen.entrada?.nombre || '—' }}</h6>
+                            </div>
+
+                            <div class="col-md-4">
+                                <p class="m-0 text-secondary">Fondo</p>
+                                <h6 class="fw-bold">{{ resumen.fondo?.nombre || '—' }}</h6>
+                            </div>
+
+                            <!-- ENTREMES -->
+                            <div class="col-md-12 mt-3">
+                                <p class="m-0 text-secondary">Entremeses ({{ resumen.entremeses.length }}/5)</p>
+                                <ul class="list-unstyled mt-1">
+                                    <li *ngFor="let e of resumen.entremeses" class="mb-1">
+                                        <span class=" bg-light text-dark  px-3 py-2 w-100 d-flex justify-content-between align-items-center">
+                                            <span>• {{ e.nombre }}</span>
+                                            <!-- <b>S/ {{ e.precio }}</b> -->
+                                        </span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                        </div>
+
+                        
+
+                        <!-- ADICIONALES -->
+                        <div class="my-3">
+                            <h6 class="fw-bold text-dark mb-2">Servicios Adicionales</h6>
+
+                            <ul class="">
+                                <li *ngFor="let a of resumen.adicionales" class="mb-1">
+                                    <span class=" bg-opacity-10 text-dark px-3 py-2 w-100">
+                                        {{ a.nombre }}
+                                    </span>
+                                </li>
+
+                                <li *ngIf="resumen.adicionales.length === 0" class="text-secondary fst-italic">
+                                    — Sin adicionales —
+                                </li>
+                            </ul>
+                        </div>
+
+                        <hr>
+
+                        <!-- TOTAL -->
+                        <div class="my-5">
+                            <h6 class="fw-bold text-success">
+                                TOTAL FINAL: S/ {{ resumen.total }}
+                            </h6>
+                        </div>
+                    </div>
+                </div>
+
+                
             </form>
         </div>
     </div>
