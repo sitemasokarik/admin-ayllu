@@ -6,6 +6,10 @@ import Swal from 'sweetalert2';
 import { AuthService } from '../../service/auth.service';
 import { BreadcrumbComponent } from '../breadcrumb/breadcrumb.component';
 import { UserService } from '../../service/user.service';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
+import { PDFDocument, rgb } from 'pdf-lib';
+import { generarPDF } from './pdf-generator';
 
 @Component({
   selector: 'app-presupuestador',
@@ -325,6 +329,26 @@ openImageModal(img: string) {
 closeImageModal() {
   this.modalImage = null;
 }
+
+  async descargarPDF() {
+    const presupuesto = JSON.parse(localStorage.getItem('presupuesto') || '{}');
+
+    // Genera los bytes del PDF
+    const pdfBytes = await generarPDF(presupuesto);
+
+    // Crea el BLOB
+    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+    const url = URL.createObjectURL(blob);
+
+    // Crea el enlace y dispara la descarga
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'presupuesto.pdf';
+    link.click();
+
+    // Limpieza
+    URL.revokeObjectURL(url);
+  }
 
   // =========================================================
   // 💾 GUARDAR EN LOCALSTORAGE
