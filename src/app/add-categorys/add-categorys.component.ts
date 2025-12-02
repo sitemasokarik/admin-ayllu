@@ -18,10 +18,13 @@ export class AddCategorysComponent {
 
   // Modelo de categoría para el formulario
   category = {
+    categoriaPadreID: null, // <- padre por defecto
     nombre: "",
     descripcion: "",
+    nivel: 0, // se calculará antes de enviar
     usuarioCreacion: ""
   };
+  categories: any[] = [];
 
   constructor(
     private userService: UserService,
@@ -32,48 +35,70 @@ export class AddCategorysComponent {
     const user = this.authService.getUser();
     this.category.usuarioCreacion = user?.nombre || "admin";
   }
+  ngOnInit(): void {
+    this.loadCategories();
+  }
 
   // Método para guardar categoría
-  saveCategory(): void {
-    if (!this.category.nombre || !this.category.descripcion) {
-      Swal.fire({
-        icon: "error",
-        title: "Campos incompletos",
-        text: "Por favor, completa todos los campos obligatorios",
-      });
-      return;
-    }
+saveCategory(): void {
+  if (!this.category.nombre || !this.category.descripcion) {
+    Swal.fire({
+      icon: "error",
+      title: "Campos incompletos",
+      text: "Por favor, completa todos los campos obligatorios",
+    });
+    return;
+  }
 
-    // Llamada al servicio para crear categoría
-    this.userService.createCategory(this.category).subscribe({
-      next: res => {
-        if (res.success) {
-          Swal.fire({
-            icon: "success",
-            title: "Categoría creada",
-            text: "La categoría se ha creado con éxito",
-            timer: 1500,
-            showConfirmButton: false,
-          }).then(() => this.goToCategories());
-        } else {
-          Swal.fire({
-            icon: "error",
-            title: "Error",
-            text: res.message || "Error al crear categoría",
-          });
-        }
-      },
-      error: err => {
-        console.error("Error creando categoría:", err);
+  // Calcular nivel: si tiene padre = 1, sino = 0
+  this.category.nivel = this.category.categoriaPadreID ? 1 : 0;
+
+  // 🔹 Ver qué se va a enviar
+  console.log("Datos de categoría a enviar:", this.category);
+
+  // Llamada al servicio para crear categoría
+  this.userService.createCategory(this.category).subscribe({
+    next: res => {
+      if (res.success) {
+        Swal.fire({
+          icon: "success",
+          title: "Categoría creada",
+          text: "La categoría se ha creado con éxito",
+          timer: 1500,
+          showConfirmButton: false,
+        }).then(() => this.goToCategories());
+      } else {
         Swal.fire({
           icon: "error",
           title: "Error",
-          text: err?.error?.message || "Error al crear categoría",
+          text: res.message || "Error al crear categoría",
         });
+      }
+    },
+    error: err => {
+      console.error("Error creando categoría:", err);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: err?.error?.message || "Error al crear categoría",
+      });
+    },
+  });
+}
+
+
+
+  loadCategories(): void {
+    this.userService.getAllCategorys().subscribe({
+      next: (res: any) => {
+        this.categories = res.data || [];
       },
+      error: err => {
+        console.error("Error cargando categorías:", err);
+        Swal.fire("Error", "No se pudieron cargar las categorías", "error");
+      }
     });
   }
-
   goToCategories(): void {
     this.router.navigate(["/categorys"]);
   }
