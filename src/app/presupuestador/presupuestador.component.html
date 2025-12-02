@@ -386,10 +386,11 @@
                     <div class="card radius-12 p-5 shadow-sm " style="background:#fafafa;">
                          <div class="card-header py-16 px-24 border border-end-0 border-start-0 border-top-0 d-flex align-items-center justify-content-between">
                             <h5 class="fw-bold ">Resumen del Presupuesto</h5>
-                            <button class="btn btn-light d-flex align-items-center gap-1" >
+                            <button type="submit" class="btn btn-light d-flex align-items-center gap-1" (click)="descargarPDF()">
                                 <iconify-icon icon="solar:download-linear" class="text-xl"></iconify-icon>
                                 Descargar
                             </button>
+
                          </div>                            
                         <!-- LOCAL -->
                         <div class="my-5">
