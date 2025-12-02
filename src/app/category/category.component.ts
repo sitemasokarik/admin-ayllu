@@ -60,7 +60,7 @@ export class CategoryComponent implements OnInit {
 		this.dataTable = null;
 	}
 
-	this.userService.getAllCategorys().subscribe({
+	this.userService.getAllCategorysG().subscribe({
 		next: (res: any) => {
 		this.categorys = res.data || [];
       console.log("📌 Categorías cargadas:", this.categorys);

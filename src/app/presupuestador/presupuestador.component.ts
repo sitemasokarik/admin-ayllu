@@ -27,7 +27,8 @@ export class PresupuestadorComponent {
   categories: any[] = [];
   products: any[] = [];
   modalImage: string | null = null;
-  
+  personal: [];
+
   // =========================================================
   // 🔥 OBJETO PRESUPUESTO COMPLETO Y CORRECTO
   // =========================================================
@@ -91,6 +92,16 @@ pendingLoads = 4; // locales, categories, products, servicios
   // 🟦 CARGA DE DATOS
   // =========================================================
   ngOnInit(): void {
+    localStorage.removeItem("presupuesto");
+    this.presupuesto.categorias = {
+      coctel: null,
+      entrada: null,
+      fondo: null,
+      entremeses: [],
+      mesasSillas: [],
+      menajeria: [],
+      fuentes: []
+    };    
     this.loadLocales();
     this.loadCategories();
     this.loadProducts();
@@ -103,11 +114,52 @@ pendingLoads = 4; // locales, categories, products, servicios
       this.loading = false;
     }
   }
+  selectedCategory: any = null;
+  selectedSubcategory: any = null;
+
+  selectCategory(cat: any) {
+    this.selectedCategory = cat;
+    this.selectedSubcategory = null; // resetear subcategoría
+  }
+
+  selectSubcategory(sub: any, cat: any) {
+    this.selectedSubcategory = { ...sub, categoriaPadreID: cat.categoriaID };
+  }
+
+  isProductoSeleccionado(producto: any, subcategoria: any) {
+    if (!subcategoria || !subcategoria.nombre) return false; // evita errores
+
+    const categoriaKey = subcategoria.nombre.toLowerCase();
+
+    if (categoriaKey === 'entremeses') {
+      return this.presupuesto.categorias.entremeses.some(p => p.productoID === producto.productoID);
+    } else {
+      return this.presupuesto.categorias[categoriaKey]?.productoID === producto.productoID;
+    }
+  }
+
+
+
+
+  localesFiltrados: any[] = []; // <- Nuevo array para mostrar en HTML
+
+  filtrarLocalesPorInvitados() {
+    const invitados = this.presupuesto.evento.invitados || 0;
+
+    if (invitados <= 0) {
+      // Si no hay invitados, mostrar todos
+      this.localesFiltrados = [...this.locales];
+      return;
+    }
+
+    this.localesFiltrados = this.locales.filter(local => local.capacidad >= invitados);
+  }  
 
   loadLocales(): void {
     this.userService.getAllLocales().subscribe({
       next: res => {
         this.locales = res.data || [];
+        this.localesFiltrados = [...this.locales]; // inicializamos filtrados
         this.finishLoad();
       },
       error: () => this.finishLoad()
@@ -124,9 +176,25 @@ pendingLoads = 4; // locales, categories, products, servicios
     });
   }
 
+  getLeafCategories(categories: any[]): any[] {
+    let leaves: any[] = [];
+
+    categories.forEach(cat => {
+      if (cat.esHoja) {
+        leaves.push(cat);
+      }
+      if (cat.subcategorias && cat.subcategorias.length > 0) {
+        leaves = leaves.concat(this.getLeafCategories(cat.subcategorias));
+      }
+    });
+
+    return leaves;
+  }
+
   loadCategories(): void {
-    this.userService.getAllCategorys().subscribe({
+    this.userService.getAllHierarchy().subscribe({
       next: res => {
+         console.log("Categori:", res);
         this.categories = res.data || [];
         this.finishLoad();
       },
@@ -137,7 +205,9 @@ pendingLoads = 4; // locales, categories, products, servicios
 
   loadProducts(): void {
     this.userService.getAllProducts().subscribe({
+      
       next: res => {
+        console.log("products loaded:", res);
         this.products = res.data || [];
         this.finishLoad();
       },
@@ -145,55 +215,53 @@ pendingLoads = 4; // locales, categories, products, servicios
     });
   }
 
-  getProductsByCategory(catID: number) {
-    return this.products.filter(p => p.categoriaID === catID && p.estado === true);
-  }
-
+getProductsByLeafCategory(cat: any) {
+  // Aquí cat es un objeto subcategoría
+  if (!cat || !cat.categoriaID) return [];
+  return this.products.filter(p => p.categoriaID === cat.categoriaID && p.estado === true);
+}
+ 
   // =========================================================
   // 🔥 MÉTODOS DE SELECCIÓN
   // =========================================================
-  addProducto(cat: any, producto: any) {
-    const catID = cat.categoriaID;
-
-    switch (catID) {
-
-      case 1: // Coctel
-        this.presupuesto.categorias.coctel = producto;
-        break;
-
-      case 2: // Entremeses (máximo 5)
-        if (this.presupuesto.categorias.entremeses.length >= 5) {
-          Swal.fire("Máximo 5 entremeses");
-          return;
-        }
-        this.presupuesto.categorias.entremeses.push(producto);
-        break;
-
-      case 3: // Entrada
-        this.presupuesto.categorias.entrada = producto;
-        break;
-
-      case 4: // Fondo
-        this.presupuesto.categorias.fondo = producto;
-        break;
-
-      case 5: // Mesas y sillas
-        this.presupuesto.categorias.mesasSillas.push(producto);
-        break;
-
-      case 6: // Menajeria
-        this.presupuesto.categorias.menajeria.push(producto);
-        break;
-
-      case 7: // Fuentes
-        this.presupuesto.categorias.fuentes.push(producto);
-        break;
-    }
-
-    this.save();
-    this.calcularTotales();
-    this.actualizarResumen();
+addProducto(subcategoria: any, producto: any) {
+  if (!this.presupuesto.categorias) {
+    this.presupuesto.categorias = {
+      coctel: null,
+      entrada: null,
+      fondo: null,
+      entremeses: [],
+      mesasSillas: [],
+      menajeria: [],
+      fuentes: []
+    };
   }
+
+  const categoriaKey = subcategoria.nombre.toLowerCase(); // ejemplo: 'entrada', 'coctel'
+
+  if (categoriaKey === 'entremeses') {
+    // Entremeses permite varios productos
+    const index = this.presupuesto.categorias.entremeses.findIndex(p => p.productoID === producto.productoID);
+    if (index > -1) {
+      this.presupuesto.categorias.entremeses.splice(index, 1); // quitar si ya está
+    } else if (this.presupuesto.categorias.entremeses.length < 5) {
+      this.presupuesto.categorias.entremeses.push(producto); // agregar
+    } else {
+      alert('Máximo 5 entremeses');
+    }
+  } else {
+    // Categorías que permiten solo 1 producto
+    if (this.presupuesto.categorias[categoriaKey] && this.presupuesto.categorias[categoriaKey].productoID === producto.productoID) {
+      this.presupuesto.categorias[categoriaKey] = null; // deseleccionar
+    } else {
+      this.presupuesto.categorias[categoriaKey] = producto; // seleccionar
+    }
+  }
+
+  this.actualizarResumen(); // actualizar resumen si tienes función
+  this.save(); // <-- GUARDO EN LOCALSTORAGE AQUÍ
+}
+
 
 
   removeProduct(catId: number, index: number) {

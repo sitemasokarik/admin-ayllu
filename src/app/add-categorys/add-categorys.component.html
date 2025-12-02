@@ -8,7 +8,18 @@
                     <div class="card border">
                         <div class="card-body">
                             <form (ngSubmit)="saveCategory()">
-                                
+                                <div class="mb-20">
+                                <label class="form-label fw-semibold text-primary-light text-sm mb-8">
+                                    Categoría Padre
+                                </label>
+                                <select class="form-select radius-8" [(ngModel)]="category.categoriaPadreID" name="categoriaPadreID">
+                                    <option [ngValue]="null">Ninguna (Categoría Padre)</option>
+                                    <option *ngFor="let cat of categories" [ngValue]="cat.categoriaID">
+                                    {{ cat.nombre }}
+                                    </option>
+                                </select>                                    
+                                </div>
+
                                 <div class="mb-20">
                                     <label class="form-label fw-semibold text-primary-light text-sm mb-8">
                                         Nombre de la categoría

@@ -132,13 +132,14 @@
 
 <div class="col-md-3">
   <label class="form-label">N° DE INVITADOS</label>
-  <input 
+    <input 
     type="number" 
     [(ngModel)]="presupuesto.evento.invitados"
     name="evento_invitados"
-    (input)="save()" 
+    (input)="save(); filtrarLocalesPorInvitados()" 
     class="form-control"
-  >
+    >
+
 </div>
   
 <div class="col-md-3">
@@ -215,65 +216,98 @@
                                             <h6 class="text-lg mb-8">Locales</h6>
 
                                             <div class="row">
-                                                <div class="col-md-6 mb-3" *ngFor="let local of locales">
-                                                    <div class="card radius-12 p-3">
+                                                <div class="col-md-6 mb-3" *ngFor="let local of localesFiltrados">
+                                                    <div 
+                                                        class="card radius-12 p-3" 
+                                                        [ngClass]="{'border-primary border-3': presupuesto.local?.localID === local.localID}">
+                                                        
                                                         <h6 class="fw-bold">{{ local.nombre }}</h6>
                                                         <p class="mb-1"><strong>Dirección:</strong> {{ local.direccion }}</p>
                                                         <p class="mb-1"><strong>Capacidad:</strong> {{ local.capacidad }}</p>
                                                         <p class="mb-1"><strong>Horas Evento:</strong> {{ local.horasEvento }}</p>
 
-                                                        <!-- Mostrar fotos -->
                                                         <div class="d-flex gap-2 mt-2 overflow-x-scroll">
-                                                            <img *ngFor="let foto of local.fotosUrls"
-                                                                [src]="foto"
-                                                                (click)="openImageModal(foto)"
-                                                                style="width: 270px; height: 170px; object-fit: cover; border-radius: 10px; cursor: zoom-in;">
-
+                                                        <img *ngFor="let foto of local.fotosUrls"
+                                                            [src]="foto"
+                                                            (click)="openImageModal(foto)"
+                                                            style="width: 270px; height: 170px; object-fit: cover; border-radius: 10px; cursor: zoom-in;">
                                                         </div>
 
-                                                        <button (click)="selectLocal(local)" class="btn btn-primary mt-3 w-100">Seleccionar Local</button>
+                                                        <button 
+                                                        (click)="selectLocal(local)" 
+                                                        class="btn mt-3 w-100"
+                                                        [ngClass]="presupuesto.local?.localID === local.localID ? 'btn-success' : 'btn-primary'">
+                                                        {{ presupuesto.local?.localID === local.localID ? 'Seleccionado' : 'Seleccionar Local' }}
+                                                        </button>
                                                     </div>
-                                                </div>
+                                                    </div>
+
+
                                             </div>
                                         </div>
 
                                     </div>
-                                    <div class=" tab-pane fade"
+                                    <div class="tab-pane fade"
                                         *ngFor="let cat of categories"
                                         [attr.id]="'tab-'+cat.categoriaID"
                                         role="tabpanel">
 
-                                        <div class="flex-grow-1">
-                                            <h6 class="text-lg my-3">{{ cat.nombre }}</h6>
+                                        <div class="category-container p-3">
+                                            <h5 class="mb-4 fw-bold text-dark">{{ cat.nombre }}</h5>
 
-                                            <div class="row" *ngIf="getProductsByCategory(cat.categoriaID)?.length > 0; else noProducts">
-                                                <div class="col-md-4 mb-3"
-                                                    *ngFor="let p of getProductsByCategory(cat.categoriaID)">
-                                                    
-                                                    <div class="card radius-12 p-3">
-                                                        <h6 class="fw-bold">{{ p.nombre }}</h6>
-                                                        <p><strong>Precio:</strong> {{ p.precio }}</p>
-                                                        <p><strong>Descripción:</strong> {{ p.descripcion }}</p>
-                                                        <div class="d-flex gap-3 mt-2 overflow-x-scroll">
-                                                            <img *ngFor="let foto of p.fotosUrls"
-                                                                [src]="foto"
-                                                                (click)="openImageModal(foto)"
-                                                                style="width: 100%; height: 200px; object-fit: cover; border-radius: 6px; cursor: zoom-in;">
-
-                                                        </div>                                                        
-                                                        <button type="button" class="btn btn-primary w-100 mt-2"
-                                                                (click)="addProducto(cat, p)">
-                                                            Agregar al evento
-                                                        </button>
+                                            <!-- Subcategorías en grid -->
+                                            <div class="row g-3 my-4">
+                                                <div class="col-md-2" *ngFor="let sub of cat.subcategorias">
+                                                    <div class="card subcategory-card p-3 h-100 cursor-pointer"
+                                                        [class.selected]="
+                                                            selectedSubcategory?.subcategoriaID === sub.subcategoriaID &&
+                                                            selectedSubcategory?.categoriaPadreID === cat.categoriaID
+                                                        "
+                                                        (click)="selectSubcategory(sub, cat)">
+                                                        <h6 class="fw-semibold my-2">{{ sub.nombre }}</h6>
                                                     </div>
                                                 </div>
                                             </div>
 
-                                            <ng-template #noProducts>
-                                                <p class="text-muted fst-italic">No hay productos para esta categoría</p>
-                                            </ng-template>
+                                            <!-- Productos de subcategoría seleccionada -->
+                                            <div *ngIf="selectedSubcategory?.categoriaPadreID === cat.categoriaID">
+                                                <h6 class="my-3">Productos de {{ selectedSubcategory.nombre }}</h6>
+                                                <div class="row g-3">
+                                                <div class="col-md-4" *ngFor="let p of getProductsByLeafCategory(selectedSubcategory)">
+                                                    <div class="card product-card h-100 p-3"
+                                                        [class.selected]="isProductoSeleccionado(p, selectedSubcategory)">
+                                                    
+                                                    <h6 class="fw-bold">{{ p.nombre }}</h6>
+                                                    <p class="mb-2 text-">{{ p.descripcion }}</p>
+
+                                                    <div class="product-images d-flex gap-3 py-3 overflow-auto">
+                                                        <img *ngFor="let foto of p.fotosUrls"
+                                                            [src]="foto"
+                                                            (click)="openImageModal(foto)"
+                                                            class="img-fluid rounded cursor-zoom">
+                                                    </div>
+
+                                                    <button type="button" 
+                                                            class="btn"
+                                                            [ngClass]="isProductoSeleccionado(p, selectedSubcategory) ? 'btn-success' : 'btn-primary'"
+(click)="addProducto(selectedSubcategory, p)"
+>
+                                                        {{ isProductoSeleccionado(p, selectedSubcategory?.categoriaID) ? 'Seleccionado' : 'Agregar al evento' }}
+                                                    </button>
+                                                    </div>
+
+                                                </div>
+                                                </div>
+
+                                                <ng-template #noProducts>
+                                                <p class="text-muted fst-italic">No hay productos para esta subcategoría</p>
+                                                </ng-template>
+                                            </div>
                                         </div>
                                     </div>
+
+
+
                                     <div class="tab-pane fade show" id="pills-vertical-servicios" role="tabpanel" aria-labelledby="pills-vertical-servicios-tab" tabindex="0">
                                         <div class="flex-grow-1">
                                             <h6 class="text-lg my-3">Servicios Adicionales</h6>
@@ -363,6 +397,10 @@
                             <div class="ps-2">
                                 <p class="m-0">
                                     <b>{{ resumen.local?.nombre || '—' }}</b>
+                                    <br>
+                                    <b>{{ resumen.local?.direccion || '—' }}</b>
+                                    <br>
+                                    <!-- <b>{{resumen.evento?.invitados || '—'}}</b> -->
                                 </p>
                             </div>
                         </div>

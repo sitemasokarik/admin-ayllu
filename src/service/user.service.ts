@@ -49,6 +49,15 @@ export class UserService {
 	getAllCategorys(): Observable<any> {
 		return this.http.get(`${this.apiUrlCategorias}/root`);
 	}
+	getAllHierarchy(): Observable<any> {
+		return this.http.get(`${this.apiUrlCategorias}/hierarchy`);
+	}	
+	getAllCategorysG(): Observable<any> {
+		return this.http.get(`${this.apiUrlCategorias}/getall`);
+	}	
+	getAllAddProducto(): Observable<any> {
+		return this.http.get(`${this.apiUrlCategorias}/getall`);
+	}		
 	getCategoryById(id: number): Observable<any> {
 		return this.http.get(`${this.apiUrlCategorias}/getbyid/${id}`);
 	}

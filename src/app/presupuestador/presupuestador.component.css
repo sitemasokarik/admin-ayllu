@@ -30,3 +30,57 @@ p{
     list-style: disc;
     padding: 0px 20px 0px 30px;
 }
+
+.category-container {
+  background: #f9f9f9;
+  border-radius: 12px;
+}
+
+.subcategory-card {
+  background: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 10px;
+  text-align: center;
+  padding: 1rem;
+  transition: all 0.2s;
+}
+
+.subcategory-card:hover {
+  background: #e6f0ff;
+  border-color: #339af0;
+}
+
+.subcategory-card.selected {
+  /* background: #339af0;
+  color: #fff; */
+}
+
+.product-card {
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: transform 0.2s;
+}
+
+.product-card:hover {
+  transform: translateY(-3px);
+}
+
+.product-images img {
+  /* width: 100px;
+  height: 80px; */
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.cursor-zoom {
+  cursor: zoom-in;
+}
+
+
+#pills-tab-five{
+  border-right: 1px solid #dbe4ef;
+}
