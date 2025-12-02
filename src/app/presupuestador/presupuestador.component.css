@@ -4,3 +4,29 @@ h6{
 p{
     font-size: 14px !important;
 }
+
+.image-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 99999;
+}
+
+.image-modal.open {
+  display: flex;
+}
+
+.image-modal-content {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 10px;
+}
+
+#pills-vertical-personal ul{
+    list-style: disc;
+    padding: 0px 20px 0px 30px;
+}

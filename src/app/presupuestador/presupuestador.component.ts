@@ -26,7 +26,8 @@ export class PresupuestadorComponent {
   paquetePersonal: any[] = [];
   categories: any[] = [];
   products: any[] = [];
-
+  modalImage: string | null = null;
+  
   // =========================================================
   // 🔥 OBJETO PRESUPUESTO COMPLETO Y CORRECTO
   // =========================================================
@@ -315,6 +316,15 @@ pendingLoads = 4; // locales, categories, products, servicios
     this.resumen.total = this.presupuesto.totales?.totalFinal || 0;
   }
 
+
+
+openImageModal(img: string) {
+  this.modalImage = img;
+}
+
+closeImageModal() {
+  this.modalImage = null;
+}
 
   // =========================================================
   // 💾 GUARDAR EN LOCALSTORAGE

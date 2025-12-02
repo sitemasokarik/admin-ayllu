@@ -226,7 +226,9 @@
                                                         <div class="d-flex gap-2 mt-2 overflow-x-scroll">
                                                             <img *ngFor="let foto of local.fotosUrls"
                                                                 [src]="foto"
-                                                                style="width: 100%; height: 250px; object-fit: cover; border-radius: 6px;">
+                                                                (click)="openImageModal(foto)"
+                                                                style="width: 270px; height: 170px; object-fit: cover; border-radius: 10px; cursor: zoom-in;">
+
                                                         </div>
 
                                                         <button (click)="selectLocal(local)" class="btn btn-primary mt-3 w-100">Seleccionar Local</button>
@@ -245,7 +247,7 @@
                                             <h6 class="text-lg my-3">{{ cat.nombre }}</h6>
 
                                             <div class="row" *ngIf="getProductsByCategory(cat.categoriaID)?.length > 0; else noProducts">
-                                                <div class="col-md-3 mb-3"
+                                                <div class="col-md-4 mb-3"
                                                     *ngFor="let p of getProductsByCategory(cat.categoriaID)">
                                                     
                                                     <div class="card radius-12 p-3">
@@ -255,7 +257,9 @@
                                                         <div class="d-flex gap-3 mt-2 overflow-x-scroll">
                                                             <img *ngFor="let foto of p.fotosUrls"
                                                                 [src]="foto"
-                                                                style="width: 100%; height: 200px; object-fit: cover; border-radius: 6px;">
+                                                                (click)="openImageModal(foto)"
+                                                                style="width: 100%; height: 200px; object-fit: cover; border-radius: 6px; cursor: zoom-in;">
+
                                                         </div>                                                        
                                                         <button type="button" class="btn btn-primary w-100 mt-2"
                                                                 (click)="addProducto(cat, p)">
@@ -285,8 +289,9 @@
                                                         <!-- Mostrar fotos -->
                                                         <div class="d-flex gap-2 mt-2 overflow-x-scroll">
                                                             <img *ngFor="let foto of servicio.fotosUrls"
-                                                                [src]="foto"
-                                                                style="width: 100%; height: 250px; object-fit: cover; border-radius: 6px;">
+                                                                 [src]="foto"
+                                                                (click)="openImageModal(foto)"
+                                                                style="width: 100%; height: 200px; object-fit: cover; border-radius: 6px; cursor: zoom-in;">
                                                         </div>
 
                                                         <button type="button" class="btn btn-primary mt-3 w-100"
@@ -301,29 +306,39 @@
                                     </div>    
                                     <div class="tab-pane fade show" id="pills-vertical-personal" role="tabpanel" aria-labelledby="pills-vertical-personal-tab" tabindex="0">
                                         <div class="flex-grow-1">
-                                            <h6 class="text-lg my-3">Personal del Evento</h6>
+                                            <div class="flex-grow-1">
+                                                <h6 class="text-lg my-3">Personal del Evento</h6>
 
-                                            <div class="row">
-                                                <div class="col-md-3 mb-3" *ngFor="let servicio of paquetePersonal">
-                                                    <div class="card radius-12 p-3">
-                                                        <h6 class="fw-bold">{{ servicio.nombre }}</h6>
-                                                        <p class="mb-1"><strong>Descripcion:</strong> {{ servicio.descripcion }}</p>
-                                                        <!-- <p class="mb-1"><strong>Capacidad:</strong> {{ servicio.capacidad }}</p>
-                                                        <p class="mb-1"><strong>Horas Evento:</strong> {{ servicio.horasEvento }}</p> -->
+                                                <div class="card p-3 radius-12">
+                                                    <!-- PERSONAL DEL EVENTO -->
+                                                    <h6 class="fw-bold">Equipo de Trabajo</h6>
+                                                    <ul class="mt-2">
+                                                        <li>Personal de cocina</li>
+                                                        <li>1 mozo cada 20 invitados</li>
+                                                        <li>1 mozo para la atención de los novios</li>
+                                                        <li>Meitre</li>
+                                                        <li>Seguridad en puerta principal del Club para controlar el ingreso de invitados</li>
+                                                        <li>Anfitriona para dirigir a los invitados en el área de ascensores</li>
+                                                        <li>Supervisor/a del evento</li>
+                                                        <li>Ama de llaves para el aseo de los SS.HH. (incluyen todos los útiles de aseo)</li>
+                                                        <li>Maestro de Ceremonias</li>
+                                                    </ul>
 
-                                                        <!-- Mostrar fotos -->
-                                                        <div class="d-flex gap-2 mt-2 overflow-x-scroll">
-                                                            <img *ngFor="let foto of servicio.fotosUrls"
-                                                                [src]="foto"
-                                                                style="width: 100%; height: 250px; object-fit: cover; border-radius: 6px;">
-                                                        </div>
+                                                    <hr class="my-3">
 
-                                                        <button class="btn btn-primary mt-3 w-100">
-                                                            Añadir
-                                                        </button>
-                                                    </div>
+                                                    <!-- DJ, SONIDO E ILUMINACIÓN -->
+                                                    <h6 class="fw-bold">DJ, Sonido e Iluminación Profesional</h6>
+                                                    <ul class="mt-2">
+                                                        <li>4 parlantes de 15 pulgadas marca JBL</li>
+                                                        <li>1 consola de audio marca Berengher de 6 canales</li>
+                                                        <li>08 tachos led para ambientación (baño de color)</li>
+                                                        <li>2 micrófonos inalámbricos</li>
+                                                        <li>2 esferas de luz</li>
+                                                    </ul>
                                                 </div>
                                             </div>
+
+                                            
                                         </div>
 
                                     </div>                                                                    
@@ -423,4 +438,9 @@
             </form>
         </div>
     </div>
+</div>
+
+<!-- MODAL GLOBAL PARA AMPLIAR IMÁGENES -->
+<div class="image-modal" [class.open]="modalImage" (click)="closeImageModal()">
+  <img [src]="modalImage" class="image-modal-content" (click)="$event.stopPropagation()">
 </div>
