@@ -34,33 +34,32 @@ export class UsersComponent implements OnInit {
 		this.loadUsers();
 	}
 
-	ngAfterViewChecked(): void {
-		// Inicializamos DataTable solo una vez que hay datos
-		if (!this.dtInitialized && this.users.length > 0) {
-			this.initDataTable();
-			this.dtInitialized = true;
-		}
+	loadUsers(): void {
+	this.loading = true;
+
+	// 🔥 Destruir DataTable ANTES de cargar datos
+	if (this.dataTable) {
+		this.dataTable.destroy();
+		this.dataTable = null;
 	}
 
-	loadUsers(): void {
-		this.userService.getAll().subscribe({
-			next: (res: any) => {
-				console.log("📌 Usuarios cargados:", res);
-				this.users = res.data || [];
-				this.loading = false;
-				
-				// Si ya estaba inicializado, refrescar DataTable
-				if (this.dataTable) {
-					this.dataTable.clear().draw();
-					this.dataTable.rows.add(this.users).draw();
-				}
-			},
-			error: err => {
-				console.error("❌ Error al cargar usuarios", err);
-				this.loading = false;
-			},
-		});
+	this.userService.getAll().subscribe({
+		next: (res: any) => {
+		this.users = res.data || [];
+		this.loading = false;
+
+		// 🔥 Esperar que Angular pinte la tabla
+		setTimeout(() => this.initDataTable(), 150);
+		},
+		error: (err) => {
+		console.error("❌ Error al cargar usuarios", err);
+		this.loading = false;
+		}
+	});
 	}
+
+
+
 
 	initDataTable(): void {
 		this.dataTable = new DataTable("#dataTable", {

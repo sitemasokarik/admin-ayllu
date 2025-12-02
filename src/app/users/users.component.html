@@ -14,74 +14,74 @@
           Agregar Usuario
         </a>
       </div>
-      <table class="table bordered-table sm-table mb-0" id="dataTable">
-        <thead>
-          <tr>
-            <th scope="col">
-              <div class="d-flex align-items-center gap-10">
-                ID
-              </div>
-            </th>
-            <th scope="col">Nombre</th>
-            <th scope="col">Email</th>
-            <th scope="col">Rol</th>
-            <th scope="col" class="text-center">Estado</th>
-            <th scope="col" class="text-center">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let user of users">
-            <td>
-              <div class="d-flex align-items-center gap-10">
-                <div class="form-check style-check d-flex align-items-center">
-                  <input class="form-check-input radius-4 border border-neutral-400" type="checkbox" />
+      <div class="table-responsive">
+        <table class="table bordered-table sm-table mb-0" id="dataTable">
+          <thead>
+            <tr>
+              <th scope="col">
+                <div class="d-flex align-items-center gap-10">
+                  ID
                 </div>
-                {{ user.usuarioID | number : "2.0" }}
-              </div>
-            </td>
-            <td>
-              <div class="d-flex align-items-center">
-                <div class="flex-grow-1">
-                  <span class="text-md mb-0 fw-normal text-secondary-light">{{ user.nombre }}</span>
+              </th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Email</th>
+              <th scope="col">Rol</th>
+              <th scope="col" class="text-center">Estado</th>
+              <th scope="col" class="text-center">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of users">
+              <td>
+                <div class="d-flex align-items-center gap-10">
+                 
+                  {{ user.usuarioID }}
                 </div>
-              </div>
-            </td>
-            <td>
-              <span class="text-md mb-0 fw-normal text-secondary-light">{{ user.email }}</span>
-            </td>
-            <td>{{ user.rolID }}</td>
-            <td class="text-center">
-              <span [ngClass]="{
-                  'bg-success-focus text-success-600 border border-success-main': user.estado,
-                  'bg-danger-200 text-danger-600 border border-danger-main': !user.estado
-                }" class="px-24 py-4 radius-4 fw-medium text-sm">
-                {{ user.estado ? "Activo" : "Inactivo" }}
-              </span>
-            </td>
-            <td class="text-center">
-              <div class="d-flex align-items-center gap-10 justify-content-center">
-                <button type="button"
-                  class="bg-info-focus bg-hover-info-200 text-info-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
-                  title="Ver usuario" (click)="openUserModal(user)">
-                  <i class='bx bx-show text-xl'></i>
-                </button>
+              </td>
+              <td>
+                <div class="d-flex align-items-center">
+                  <div class="flex-grow-1">
+                    <span class="text-md mb-0 fw-normal text-secondary-light">{{ user.nombre }}</span>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <span class="text-md mb-0 fw-normal text-secondary-light">{{ user.email }}</span>
+              </td>
+              <td>{{ user.rolID }}</td>
+              <td class="text-center">
+                <span [ngClass]="{
+                    'bg-success-focus text-success-600 border border-success-main': user.estado,
+                    'bg-danger-200 text-danger-600 border border-danger-main': !user.estado
+                  }" class="px-24 py-4 radius-4 fw-medium text-sm">
+                  {{ user.estado ? "Activo" : "Inactivo" }}
+                </span>
+              </td>
+              <td class="text-center">
+                <div class="d-flex align-items-center gap-10 justify-content-center">
+                  <button type="button"
+                    class="bg-info-focus bg-hover-info-200 text-info-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
+                    title="Ver usuario" (click)="openUserModal(user)">
+                    <i class='bx bx-show text-xl'></i>
+                  </button>
 
-                <button type="button" (click)="editUser(user)"
-                  class="bg-success-focus text-success-600 bg-hover-success-200 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
-                  title="Editar usuario">
-                  <i class="bx bx-edit-alt text-xl"></i>
-                </button>
-                <button *ngIf="user.estado" type="button" (click)="deleteUser(user.usuarioID)"
-                  class="remove-item-btn bg-danger-focus bg-hover-danger-200 text-danger-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
-                  title="Desactivar usuario">
-                  <i class="bx bx-user-x text-xl"></i>
-                </button>
+                  <button type="button" (click)="editUser(user)"
+                    class="bg-success-focus text-success-600 bg-hover-success-200 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
+                    title="Editar usuario">
+                    <i class="bx bx-edit-alt text-xl"></i>
+                  </button>
+                  <button *ngIf="user.estado" type="button" (click)="deleteUser(user.usuarioID)"
+                    class="remove-item-btn bg-danger-focus bg-hover-danger-200 text-danger-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
+                    title="Desactivar usuario">
+                    <i class="bx bx-user-x text-xl"></i>
+                  </button>
 
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>        
+      </div>
     </div>
   </div>
 </div>
@@ -134,10 +134,10 @@
             </div>
 
             <!-- Creado por -->
-            <div class="col-md-6">
+            <!-- <div class="col-md-6">
               <h6 class="fw-semibold text-secondary mb-1">Creado por</h6>
               <p class="mb-0">{{ selectedUser.usuarioCreacion }}</p>
-            </div>
+            </div> -->
 
             <!-- Fecha de creación -->
             <div class="col-md-6">
@@ -153,11 +153,11 @@
             </div>
 
             <!-- Fecha de eliminación / inactividad -->
-            <div class="col-md-6">
+            <!-- <div class="col-md-6">
               <h6 class="fw-semibold text-secondary mb-1">Fecha de Inactividad</h6>
               <p class="mb-0">{{ selectedUser.fechaEliminacion ? (selectedUser.fechaEliminacion | date:'medium') : '-'
                 }}</p>
-            </div>
+            </div> -->
 
           </div>
         </div>
