@@ -15,12 +15,13 @@
         Agregar Servicio
       </a>
     </div>      
+    <div class="table-responsive">
       <table class="table bordered-table sm-table mb-0" id="dataTable">
         <thead>
           <tr>
             <th>ID</th>
             <th>Nombre</th>
-            <th>Descripción</th>
+            <!-- <th>Descripción</th> -->
             <th>Precio</th>
             <th class="text-center">Estado</th>
             <th class="text-center">Acciones</th>
@@ -30,7 +31,7 @@
           <tr *ngFor="let servicio of servicios">
             <td>{{ servicio.servicioID }}</td>
             <td>{{ servicio.nombre }}</td>
-            <td>{{ servicio.descripcion }}</td>
+            <!-- <td>{{ servicio.descripcion }}</td> -->
             <td>{{ servicio.precio }}</td>
             <td class="text-center">
               <span [ngClass]="{
@@ -67,7 +68,8 @@
 
           </tr>
         </tbody>
-      </table>
+      </table>      
+    </div>
     </div>
   </div>
 </div>

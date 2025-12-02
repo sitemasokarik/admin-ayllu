@@ -34,7 +34,7 @@ export class LandingPageComponent implements OnInit {
 
     this.userService.getBlogById(id).subscribe({
       next: (res: any) => {
-
+        
         const data = res.data;
         this.blogID = data.blogID;
 

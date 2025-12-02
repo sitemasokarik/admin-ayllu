@@ -63,7 +63,7 @@ export class CategoryComponent implements OnInit {
 	this.userService.getAllCategorys().subscribe({
 		next: (res: any) => {
 		this.categorys = res.data || [];
-
+      console.log("📌 Categorías cargadas:", this.categorys);
 		// 🔥 Esperar a que Angular pinte el HTML de la tabla
 		setTimeout(() => {
 			this.loading = false;   // Ocultar loader

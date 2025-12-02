@@ -41,26 +41,41 @@ export class CotizacionComponent {
   }
 
   loadServicios(): void {
+    this.loading = true;
+
+    // Destruir datatable si existe
+    if (this.dataTable) {
+      this.dataTable.destroy();
+      this.dataTable = null;
+      this.dtInitialized = false;
+    }
+
     this.userService.getAllCotizaciones().subscribe({
       next: (res: any) => {
         console.log('Respuesta completa de la API:', res);
+
         this.cotizaciones = res.data || [];
         this.loading = false;
-        if (this.dtInitialized && this.dataTable) {
-          this.dataTable.destroy();
-          setTimeout(() => this.initDataTable(), 0);
-        }
+
+        // Esperar a que Angular pinte la tabla
+        setTimeout(() => {
+          this.initDataTable();
+        }, 150);
       },
       error: err => console.error("Error al cargar servicios:", err),
     });
   }
 
-    initDataTable(): void {
-    this.dataTable = new DataTable("#dataTable", {
-      pageLength: 10,
-      columnDefs: [{ orderable: false, targets: -1 }],
-    });
-  }
+
+initDataTable(): void {
+  if (!document.querySelector("#dataTable")) return;
+
+  this.dataTable = new DataTable("#dataTable", {
+    pageLength: 10,
+    columnDefs: [{ orderable: false, targets: -1 }],
+  });
+}
+
 
 openServicioModal(cotizacionID: number) {
   this.userService.getCotizacionesById(cotizacionID).subscribe({

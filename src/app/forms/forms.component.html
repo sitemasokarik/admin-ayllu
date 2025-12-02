@@ -5,58 +5,60 @@
 <div *ngIf="!loading" class="dashboard-main-body">
   <app-breadcrumb [title]="title"></app-breadcrumb>
   <div class="card basic-data-table">
-    <div class="card-body">
-      <table class="table bordered-table sm-table mb-0" id="dataTable">
-        <thead>
-          <tr>
-            <th scope="col">
-              <div class="d-flex align-items-center gap-10">
-                ID
-              </div>
-            </th>
-            <th scope="col">Nombre</th>
-            <th scope="col">Correo Contacto</th>
-            <th scope="col" class="text-center">Número Contacto</th>
-            <th scope="col" class="text-center">Servicio</th>
-            <th scope="col" class="text-center">Mensaje</th>
-            <th scope="col" class="text-center">Fecha Registro</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let cliente of registrosClientes">
-            <td>
-              <div class="d-flex align-items-center gap-10">
-                {{ cliente.contactanosID}}
-              </div>
-            </td>
-            <td>
-              <div class="d-flex align-items-center">
-                <div class="flex-grow-1">
-                  <span class="text-md mb-0 fw-normal text-secondary-light">{{ cliente.nombreCompleto }}</span>
+    <div class="card-body ">
+      <div class="table-responsive">
+        <table class="table bordered-table sm-table mb-0" id="dataTable">
+          <thead>
+            <tr>
+              <th scope="col">
+                <div class="d-flex align-items-center gap-10">
+                  ID
                 </div>
-              </div>
-            </td>
-            <td>
-              <span class="text-md mb-0 fw-normal text-secondary-light">{{ cliente.correo }}</span>
-            </td>
-            <td>
-              <span class="text-md mb-0 fw-normal text-secondary-light">{{ cliente.telefono }}</span>
-            </td>
-            <td>
-              <span class="text-md mb-0 fw-normal text-secondary-light">{{ cliente.servicio }}</span>
-            </td>
-            <td>
-              <span class="text-md mb-0 fw-normal text-secondary-light">{{ cliente.mensaje }}</span>
-            </td>   
-            <td class="text-center">
-              <span class="text-md mb-0 fw-normal text-secondary-light">
-                {{ cliente.fechaCreacion | date:'short' }}
-              </span>
-            </td>                     
-             
-          </tr>
-        </tbody>
-      </table>
+              </th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Correo Contacto</th>
+              <th scope="col" class="text-center">Número Contacto</th>
+              <th scope="col" class="text-center">Servicio</th>
+              <th scope="col" class="text-center">Mensaje</th>
+              <th scope="col" class="text-center">Fecha Registro</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let cliente of registrosClientes">
+              <td>
+                <div class="d-flex align-items-center gap-10">
+                  {{ cliente.contactanosID}}
+                </div>
+              </td>
+              <td>
+                <div class="d-flex align-items-center">
+                  <div class="flex-grow-1">
+                    <span class="text-md mb-0 fw-normal text-secondary-light">{{ cliente.nombreCompleto }}</span>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <span class="text-md mb-0 fw-normal text-secondary-light">{{ cliente.correo }}</span>
+              </td>
+              <td>
+                <span class="text-md mb-0 fw-normal text-secondary-light">{{ cliente.telefono }}</span>
+              </td>
+              <td>
+                <span class="text-md mb-0 fw-normal text-secondary-light">{{ cliente.servicio }}</span>
+              </td>
+              <td>
+                <span class="text-md mb-0 fw-normal text-secondary-light">{{ cliente.mensaje }}</span>
+              </td>   
+              <td class="text-center">
+                <span class="text-md mb-0 fw-normal text-secondary-light">
+                  {{ cliente.fechaCreacion | date:'short' }}
+                </span>
+              </td>                     
+              
+            </tr>
+          </tbody>
+        </table>        
+      </div>
     </div>
   </div>
 </div>
