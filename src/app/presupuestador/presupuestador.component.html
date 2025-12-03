@@ -386,10 +386,20 @@
                     <div class="card radius-12 p-5 shadow-sm " style="background:#fafafa;">
                          <div class="card-header py-16 px-24 border border-end-0 border-start-0 border-top-0 d-flex align-items-center justify-content-between">
                             <h5 class="fw-bold ">Resumen del Presupuesto</h5>
-                            <button type="submit" class="btn btn-light d-flex align-items-center gap-1" (click)="descargarPDF()">
-                                <iconify-icon icon="solar:download-linear" class="text-xl"></iconify-icon>
-                                Descargar
+                            <button 
+                            type="button" 
+                            class="btn d-flex align-items-center gap-1"
+                            [ngClass]="resumenCompleto ? 'btn-light' : 'btn-secondary'"
+                            [disabled]="!resumenCompleto"
+                            (click)="descargarPDF()"
+                            >
+                            <iconify-icon icon="solar:download-linear" class="text-xl"></iconify-icon>
+                            Descargar
                             </button>
+<p *ngIf="!resumenCompleto" class="text-danger mt-2">
+  Complete todos los campos del presupuesto para poder descargar Proforma.
+</p>
+
 
                          </div>                            
                         <!-- LOCAL -->
@@ -465,11 +475,11 @@
                         <hr>
 
                         <!-- TOTAL -->
-                        <div class="my-5">
+                        <!-- <div class="my-5">
                             <h6 class="fw-bold text-success">
                                 TOTAL FINAL: S/ {{ resumen.total }}
                             </h6>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
 

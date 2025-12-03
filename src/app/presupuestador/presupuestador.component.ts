@@ -159,16 +159,20 @@ pendingLoads = 4; // locales, categories, products, servicios
     this.localesFiltrados = this.locales.filter(local => local.capacidad >= invitados);
   }  
 
-  loadLocales(): void {
-    this.userService.getAllLocales().subscribe({
-      next: res => {
-        this.locales = res.data || [];
-        this.localesFiltrados = [...this.locales]; // inicializamos filtrados
-        this.finishLoad();
-      },
-      error: () => this.finishLoad()
-    });
-  }
+loadLocales(): void {
+  this.userService.getAllLocales().subscribe({
+    next: res => {
+      // Filtramos solo los locales activos
+      this.locales = (res.data || []).filter(local => local.estado === true);
+
+      // Inicializamos locales filtrados
+      this.localesFiltrados = [...this.locales];
+
+      this.finishLoad();
+    },
+    error: () => this.finishLoad()
+  });
+}
 
   loadServiciosAdicionales(): void {
     this.userService.getAllServicios().subscribe({
@@ -396,6 +400,18 @@ openImageModal(img: string) {
 
 closeImageModal() {
   this.modalImage = null;
+}
+
+get resumenCompleto(): boolean {
+  const r = this.resumen;
+  
+  return !!(
+    r.local &&
+    r.coctel &&
+    r.entrada &&
+    r.fondo &&
+    r.entremeses.length > 0
+  );
 }
 
   async descargarPDF() {

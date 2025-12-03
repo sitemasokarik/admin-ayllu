@@ -3,74 +3,76 @@ import fontkit from '@pdf-lib/fontkit';
 
 export async function generarPDF(data: any) {
 
-  // Cargar PDF base (1 página en blanco)
   const existingPdfBytes = await fetch('assets/tu_pdf_base.pdf').then(res => res.arrayBuffer());
   const pdfDoc = await PDFDocument.load(existingPdfBytes);
   pdfDoc.registerFontkit(fontkit);
 
-  // Fuente
   const fontBytes = await fetch('assets/Roboto-VariableFont_wdth,wght.ttf').then(res => res.arrayBuffer());
   const font = await pdfDoc.embedFont(fontBytes);
 
   let page = pdfDoc.getPages()[0];
   let { width, height } = page.getSize();
 
-  let x = 40;
-  let y = height - 80; // espacio para encabezado
+  const MARGIN = 50;
+  const LIST_INDENT = 70;
 
-  // ------------------------------
-  // Helpers
-  // ------------------------------
-  const newPage = () => {
-    page = pdfDoc.addPage();
-    width = page.getWidth();
-    height = page.getHeight();
-    x = 40;
-    y = height - 80;
+  let y = height - 120;
 
-    drawHeader();
-  };
-
-  const line = (text: string, spacing = 16) => {
-    if (y < 80) {   // espacio para pie
-      drawFooter();
-      newPage();
-    }
-    page.drawText(text, { x, y, size: 11, font, color: rgb(0, 0, 0) });
+  // -----------------------------------
+  // CENTERED TITLE WRAPPER
+  // -----------------------------------
+  const centered = (text: string, size = 18, spacing = 28) => {
+    if (y < 100) newPage();
+    const textWidth = font.widthOfTextAtSize(text, size);
+    const x = (width - textWidth) / 2;
+    page.drawText(text, { x, y, size, font });
     y -= spacing;
   };
 
-  const title = (text: string, spacing = 22) => {
-    if (y < 100) {
-      drawFooter();
-      newPage();
-    }
-    page.drawText(text, { x, y, size: 14, font, color: rgb(0, 0, 0) });
+  const sectionTitle = (text: string, spacing = 22) => {
+    if (y < 120) newPage();
+    page.drawText(text, { x: MARGIN, y, size: 14, font, color: rgb(0.2, 0.2, 0.2) });
     y -= spacing;
   };
 
-  // ------------------------------
-  // Encabezado y pie
-  // ------------------------------
+  const line = (text: string, spacing = 16, indent = false) => {
+    if (y < 80) newPage();
+    page.drawText(text, { x: indent ? LIST_INDENT : MARGIN, y, size: 11, font });
+    y -= spacing;
+  };
+
+  // -----------------------------------
+  // HEADER + FOOTER
+  // -----------------------------------
   const drawHeader = () => {
-    page.drawText("EVENTOS AYLLU", { x: 40, y: height - 40, size: 16, font });
-    page.drawText("Cotización personalizada", { x: 40, y: height - 60, size: 12, font });
+    centered("EVENTOS AYLLU", 20, 26);
+    centered("Cotización personalizada", 12, 40);
   };
 
   const drawFooter = () => {
-    page.drawText("Jr. de la Unión 364 – Lima", { x: 40, y: 40, size: 10, font });
-    page.drawText("Cel: 978 561 182 / 957 915 971 / 01 782 2192", { x: 40, y: 27, size: 10, font });
-    page.drawText("www.eventosayllu.com", { x: 40, y: 14, size: 10, font });
+    page.drawText("Jr. de la Unión 364 – Lima", { x: MARGIN, y: 40, size: 10, font });
+    page.drawText("Cel: 978 561 182 / 957 915 971 / 01 782 2192", { x: MARGIN, y: 26, size: 10, font });
+    page.drawText("www.eventosayllu.com", { x: MARGIN, y: 12, size: 10, font });
+  };
+
+  const newPage = () => {
+    drawFooter();
+    page = pdfDoc.addPage();
+    width = page.getWidth();
+    height = page.getHeight();
+    y = height - 120;
+    drawHeader();
   };
 
   drawHeader();
 
-  // ------------------------------
-  // CONTENIDO DINÁMICO
-  // ------------------------------
+  // -----------------------------------
+  // CONTENT
+  // -----------------------------------
 
-  title("PAQUETE DE EVENTOS");
+  centered("PAQUETE DE EVENTOS", 18, 35);
 
+  sectionTitle("Datos del Cliente");
   line(`Estimado: ${data.cliente.nombre} ${data.cliente.apellido}`);
   line(`Teléfonos: ${data.cliente.telefono1} / ${data.cliente.telefono2}`);
   line(`Fechas tentativas: ${data.evento.fecha1} o ${data.evento.fecha2}`);
@@ -78,115 +80,75 @@ export async function generarPDF(data: any) {
   line(`Cantidad de invitados: ${data.evento.invitados}`);
   line(`Tipo de evento: ${data.evento.tipo}`);
 
-  // ------------------------------
-  // SERVICIO DE CATERING
-  // ------------------------------
-  title("SERVICIO DE CATERING");
+  sectionTitle("Servicio de Catering");
+  line("El cóctel de bienvenida se brinda al inicio de la recepción.");
+  line("A continuación, la opción seleccionada es:");
+  line(`• ${data.categorias.coctel.nombre}`, 16, true);
 
-  line("El coctel de bienvenida se brinda al inicio de la recepción, los invitados socializan mientras");
-  line("esperan la llegada de los novios. A continuación, la opción seleccionada es:");
-  line(`• ${data.categorias.coctel.nombre}`);
+  sectionTitle("Entremeses Salados");
+  line("Los seleccionados son:");
+  data.categorias.entremeses.forEach((item: any) => line(`• ${item.nombre}`, 16, true));
 
-  // ------------------------------
-  // ENTREMESSES
-  // ------------------------------
-  title("ENTREMESSES SALADOS");
+  sectionTitle("Platos de Entrada");
+  line(`• ${data.categorias.entrada.nombre}`, 16, true);
 
-  line("Se deben elegir 5 variedades. Los seleccionados son:");
+  sectionTitle("Platos de Fondo");
+  line(`• ${data.categorias.fondo.nombre}`, 16, true);
 
-  data.categorias.entremeses.forEach((item: any) => {
-    line(`• ${item.nombre}`);
-  });
+  sectionTitle("Cena de Gala");
+  line("La cena incluye degustación previa.");
+  line("Se sirve en 2 tiempos: entrada y fondo.");
+  line("Cada fondo incluye proteína, arroz y ensalada.");
 
-  // ------------------------------
-  // ENTRADA
-  // ------------------------------
-  title("PLATOS DE ENTRADA");
-  line(`• ${data.categorias.entrada.nombre}`);
-
-  // ------------------------------
-  // FONDO
-  // ------------------------------
-  title("PLATOS DE FONDO");
-  line(`• ${data.categorias.fondo.nombre}`);
-
-  // ------------------------------
-  // TEXTOS FIJOS DE LA CENA
-  // ------------------------------
-  title("CENA DE GALA");
-  line("La cena de gala incluye degustación previa. Se sirve en 2 tiempos: entrada y fondo,");
-  line("cada fondo incluye 3 complementos (proteína, arroz y ensalada).");
   line("");
   line("Degustación:");
-  line("Los novios elegirán 2 variedades de entrada y 2 de fondo para degustación previa.");
-  line("La opción elegida será la servida a todos los invitados.");
+  line("• 2 variedades de entrada", 16, true);
+  line("• 2 variedades de fondo", 16, true);
 
-  // ------------------------------
-  // MOBILIARIO
-  // ------------------------------
-  title("MOBILIARIO Y DECORACIÓN EN FLORES NATURALES");
+  sectionTitle("Mobiliario y Decoración en Flores Naturales");
+  (data.categorias.mesasSillas || []).forEach((m: any) => line(`• ${m.nombre}`, 16, true));
 
-  const mesas = data.categorias.mesasSillas || [];
-  mesas.forEach((m: any) => line(`• ${m.nombre}`));
+  sectionTitle("Menajería");
+  (data.categorias.menajeria || []).forEach((m: any) => line(`• ${m.nombre}`, 16, true));
 
-  title("MANAJERÍA");
-  const menajeria = data.categorias.menajeria || [];
-  menajeria.forEach((m: any) => line(`• ${m.nombre}`));
+  sectionTitle("Fuentes");
+  (data.categorias.fuentes || []).forEach((m: any) => line(`• ${m.nombre}`, 16, true));
 
-  title("FUENTES PARA SERVICIO Y BOCADITOS");
-  const fuentes = data.categorias.fuentes || [];
-  fuentes.forEach((m: any) => line(`• ${m.nombre}`));
-
-  // ------------------------------
-  // EQUIPO DE TRABAJO
-  // ------------------------------
-  title("EQUIPO DE TRABAJO (INCLUIDO)");
+  sectionTitle("Equipo de Trabajo (Incluido)");
   [
     "Personal de cocina",
     "1 mozo cada 20 invitados",
     "1 mozo especial atención anfitrión",
     "Maitre",
-    "Seguridad en puerta principal",
-    "Anfitriona para dirigir invitados",
-    "Supervisor/a del evento",
+    "Seguridad",
+    "Anfitriona",
+    "Supervisor/a",
     "Ama de llaves SS.HH.",
     "Maestro de ceremonias"
-  ].forEach(t => line(`• ${t}`));
+  ].forEach(t => line(`• ${t}`, 16, true));
 
-  // ------------------------------
-  // DJ
-  // ------------------------------
-  title("DJ, SONIDO E ILUMINACIÓN");
+  sectionTitle("DJ, Sonido e Iluminación");
   [
     "4 parlantes de 15 pulgadas JBL",
     "Consola 6 canales",
     "8 tachos LED",
     "2 micrófonos inalámbricos",
     "2 esferas de luz"
-  ].forEach(t => line(`• ${t}`));
+  ].forEach(t => line(`• ${t}`, 16, true));
 
-  // ------------------------------
-  // WEDDING DESIGNER
-  // ------------------------------
-  title("EVENT DESIGNER");
+  sectionTitle("Event Designer");
   [
     "Asesoría en diseño del evento",
     "Elección de mobiliario",
     "Planificación del catering",
     "Coordinación del timing",
     "Recomendación de proveedores"
-  ].forEach(t => line(`• ${t}`));
+  ].forEach(t => line(`• ${t}`, 16, true));
 
-  // ------------------------------
-  // SERVICIOS ADICIONALES
-  // ------------------------------
-  title("SERVICIOS ADICIONALES");
-  data.adicionales.forEach((a: any) => line(`• ${a.nombre}`));
+  sectionTitle("Servicios Adicionales");
+  data.adicionales.forEach((a: any) => line(`• ${a.nombre}`, 16, true));
 
-  // ------------------------------
-  // RESUMEN
-  // ------------------------------
-  title("RESUMEN DE PRESUPUESTO");
+  sectionTitle("Resumen de Presupuesto");
   line(`Costo por invitado: S/ ${data.totales.costoPorInvitado}`);
   line(`Garantía Catering: S/ ${data.totales.garantia}`);
   line(`Alquiler de salón: S/ ${data.local.precioAlquiler}`);
