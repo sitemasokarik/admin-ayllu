@@ -14,6 +14,10 @@ export class UserService {
 	private apiUrlFormulario = "http://caeteringdcodepe.runasp.net/api/v1/contactanos";
 	private apiUrlServicio = "http://caeteringdcodepe.runasp.net/api/v1/ServicioAdicional";
 	private apiUrlCotizacion = "http://caeteringdcodepe.runasp.net/api/v1/cotizacion";
+	private apiUrlEvento = "http://caeteringdcodepe.runasp.net/api/v1/evento";
+	private apiUrlRol = "http://caeteringdcodepe.runasp.net/api/v1/rol";
+	private apiUrlPage = "http://caeteringdcodepe.runasp.net/api/v1/pagina";
+	private apiUrlPermiso = "http://caeteringdcodepe.runasp.net/api/v1/permiso";
 
 	constructor(private http: HttpClient) {}
 
@@ -172,5 +176,64 @@ export class UserService {
 	}
 	deleteCotizaciones(id: number): Observable<any> {
 		return this.http.delete(`${this.apiUrlCotizacion}/delete/${id}`);
+	}	
+	
+	
+	getAllEventos(): Observable<any> {
+		return this.http.get(`${this.apiUrlEvento}/getall`);
+	}	
+	createEvento(localData: any): Observable<any> {
+		return this.http.post(`${this.apiUrlEvento}/create`, localData);
+	}		
+	getEventoById(id: number): Observable<any> {
+		return this.http.get(`${this.apiUrlEvento}/getbyid/${id}`);
+	}	
+	deleteEvento(id: number): Observable<any> {
+		return this.http.delete(`${this.apiUrlEvento}/delete/${id}`);
+	}	
+
+	//ROLE METHODS
+
+	getAllRoles(): Observable<any> {
+		return this.http.get(`${this.apiUrlRol}/getall`);
+	}	
+	getRolById(id: number): Observable<any> {
+		return this.http.get(`${this.apiUrlRol}/getbyid/${id}`);
+	}	
+	deleteRol(id: number): Observable<any> {
+		return this.http.delete(`${this.apiUrlRol}/delete/${id}`);
+	}
+	createRol(localData: any): Observable<any> {
+		return this.http.post(`${this.apiUrlRol}/create`, localData);
+	}	
+	updateRol(localData: any): Observable<any> {
+		return this.http.put(`${this.apiUrlRol}/update`, localData);
+	}	
+	
+	getAllPages(): Observable<any> {
+		return this.http.get(`${this.apiUrlPage}/getall`);
+	}	
+	getPageById(id: number): Observable<any> {
+		return this.http.get(`${this.apiUrlPage}/getbyid/${id}`);
+	}	
+	deletePage(id: number): Observable<any> {
+		return this.http.delete(`${this.apiUrlPage}/delete/${id}`);
+	}
+	createPage(localData: any): Observable<any> {
+		return this.http.post(`${this.apiUrlPage}/create`, localData);
+	}	
+	updatePage(localData: any): Observable<any> {
+		return this.http.put(`${this.apiUrlPage}/update`, localData);
+	}		
+
+
+	getAllPermisos(): Observable<any> {
+		return this.http.get(`${this.apiUrlPermiso}/getall`);
+	}	
+	createPermiso(localData: any): Observable<any> {
+		return this.http.post(`${this.apiUrlPermiso}/create`, localData);
+	}			
+	deletePermiso(id: number): Observable<any> {
+		return this.http.delete(`${this.apiUrlPermiso}/delete/${id}`);
 	}		
 }

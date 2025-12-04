@@ -272,6 +272,7 @@
                                             <!-- Productos de subcategoría seleccionada -->
                                             <div *ngIf="selectedSubcategory?.categoriaPadreID === cat.categoriaID">
                                                 <h6 class="my-3">Productos de {{ selectedSubcategory.nombre }}</h6>
+                                                <h6 class="my-3"> {{ selectedSubcategory.descripcion }}</h6>
                                                 <div class="row g-3">
                                                 <div class="col-md-4" *ngFor="let p of getProductsByLeafCategory(selectedSubcategory)">
                                                     <div class="card product-card h-100 p-3"
@@ -287,13 +288,12 @@
                                                             class="img-fluid rounded cursor-zoom">
                                                     </div>
 
-                                                    <button type="button" 
-                                                            class="btn"
-                                                            [ngClass]="isProductoSeleccionado(p, selectedSubcategory) ? 'btn-success' : 'btn-primary'"
-(click)="addProducto(selectedSubcategory, p)"
->
-                                                        {{ isProductoSeleccionado(p, selectedSubcategory?.categoriaID) ? 'Seleccionado' : 'Agregar al evento' }}
-                                                    </button>
+                                                   <button type="button" 
+        class="btn"
+        [ngClass]="isProductoSeleccionado(p, selectedSubcategory) ? 'btn-success' : 'btn-primary'"
+        (click)="seleccionarProducto(selectedSubcategory, p)">
+    {{ isProductoSeleccionado(p, selectedSubcategory) ? 'Seleccionado' : 'Agregar al evento' }}
+</button>
                                                     </div>
 
                                                 </div>
@@ -312,7 +312,7 @@
                                         <div class="flex-grow-1">
                                             <h6 class="text-lg my-3">Servicios Adicionales</h6>
 
-                                            <div class="row">
+                                            <div class="row" *ngIf="serviciosAdicionales?.length > 0">
                                                 <div class="col-md-3 mb-3" *ngFor="let servicio of serviciosAdicionales">
                                                     <div class="card radius-12 p-3">
                                                         <h6 class="fw-bold">{{ servicio.nombre }}</h6>
@@ -328,10 +328,12 @@
                                                                 style="width: 100%; height: 200px; object-fit: cover; border-radius: 6px; cursor: zoom-in;">
                                                         </div>
 
-                                                        <button type="button" class="btn btn-primary mt-3 w-100"
-                                                                (click)="addAdicional(servicio)">
-                                                            Añadir
-                                                        </button>
+                                                       <button type="button"
+        class="btn mt-3 w-100"
+        [ngClass]="isAdicionalSeleccionado(servicio) ? 'btn-success' : 'btn-primary'"
+        (click)="addAdicional(servicio)">
+    {{ isAdicionalSeleccionado(servicio) ? 'Seleccionado' : 'Añadir' }}
+</button>
                                                     </div>
                                                 </div>
                                             </div>

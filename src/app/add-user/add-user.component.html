@@ -50,19 +50,18 @@
 										name="password" />
 								</div>
 
+								
 								<div class="mb-20">
-									<label for="rolID" class="form-label fw-semibold text-primary-light text-sm mb-8">
-										Rol
-										<span class="text-danger-600">*</span>
+									<label class="form-label fw-semibold text-primary-light text-sm mb-8">
+										Rol <span class="text-danger-600">*</span>
 									</label>
-									<select class="form-control radius-8 form-select" id="rolID"
-										[(ngModel)]="user.rolID" name="rolID">
-										<option [ngValue]="1">Admin</option>
-										<!-- <option [ngValue]="2">Ejecutivo de Ventas</option>
-										<option [ngValue]="3">Usuario</option> -->
+									<select class="form-select radius-8" [(ngModel)]="user.rolID" name="rolID" required>
+										<option [ngValue]="null" disabled>Seleccione un Rol</option>
+										<option *ngFor="let cat of categories" [ngValue]="cat.rolID">
+										{{ cat.nombre }}
+										</option>
 									</select>
 								</div>
-
 								<div class="d-flex align-items-center justify-content-center gap-3">
 									<button type="button"
 										class="border border-danger-600 bg-hover-danger-200 text-danger-600 text-md px-56 py-11 radius-8"

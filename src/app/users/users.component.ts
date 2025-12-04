@@ -24,7 +24,15 @@ export class UsersComponent implements OnInit {
 	passwords = { currentPassword: "", newPassword: "", confirmPassword: "" }; // Para cambio de contraseña
 
 	loading: boolean = true;
-
+		user = {
+			nombre: "",
+			userName: "",
+			email: "",
+			password: "",
+			rolID: null,  
+			usuarioCreacion: "admin",
+		};
+	categories: any[] = []; 
 	dataTable: any; // Instancia de DataTable
 	private dtInitialized = false; // Marca si DataTable ya se inicializó
 
@@ -32,8 +40,19 @@ export class UsersComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.loadUsers();
+		this.loadRoles();
 	}
-
+	loadRoles(): void {
+		this.userService.getAllRoles().subscribe({
+		next: (res: any) => {
+			this.categories = res.data || [];
+		},
+		error: err => {
+			console.error("Error cargando Roles:", err);
+			Swal.fire("Error", "No se pudieron cargar las Roles", "error");
+		}
+		});
+	}
 	loadUsers(): void {
 	this.loading = true;
 
@@ -45,6 +64,7 @@ export class UsersComponent implements OnInit {
 
 	this.userService.getAll().subscribe({
 		next: (res: any) => {
+			console.log("✅ Usuarios cargados", res);
 		this.users = res.data || [];
 		this.loading = false;
 

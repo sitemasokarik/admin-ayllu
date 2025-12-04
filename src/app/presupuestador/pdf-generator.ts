@@ -2,7 +2,6 @@ import { PDFDocument, rgb } from 'pdf-lib';
 import fontkit from '@pdf-lib/fontkit';
 
 export async function generarPDF(data: any) {
-
   const existingPdfBytes = await fetch('assets/tu_pdf_base.pdf').then(res => res.arrayBuffer());
   const pdfDoc = await PDFDocument.load(existingPdfBytes);
   pdfDoc.registerFontkit(fontkit);
@@ -15,12 +14,17 @@ export async function generarPDF(data: any) {
 
   const MARGIN = 50;
   const LIST_INDENT = 70;
-
   let y = height - 120;
 
-  // -----------------------------------
-  // CENTERED TITLE WRAPPER
-  // -----------------------------------
+  const newPage = () => {
+    drawFooter();
+    page = pdfDoc.addPage();
+    width = page.getWidth();
+    height = page.getHeight();
+    y = height - 120;
+    drawHeader();
+  };
+
   const centered = (text: string, size = 18, spacing = 28) => {
     if (y < 100) newPage();
     const textWidth = font.widthOfTextAtSize(text, size);
@@ -41,9 +45,6 @@ export async function generarPDF(data: any) {
     y -= spacing;
   };
 
-  // -----------------------------------
-  // HEADER + FOOTER
-  // -----------------------------------
   const drawHeader = () => {
     centered("EVENTOS AYLLU", 20, 26);
     centered("Cotización personalizada", 12, 40);
@@ -55,65 +56,64 @@ export async function generarPDF(data: any) {
     page.drawText("www.eventosayllu.com", { x: MARGIN, y: 12, size: 10, font });
   };
 
-  const newPage = () => {
-    drawFooter();
-    page = pdfDoc.addPage();
-    width = page.getWidth();
-    height = page.getHeight();
-    y = height - 120;
-    drawHeader();
-  };
-
   drawHeader();
 
-  // -----------------------------------
-  // CONTENT
-  // -----------------------------------
-
-  centered("PAQUETE DE EVENTOS", 18, 35);
-
+  // ========================================
+  // DATOS DEL CLIENTE
+  // ========================================
   sectionTitle("Datos del Cliente");
   line(`Estimado: ${data.cliente.nombre} ${data.cliente.apellido}`);
   line(`Teléfonos: ${data.cliente.telefono1} / ${data.cliente.telefono2}`);
+  line(`Correo: ${data.cliente.correo}`);
+  line(`Documento: ${data.cliente.tipoDocumento} ${data.cliente.documento}`);
   line(`Fechas tentativas: ${data.evento.fecha1} o ${data.evento.fecha2}`);
-  line(`Salón deseado: ${data.local.nombre}`);
-  line(`Cantidad de invitados: ${data.evento.invitados}`);
   line(`Tipo de evento: ${data.evento.tipo}`);
+  line(`Cantidad de invitados: ${data.evento.invitados}`);
+  line(`Salón deseado: ${data.local?.nombre || "No seleccionado"}`);
 
+  // ========================================
+  // SERVICIO DE CATERING
+  // ========================================
   sectionTitle("Servicio de Catering");
   line("El cóctel de bienvenida se brinda al inicio de la recepción.");
-  line("A continuación, la opción seleccionada es:");
-  line(`• ${data.categorias.coctel.nombre}`, 16, true);
+  line("A continuación, los productos seleccionados son:");
 
-  sectionTitle("Entremeses Salados");
-  line("Los seleccionados son:");
-  data.categorias.entremeses.forEach((item: any) => line(`• ${item.nombre}`, 16, true));
+  // Coctel
+  if (data.categorias.coctel) line(`• Cóctel: ${data.categorias.coctel.nombre}`, 16, true);
 
-  sectionTitle("Platos de Entrada");
-  line(`• ${data.categorias.entrada.nombre}`, 16, true);
+  // Entradas
+  if (data.categorias.entrada) line(`• Entrada: ${data.categorias.entrada.nombre}`, 16, true);
 
-  sectionTitle("Platos de Fondo");
-  line(`• ${data.categorias.fondo.nombre}`, 16, true);
+  // Fondos
+  if (data.categorias.fondo) line(`• Fondo: ${data.categorias.fondo.nombre}`, 16, true);
 
-  sectionTitle("Cena de Gala");
-  line("La cena incluye degustación previa.");
-  line("Se sirve en 2 tiempos: entrada y fondo.");
-  line("Cada fondo incluye proteína, arroz y ensalada.");
+  // Entremeses
+  if (data.categorias.entremeses?.length) {
+    sectionTitle("Entremeses");
+    data.categorias.entremeses.forEach((item: any) => line(`• ${item.nombre}`, 16, true));
+  }
 
-  line("");
-  line("Degustación:");
-  line("• 2 variedades de entrada", 16, true);
-  line("• 2 variedades de fondo", 16, true);
+  // ========================================
+  // MOBILIARIO Y DECORACIÓN
+  // ========================================
+  if (data.categorias.mesasSillas?.length) {
+    sectionTitle("Mobiliario y Decoración");
+    data.categorias.mesasSillas.forEach((m: any) => line(`• ${m.nombre}`, 16, true));
+  }
 
-  sectionTitle("Mobiliario y Decoración en Flores Naturales");
-  (data.categorias.mesasSillas || []).forEach((m: any) => line(`• ${m.nombre}`, 16, true));
+  if (data.categorias.menajeria?.length) {
+    sectionTitle("Menajería");
+    data.categorias.menajeria.forEach((m: any) => line(`• ${m.nombre}`, 16, true));
+  }
 
-  sectionTitle("Menajería");
-  (data.categorias.menajeria || []).forEach((m: any) => line(`• ${m.nombre}`, 16, true));
+  if (data.categorias.fuentes?.length) {
+    sectionTitle("Fuentes");
+    data.categorias.fuentes.forEach((m: any) => line(`• ${m.nombre}`, 16, true));
+  }
 
-  sectionTitle("Fuentes");
-  (data.categorias.fuentes || []).forEach((m: any) => line(`• ${m.nombre}`, 16, true));
-
+  // ========================================
+  // PERSONAL
+  // ========================================
   sectionTitle("Equipo de Trabajo (Incluido)");
   [
     "Personal de cocina",
@@ -127,6 +127,14 @@ export async function generarPDF(data: any) {
     "Maestro de ceremonias"
   ].forEach(t => line(`• ${t}`, 16, true));
 
+  if (data.personal?.length) {
+    sectionTitle("Personal Adicional");
+    data.personal.forEach((p: any) => line(`• ${p.nombre} - ${p.rol}`, 16, true));
+  }
+
+  // ========================================
+  // DJ, SONIDO E ILUMINACIÓN
+  // ========================================
   sectionTitle("DJ, Sonido e Iluminación");
   [
     "4 parlantes de 15 pulgadas JBL",
@@ -136,6 +144,9 @@ export async function generarPDF(data: any) {
     "2 esferas de luz"
   ].forEach(t => line(`• ${t}`, 16, true));
 
+  // ========================================
+  // EVENT DESIGNER
+  // ========================================
   sectionTitle("Event Designer");
   [
     "Asesoría en diseño del evento",
@@ -145,14 +156,22 @@ export async function generarPDF(data: any) {
     "Recomendación de proveedores"
   ].forEach(t => line(`• ${t}`, 16, true));
 
-  sectionTitle("Servicios Adicionales");
-  data.adicionales.forEach((a: any) => line(`• ${a.nombre}`, 16, true));
+  // ========================================
+  // SERVICIOS ADICIONALES
+  // ========================================
+  if (data.adicionales?.length) {
+    sectionTitle("Servicios Adicionales");
+    data.adicionales.forEach((a: any) => line(`• ${a.nombre} - S/ ${a.precio}`, 16, true));
+  }
 
+  // ========================================
+  // RESUMEN Y TOTALES
+  // ========================================
   sectionTitle("Resumen de Presupuesto");
-  line(`Costo por invitado: S/ ${data.totales.costoPorInvitado}`);
-  line(`Garantía Catering: S/ ${data.totales.garantia}`);
-  line(`Alquiler de salón: S/ ${data.local.precioAlquiler}`);
-  line(`Total Final: S/ ${data.totales.totalFinal}`);
+  line(`Costo por invitado: S/ ${data.totales?.costoPorInvitado || 0}`);
+  line(`Garantía Catering: S/ ${data.totales?.garantia || 0}`);
+  line(`Alquiler de salón: S/ ${data.local?.precioAlquiler || 0}`);
+  line(`Total Final: S/ ${data.totales?.totalFinal || 0}`);
 
   drawFooter();
 

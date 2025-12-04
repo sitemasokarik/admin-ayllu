@@ -10,6 +10,7 @@ import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { PDFDocument, rgb } from 'pdf-lib';
 import { generarPDF } from './pdf-generator';
+import { PresupuestadorConfig } from './presupuestador.config';
 
 @Component({
   selector: 'app-presupuestador',
@@ -31,7 +32,7 @@ export class PresupuestadorComponent {
   categories: any[] = [];
   products: any[] = [];
   modalImage: string | null = null;
-  personal: [];
+  personal: any[] = [];
 
   // =========================================================
   // 🔥 OBJETO PRESUPUESTO COMPLETO Y CORRECTO
@@ -44,7 +45,8 @@ export class PresupuestadorComponent {
       telefono2: "",
       correo: "",
       tipoDocumento: "",
-      documento: ""
+      documento: "",
+      personal: []
     },
     
     evento: {
@@ -60,11 +62,7 @@ export class PresupuestadorComponent {
       coctel: null,        // 1
       entrada: null,       // 3
       fondo: null,         // 4
-      entremeses: [],      // 2 (máx 5)
-      
-      mesasSillas: [],     // 5
-      menajeria: [],       // 6
-      fuentes: []          // 7
+      entremeses: []
     },
 
     adicionales: [],
@@ -111,7 +109,12 @@ pendingLoads = 4; // locales, categories, products, servicios
     this.loadProducts();
     this.loadServiciosAdicionales();
   }
-
+  private normalizeKey(nombre: string): string {
+    return nombre
+      .toLowerCase()
+      .replace(/\s+/g, '')           // elimina espacios
+      .replace(/[^a-z0-9]/g, '');    // elimina caracteres raros
+  }
   private finishLoad() {
     this.pendingLoads--;
     if (this.pendingLoads === 0) {
@@ -120,6 +123,56 @@ pendingLoads = 4; // locales, categories, products, servicios
   }
   selectedCategory: any = null;
   selectedSubcategory: any = null;
+ 
+seleccionarProducto(subcat: any, producto: any) {
+  const key = subcat.nombre
+    .toLowerCase()
+    .replace(/\s+/g, '')
+    .replace(/[^a-z0-9]/g, '');
+
+  const c = this.presupuesto.categorias;
+
+  if (c[key] === undefined) {
+    const limite = PresupuestadorConfig.limitesCategorias[key] || Infinity;
+    c[key] = limite === 1 ? null : [];
+  }
+
+  const limite = PresupuestadorConfig.limitesCategorias[key] || Infinity;
+
+  if (Array.isArray(c[key])) {
+    if (c[key].some(p => p.productoID === producto.productoID)) {
+      c[key] = c[key].filter(p => p.productoID !== producto.productoID);
+    } else {
+      if (c[key].length >= limite) {
+        // 🔥 Mensaje bonito con SweetAlert2
+        Swal.fire({
+          toast: true,
+          position: 'top-end',
+          icon: 'warning',
+          title: `Máximo ${limite} ${key} alcanzado`,
+          showConfirmButton: false,
+          timer: 2000,
+          timerProgressBar: true,
+          background: '#f8d7da', // fondo rosa claro
+          color: '#721c24',      // texto
+          width: 'auto',   // que ajuste al contenido
+          padding: '0.25rem 0.75rem',
+
+        });
+        return;
+      }
+      c[key].push(producto);
+    }
+  } else {
+    c[key] = producto;
+  }
+
+  this.save();
+  this.calcularTotales();
+}
+
+
+
 
   selectCategory(cat: any) {
     this.selectedCategory = cat;
@@ -130,17 +183,29 @@ pendingLoads = 4; // locales, categories, products, servicios
     this.selectedSubcategory = { ...sub, categoriaPadreID: cat.categoriaID };
   }
 
-  isProductoSeleccionado(producto: any, subcategoria: any) {
-    if (!subcategoria || !subcategoria.nombre) return false; // evita errores
+isProductoSeleccionado(producto: any, subcategoria: any) {
+  if (!subcategoria || !subcategoria.nombre) return false;
 
-    const categoriaKey = subcategoria.nombre.toLowerCase();
+  const key = subcategoria.nombre
+    .toLowerCase()
+    .replace(/\s+/g, '')
+    .replace(/[^a-z0-9]/g, '');
 
-    if (categoriaKey === 'entremeses') {
-      return this.presupuesto.categorias.entremeses.some(p => p.productoID === producto.productoID);
-    } else {
-      return this.presupuesto.categorias[categoriaKey]?.productoID === producto.productoID;
-    }
+  const c = this.presupuesto.categorias;
+
+  if (key === 'coctel' || key === 'entrada' || key === 'fondo') {
+    return c[key]?.productoID === producto.productoID;
   }
+
+  if (key === 'entremeses') {
+    return c.entremeses.some(p => p.productoID === producto.productoID);
+  }
+
+  // para todas las demás subcategorías
+  return c[key]?.some(p => p.productoID === producto.productoID);
+}
+
+
 
 
 
@@ -174,15 +239,18 @@ loadLocales(): void {
   });
 }
 
-  loadServiciosAdicionales(): void {
-    this.userService.getAllServicios().subscribe({
-      next: res => {
-        this.serviciosAdicionales = res.data || [];
-        this.finishLoad();
-      },
-      error: () => this.finishLoad()
-    });
-  }
+loadServiciosAdicionales(): void {
+  this.userService.getAllServicios().subscribe({
+    next: res => {
+      this.serviciosAdicionales = (res.data || []).map(s => ({
+        ...s,
+        id: s.servicioID  // ahora cada servicio tendrá la propiedad 'id'
+      }));
+      this.finishLoad();
+    },
+    error: () => this.finishLoad()
+  });
+}
 
   getLeafCategories(categories: any[]): any[] {
     let leaves: any[] = [];
@@ -199,16 +267,37 @@ loadLocales(): void {
     return leaves;
   }
 
-  loadCategories(): void {
-    this.userService.getAllHierarchy().subscribe({
-      next: res => {
-         console.log("Categori:", res);
-        this.categories = res.data || [];
-        this.finishLoad();
-      },
-      error: () => this.finishLoad()
-    });
-  }
+loadCategories(): void {
+  this.userService.getAllHierarchy().subscribe({
+    next: res => {
+      this.categories = res.data || [];
+
+      // Crea un mapa dinámico de categorías
+      this.presupuesto.categorias = {};
+
+      const leaves = this.getLeafCategories(this.categories);
+
+      leaves.forEach(sub => {
+        const key = this.normalizeKey(sub.nombre);
+
+        if (sub.nombre === 'Entremeses') {
+          this.presupuesto.categorias[key] = [];
+        }
+        else if (['coctel','entrada','fondo'].includes(key)) {
+          this.presupuesto.categorias[key] = null;
+        }
+        else {
+          this.presupuesto.categorias[key] = []; // múltiple por defecto
+        }
+      });
+
+      this.finishLoad();
+    },
+    error: () => this.finishLoad()
+  });
+}
+
+
  
 
   loadProducts(): void {
@@ -299,12 +388,22 @@ addProducto(subcategoria: any, producto: any) {
 
  
 
-  addAdicional(item: any) {
+addAdicional(item: any) {
+  const index = this.presupuesto.adicionales.findIndex(a => a.id === item.id);
+  if (index > -1) {
+    this.presupuesto.adicionales.splice(index, 1);
+  } else {
     this.presupuesto.adicionales.push(item);
-    this.save();
-    this.calcularTotales(); // <-- AGREGAR ESTO
-    this.actualizarResumen();
   }
+  this.save();
+  this.calcularTotales();
+  this.actualizarResumen();
+}
+
+isAdicionalSeleccionado(servicio: any): boolean {
+  return this.presupuesto.adicionales.some(a => a.id === servicio.id);
+}
+
 
   addPersonal(per) {
     this.presupuesto.personal.push(per);
@@ -316,69 +415,67 @@ addProducto(subcategoria: any, producto: any) {
   // =========================================================
   // 🧮 CALCULAR COSTO POR INVITADO
   // =========================================================
-  calcularCostoPorInvitado() {
-    let total = 0;
-    const c = this.presupuesto.categorias;
+calcularCostoPorInvitado() {
+  let total = 0;
+  const c = this.presupuesto.categorias;
 
-    // PLATOS PRINCIPALES
-    if (c.coctel) total += c.coctel.precio;
-    if (c.entrada) total += c.entrada.precio;
-    if (c.fondo) total += c.fondo.precio;
+  // 1) Platos principales
+  ['coctel', 'entrada', 'fondo'].forEach(cat => {
+    if (c[cat]) total += c[cat].precio || 0;
+  });
 
-    // ENTREMESES
-    total += c.entremeses.reduce((a, b) => a + b.precio, 0);
+  // 2) Entremeses
+  total += (c.entremeses || []).reduce((s, p) => s + (p.precio || 0), 0);
 
-    // MESAS Y SILLAS
-    total += c.mesasSillas.reduce((a, b) => a + b.precio, 0);
-
-    // MENAJERIA
-    total += c.menajeria.reduce((a, b) => a + b.precio, 0);
-
-    // FUENTES
-    total += c.fuentes.reduce((a, b) => a + b.precio, 0);
-
-    // PERSONAL (si existe)
-    if (this.presupuesto.personal) {
-      total += this.presupuesto.personal.reduce((a, b) => a + b.precio, 0);
+  // 3) Otras categorías múltiples
+  Object.keys(c).forEach(key => {
+    const val = c[key];
+    if (Array.isArray(val)) {
+      total += val.reduce((s, p) => s + (p.precio || 0), 0);
     }
+  });
 
-    this.presupuesto.costoPorInvitado = total;
-    return total;
-  }
+  // 4) Personal fijo +100
+  total += PresupuestadorConfig.personal;
+
+  this.presupuesto.costoPorInvitado = total;
+  return total;
+}
+
 
 
   // =========================================================
   // 🧮 CALCULAR TOTALES FINALES
   // =========================================================
 
-  calcularTotales() {
-    const invitados = this.presupuesto.evento.invitados || 0;
-    const costoInv = this.calcularCostoPorInvitado();
+calcularTotales() {
+  const invitados = this.presupuesto.evento.invitados || 0;
+  const costoInv = this.calcularCostoPorInvitado();
 
-    const totalEvento = invitados * costoInv;
+  const totalEvento = invitados * costoInv;
 
-    const local = this.presupuesto.local
-      ? this.presupuesto.local.precioAlquiler
-      : 0;
+  const local = this.presupuesto.local?.precioAlquiler || 0;
+  const garantia = PresupuestadorConfig.garantia; // uso de la configuración
 
-    const garantia = 500;
+  // Asegurar array
+  const adicionales = Array.isArray(this.presupuesto.adicionales)
+    ? this.presupuesto.adicionales.reduce((s, p) => s + (p.precio || 0), 0)
+    : 0;
 
-    const adicionales = (this.presupuesto.adicionales || [])
-      .reduce((a, b) => a + (b.precio || 0), 0);
+  const totalFinal = totalEvento + local + garantia + adicionales;
 
-    const totalFinal = totalEvento + local + garantia + adicionales;
+  this.presupuesto.totales = {
+    costoPorInvitado: costoInv,
+    totalEvento,
+    local,
+    garantia,
+    adicionales,
+    totalFinal
+  };
 
-    this.presupuesto.totales = {
-      costoPorInvitado: costoInv,
-      totalEvento,
-      local,
-      garantia,
-      adicionales,
-      totalFinal
-    };
+  this.save();
+}
 
-    this.save();
-  }
 
   actualizarResumen() {
     const c = this.presupuesto.categorias;

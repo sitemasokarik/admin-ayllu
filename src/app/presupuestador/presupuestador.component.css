@@ -84,3 +84,10 @@ p{
 #pills-tab-five{
   border-right: 1px solid #dbe4ef;
 }
+.swal2-toast-custom {
+  width: auto !important;   /* que se ajuste al contenido */
+  min-width: 150px;         /* opcional, ancho mínimo */
+  max-width: 250px;         /* opcional, ancho máximo */
+  padding: 0.25rem 0.75rem; /* ajustar padding */
+  font-size: 0.85rem;       /* tamaño de letra más pequeño */
+}

@@ -21,14 +21,33 @@ export class SideNavComponent implements AfterViewInit, OnInit, OnDestroy {
 
   currentThemeSetting: string = 'light';
   isSidebarOpen = true;
-
+  menuVisible: any[] = [];
   constructor(private router: Router,
     private themeService: ThemeService,
     private renderer: Renderer2,
     private el: ElementRef
   ) { }
-  ngOnInit(): void {
+  slugify(text: string): string {
+    return text
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '') // quitar tildes
+      .replace(/[^a-z0-9]+/g, '-')     // reemplazar espacios por -
+      .replace(/^-+|-+$/g, '');        // quitar guiones sobrantes
+  }
 
+  ngOnInit(): void {
+    this.permisos = JSON.parse(localStorage.getItem("permisos") || "[]");
+
+    // Construimos el menú dinámico
+    this.menuVisible = this.permisos
+      .filter(p => p.puedeVer)
+      .map(p => ({
+        paginaID: p.paginaID,
+        nombre: p.paginaNombre,
+        ruta: "/" + this.slugify(p.paginaNombre)
+      }));
+    
     const localStorageTheme = localStorage.getItem('theme');
     this.currentThemeSetting = this.themeService.calculateSettingAsThemeString(localStorageTheme);
 
@@ -211,7 +230,12 @@ export class SideNavComponent implements AfterViewInit, OnInit, OnDestroy {
       });
     });
   }
+permisos: any[] = [];
+ 
 
+canViewPage(paginaID: number): boolean {
+  return this.permisos.some(p => p.paginaID === paginaID && p.puedeVer === true);
+}
   toggleTheme(): void {
     const newTheme = this.currentThemeSetting === 'dark' ? 'light' : 'dark';
 

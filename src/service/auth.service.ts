@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 export class AuthService {
 
   private API_URL = 'http://caeteringdcodepe.runasp.net/api/v1/usuario';
+  private API_URL_ROL = 'http://caeteringdcodepe.runasp.net/api/v1/rol';
   private readonly TOKEN_KEY = 'token';
   private readonly USER_KEY = 'user';
   private readonly EXPIRES_KEY = 'expires_at';
@@ -17,7 +18,9 @@ export class AuthService {
   login(credentials: { userName: string; password: string }): Observable<any> {
     return this.http.post(`${this.API_URL}/login`, credentials);
   }
-
+  getRolById(id: number) {
+     return this.http.get(`${this.API_URL_ROL}/getbyid/${id}`);
+  }
   // Token
   saveToken(token: string): void {
     const expiresAt = Date.now() + (30 * 60 * 1000); // 30 min

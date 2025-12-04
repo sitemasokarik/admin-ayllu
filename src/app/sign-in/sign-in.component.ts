@@ -21,56 +21,69 @@ export class SignInComponent {
 
 	constructor(private readonly router: Router, private readonly authService: AuthService) {}
 
-	onSubmit(): void {
-	this.loading = true; // 🔹 Activar loading
+onSubmit(): void {
+  this.loading = true;
 
-	const credentials = {
-		userName: this.userName,
-		password: this.password,
-	};
+  const credentials = {
+    userName: this.userName,
+    password: this.password,
+  };
 
-	this.authService.login(credentials).subscribe({
-		next: (resp: any) => {
-		this.loading = false; // 🔹 Desactivar loading
+  this.authService.login(credentials).subscribe({
+    next: (resp: any) => {
+      this.loading = false;
 
-		console.log("🟢 Respuesta servidor:", resp);
+      const token = resp?.data?.token;
+      const user = resp?.data;
 
-		const token = resp?.data?.token;
-		if (!token) {
-			Swal.fire({
-			icon: "error",
-			title: "Error",
-			text: "No se recibió token del servidor",
-			});
-			return;
-		}
+      console.log("LOGIN:", user);
 
-		this.authService.saveToken(token);
+      if (!token || !user) {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "No se recibió información válida",
+        });
+        return;
+      }
 
-		const user = resp?.data?.usuario;
-		if (user) this.authService.saveUser(user);
+      // Guardar token y usuario
+      this.authService.saveToken(token);
+      this.authService.saveUser(user);
 
-		Swal.fire({
-			icon: "success",
-			title: "Bienvenido",
-			text: `Hola ${user?.nombre || this.userName}!`,
-		});
+      // 🔥 TRAER PERMISOS SEGÚN EL ROL
+      this.authService.getRolById(user.rolID).subscribe((rolResp: any) => {
 
-		this.router.navigate(["/home"]);
-		},
+        console.log("PERMISOS:", rolResp);
 
-		error: err => {
-		this.loading = false; // 🔹 Desactivar loading
+        const permisos = rolResp?.data?.permisos || [];
 
-		console.error("❌ Error login:", err);
-		Swal.fire({
-			icon: "error",
-			title: "Error",
-			text: "Credenciales incorrectas",
-		});
-		},
-	});
-	}
+        // Guardar permisos en localStorage
+        localStorage.setItem("permisos", JSON.stringify(permisos));
+
+        Swal.fire({
+          icon: "success",
+          title: "Bienvenido",
+          text: `Hola ${user.nombre}!`,
+        });
+
+        this.router.navigate(["/home"]);
+      });
+
+    },
+
+    error: err => {
+      this.loading = false;
+      console.error("Error login:", err);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Credenciales incorrectas",
+      });
+    }
+  });
+}
+
 
 
 	togglePassword() {

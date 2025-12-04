@@ -117,16 +117,24 @@ import { AddLocalComponent } from './add-local/add-local.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { ServicesComponent } from './services/services.component';
 import { AddServicesComponent } from './add-services/add-services.component';
+import { RolesComponent } from './roles/roles.component';
+import { EventsComponent } from './events/events.component';
+import { PagesComponent } from './pages/pages.component';
+import { AddRolComponent } from './add-rol/add-rol.component';
+import { PermisosComponent } from './permisos/permisos.component';
+import { AddPermisoRolComponent } from './add-permiso-rol/add-permiso-rol.component';
+import { AddEventsComponent } from './add-events/add-events.component';
 
 export const routes: Routes = [
     {
         path: '',
         component: SideNavComponent,
-        canActivate: [AuthGuard],
+        // canActivate: [AuthGuard],
         children: [
             { path: '', redirectTo: '/sign-in', pathMatch: 'full' },
             //{ path: 'home', component: HomeComponent },
             { path: 'home', component: Home15Component },
+            { path: 'inicio', component: Home15Component },
             { path: 'landing-page', component: LandingPageComponent },
             { path: 'add-blog', component: AddBlogComponent },
             { path: 'add-user', component: AddUserComponent },
@@ -134,6 +142,7 @@ export const routes: Routes = [
             { path: 'add-product', component: AddProductComponent },
             { path: 'add-categorys', component: AddCategorysComponent },
             { path: 'add-services', component: AddServicesComponent },
+            { path: 'add-rol', component: AddRolComponent },
             { path: 'alert', component: AlertComponent },
             { path: 'assign-role', component: AssignRoleComponent },
             { path: 'avatar', component: AvatarComponent },
@@ -240,6 +249,12 @@ export const routes: Routes = [
             { path: 'products', component: ProductComponent },
             { path: 'clients', component: ClientsComponent },
             { path: 'services', component: ServicesComponent },
+            { path: 'roles', component: RolesComponent },
+            { path: 'events', component: EventsComponent },
+            { path: 'pages', component: PagesComponent },
+            { path: 'permisos', component: PermisosComponent },
+            { path: 'add-permiso-rol', component: AddPermisoRolComponent },
+            { path: 'add-events', component: AddEventsComponent },
         ]
     },
     { path: 'coming-soon', component: ComingSoonComponent },

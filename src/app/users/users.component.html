@@ -25,7 +25,7 @@
               </th>
               <th scope="col">Nombre</th>
               <th scope="col">Email</th>
-              <th scope="col">Rol</th>
+              <!-- <th scope="col">Rol</th> -->
               <th scope="col" class="text-center">Estado</th>
               <th scope="col" class="text-center">Acciones</th>
             </tr>
@@ -48,7 +48,7 @@
               <td>
                 <span class="text-md mb-0 fw-normal text-secondary-light">{{ user.email }}</span>
               </td>
-              <td>{{ user.rolID }}</td>
+              <!-- <td>{{ user.rolID }}</td> -->
               <td class="text-center">
                 <span [ngClass]="{
                     'bg-success-focus text-success-600 border border-success-main': user.estado,
@@ -120,8 +120,7 @@
             <div class="col-md-6">
               <h6 class="fw-semibold text-secondary mb-1">Rol</h6>
               <p class="mb-0 text-dark">
-                {{ selectedUser.rolID === 1 ? 'Admin' : (selectedUser.rolID === 2 ? 'Ejecutivo de Ventas' : 'Usuario')
-                }}
+                {{ selectedUser.rolNombre }}
               </p>
             </div>
 
@@ -199,7 +198,24 @@
               <input type="email" class="form-control" [(ngModel)]="selectedUser.email" name="email" required
                 [ngModelOptions]="{standalone: true}">
             </div>
+								<div class="mb-20">
+									<label class="form-label fw-semibold text-primary-light text-sm mb-8">
+										Rol <span class="text-danger-600">*</span>
+									</label>
+                  <select class="form-select radius-8" 
+                          [(ngModel)]="selectedUser.rolID" 
+                          name="rolID" 
+                          required 
+                          [ngModelOptions]="{standalone: true}">
+                    
+                    <option [ngValue]="null" disabled>Seleccione un Rol</option>
 
+                    <option *ngFor="let cat of categories" 
+                            [ngValue]="cat.rolID">
+                      {{ cat.nombre }}
+                    </option>
+                  </select>
+								</div>
             <!-- Rol -->
             <!-- <div class="col-md-6">
               <label class="form-label">Rol</label>

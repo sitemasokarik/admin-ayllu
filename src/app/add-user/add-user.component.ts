@@ -19,16 +19,41 @@ export class AddUserComponent {
 
 	// Modelo de usuario para el formulario
 	user = {
-		nombre: "",
-		userName: "",
-		email: "",
-		password: "",
-		rolID: 1,
-		usuarioCreacion: "admin",
+	nombre: "",
+	userName: "",
+	email: "",
+	password: "",
+	rolID: null,  
+	usuarioCreacion: "admin",
 	};
-
+	
+	product = {
+		rolID: 0,
+		paginaID: 0,
+		puedeVer: true,
+		puedeCrear: true,
+		puedeEditar: true,
+		puedeEliminar: true,
+		usuarioCreacion: "Admin",
+	};
+	categories: any[] = []; 
 	constructor(private userService: UserService, private router: Router) {}
 
+	loadRoles(): void {
+		this.userService.getAllRoles().subscribe({
+		next: (res: any) => {
+			this.categories = res.data || [];
+		},
+		error: err => {
+			console.error("Error cargando Roles:", err);
+			Swal.fire("Error", "No se pudieron cargar las Roles", "error");
+		}
+		});
+	}
+
+	ngOnInit(): void {
+		this.loadRoles();
+	}	
 	// Método para guardar usuario
 	saveUser(): void {
 		// Validaciones básicas
@@ -59,32 +84,24 @@ export class AddUserComponent {
 			return;
 		}
 
-		// Llamada al servicio
+		
 		this.userService.createUser(this.user).subscribe({
 			next: res => {
-				if (res.success) {
-					Swal.fire({
-						icon: "success",
-						title: "Usuario creado",
-						text: "El usuario se ha creado con éxito",
-						timer: 1500,
-						showConfirmButton: false,
-					}).then(() => this.goToUsers());
-				} else {
-					Swal.fire({
-						icon: "error",
-						title: "Error",
-						text: res.message || "Error al crear usuario",
-					});
-				}
+			if (res.success) {
+				Swal.fire({
+				icon: "success",
+				title: "Usuario creado",
+				text: "El usuario se ha creado con éxito",
+				timer: 1500,
+				showConfirmButton: false,
+				}).then(() => this.goToUsers());
+			} else {
+				Swal.fire("Error", res.message || "Error al crear usuario", "error");
+			}
 			},
 			error: err => {
-				console.error("Error creando usuario:", err);
-				Swal.fire({
-					icon: "error",
-					title: "Error",
-					text: err?.error?.message || "Error al crear usuario",
-				});
+			console.error("Error creando usuario:", err);
+			Swal.fire("Error", err?.error?.message || "Error al crear usuario", "error");
 			},
 		});
 	}

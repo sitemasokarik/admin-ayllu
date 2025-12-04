@@ -1,0 +1,148 @@
+<div *ngIf="loading" class="d-flex flex-column align-items-center justify-content-center py-80">
+  <div class="spinner-grow text-primary mb-3" style="width: 3rem; height: 3rem;"></div>
+  <p class="text-primary-light">Cargando información...</p>
+</div>
+
+<div *ngIf="!loading" class="dashboard-main-body">
+  <app-breadcrumb [title]="title"></app-breadcrumb>
+
+  <div class="card basic-data-table">
+    <div class="card-body">
+    <div class="justify-content-start d-flex pb-3">
+      <!-- <a routerLink="/add-pages"
+        class="btn btn-primary text-sm btn-sm px-12 py-12 radius-8 d-flex align-items-center gap-2">
+        <iconify-icon icon="ic:baseline-plus" class="icon text-xl line-height-1"></iconify-icon>
+        Nuevas Páginas
+      </a> -->
+    </div>      
+    <div class="table-responsive">
+      <table class="table bordered-table sm-table mb-0" id="dataTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <!-- <th>Descripción</th> -->
+            <!-- <th>Precio</th> -->
+            <th class="text-center">Estado</th>
+            <th class="text-center">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let rol of pages">
+            <td>{{ rol.paginaID }}</td>
+            <td>{{ rol.nombre }}</td>
+            <!-- <td>{{ rol.descripcion }}</td> -->
+            <!-- <td>{{ rol.descripcion }}</td> -->
+            <td class="text-center">
+            <span 
+                [ngClass]="{
+                'bg-success-focus text-success-600 border border-success-main': rol.estado === true,
+                'bg-danger-200 text-danger-600 border border-danger-main': rol.estado !== true
+                }"
+                class="px-24 py-4 radius-4 fw-medium text-sm"
+            >
+                {{ rol.estado === true ? "Activo" : "Inactivo" }}
+            </span>
+            </td>
+
+            <td class="text-center">
+              <div class="d-flex align-items-center gap-10 justify-content-center">
+                <!-- Ver Servicio -->
+                <button type="button"
+                  class="bg-info-focus bg-hover-info-200 text-info-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
+                  title="Ver Servicio" (click)="openRolModal(rol)">
+                  <i class="bx bx-show text-xl"></i>
+                </button>
+
+                <!-- Editar Servicio -->
+                <button type="button"
+                  class="bg-success-focus text-success-600 bg-hover-success-200 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
+                  title="Editar Servicio" (click)="editPage(rol)">
+                  <i class="bx bx-edit-alt text-xl"></i>
+                </button>
+
+                <!-- Eliminar Servicio -->
+                <button type="button"
+                  class="remove-item-btn bg-danger-focus bg-hover-danger-200 text-danger-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
+                  title="Eliminar Servicio" (click)="deletePage(rol.paginaID)">
+                  <i class="bx bx-trash text-xl"></i>
+                </button>
+              </div>
+            </td>
+
+          </tr>
+        </tbody>
+      </table>      
+    </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Bootstrap para Servicio -->
+<div class="modal fade" id="servicioModal" tabindex="-1" aria-labelledby="servicioModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <!-- Header -->
+      <div class="modal-header text-white">
+        <h5 class="modal-title" id="servicioModalLabel">Detalles de Página</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body" *ngIf="selectedPages">
+        <div class="p-4">
+          <div class="row g-3">
+            <!-- Nombre -->
+            <div class="col-md-6">
+              <h6 class="fw-semibold text-secondary mb-1">Nombre</h6>
+              <p class="mb-0">{{ selectedPages.nombre }}</p>
+            </div>
+
+            <!-- Estado -->
+            <div class="col-md-6">
+              <h6 class="fw-semibold text-secondary mb-1">Estado</h6>
+              <p class="mb-0">{{ selectedPages.estado ? 'Activo' : 'Inactivo' }}</p>
+            </div>
+
+            <!-- Fecha de Creación -->
+            <!-- <div class="col-md-6">
+              <h6 class="fw-semibold text-secondary mb-1">Fecha de Creación</h6>
+              <p class="mb-0">{{ selectedPages.fechaCreacion | date:'medium' }}</p>
+            </div> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Editar Servicio -->
+<div class="modal fade" id="editServicioModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Editar Rol</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" *ngIf="selectedPages">
+        <form #editServicioForm="ngForm" (ngSubmit)="submitEditPage()">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Nombre</label>
+              <input type="text" class="form-control" [(ngModel)]="selectedPages.nombre" name="nombre" required [ngModelOptions]="{standalone: true}">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Descripción</label>
+              <input type="text" class="form-control" [(ngModel)]="selectedPages.descripcion" name="descripcion" [ngModelOptions]="{standalone: true}">
+            </div>
+             
+          </div>
+          <div class="modal-footer mt-3">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            <button type="submit" class="btn btn-primary" [disabled]="editServicioForm.invalid">Guardar Cambios</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
