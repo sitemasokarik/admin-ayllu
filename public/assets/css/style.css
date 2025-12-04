@@ -13703,7 +13703,7 @@ html[data-theme=dark] .text-style .apexcharts-text.apexcharts-yaxis-label {
 }
 @media (min-width: 375px) {
   .dropdown-menu-sm {
-    width: 312px;
+    width: 200px;
   }
 }
 /* Dropdown Toggle Custom Icon */
