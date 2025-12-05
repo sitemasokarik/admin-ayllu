@@ -127,7 +127,7 @@ const insertImage = async (url: string, maxHeight = 400) => {
   const drawFooter = () => {
     page.drawText("Jr. de la Unión 364 – Lima", { x: MARGIN, y: 40, size: 10, font });
     page.drawText("Cel: 978 561 182 / 957 915 971 / 01 782 2192", { x: MARGIN, y: 26, size: 10, font });
-    page.drawText("www.eventosayllu.com", { x: MARGIN, y: 12, size: 10, font });
+    page.drawText("https://ayllueventos.com/", { x: MARGIN, y: 12, size: 10, font });
   };
 
   drawHeader();
@@ -281,6 +281,8 @@ const insertImage = async (url: string, maxHeight = 400) => {
       y -= rowHeight;
     });
   };
+
+  y -= 20; 
 
   // USO
   sectionTitle("Resumen de Presupuesto");
