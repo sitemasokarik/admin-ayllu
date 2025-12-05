@@ -37,6 +37,19 @@
                                     <textarea class="form-control radius-8" placeholder="Ingrese la descripción"
                                         [(ngModel)]="category.descripcion" name="descripcion"></textarea>
                                 </div>
+                                <div class="mb-20">
+                                    <label class="form-label fw-semibold text-primary-light text-sm mb-8">
+                                        Límite de selección
+                                    </label>
+                                    <input
+                                        type="number"
+                                        class="form-control radius-8"
+                                        placeholder="Ingrese el límite"
+                                        [(ngModel)]="category.limite"
+                                        name="limite"
+                                        min="0"
+                                    />
+                                </div>
 
                                 <div class="d-flex align-items-center justify-content-center gap-3">
                                     <button type="button"

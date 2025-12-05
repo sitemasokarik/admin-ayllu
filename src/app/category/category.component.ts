@@ -92,9 +92,6 @@ export class CategoryComponent implements OnInit {
       if (result.isConfirmed) {
         this.userService.deleteCategory(categoriaID).subscribe({
           next: () => {
-            const category = this.categorys.find(c => c.categoriaID === categoriaID);
-            if (category) category.estado = false;
-
             Swal.fire({
               icon: "success",
               title: "Categoría desactivada",
@@ -102,7 +99,8 @@ export class CategoryComponent implements OnInit {
               showConfirmButton: false,
             });
 
-            this.initOrRefreshTable();
+            // 🔥 Recargar TODA la tabla desde backend
+            this.loadCategorys();
           },
           error: err => {
             console.error("Error desactivando categoría", err);
@@ -113,11 +111,13 @@ export class CategoryComponent implements OnInit {
     });
   }
 
+
   openCategoryModal(category: any) {
     this.selectedCategory = null;
 
     this.userService.getCategoryById(category.categoriaID).subscribe({
       next: (res: any) => {
+        console.log("ID", res);
         this.selectedCategory = res.data;
 
         const modalEl = document.getElementById("categoryModal");
@@ -130,48 +130,71 @@ export class CategoryComponent implements OnInit {
     });
   }
 
-  editCategory(category: any) {
-    this.selectedCategory = null;
+editCategory(category: any) {
+  this.selectedCategory = null;
 
-    this.userService.getCategoryById(category.categoriaID).subscribe({
-      next: (res: any) => {
+  this.userService.getCategoryById(category.categoriaID).subscribe({
+    next: (res: any) => {
+      console.log("ID CATE", res);
+
+      const fullRecord = this.categorys.find(c => c.categoriaID === category.categoriaID);
+
+      if (fullRecord) {
+        this.selectedCategory = { ...fullRecord, ...res.data };
+      } else {
         this.selectedCategory = res.data;
+      }
 
-        const modalEl = document.getElementById("editCategoryModal");
-        if (modalEl) new bootstrap.Modal(modalEl).show();
+      console.log("📌 Datos completos para editar:", this.selectedCategory);
+
+      const modalEl = document.getElementById("editCategoryModal");
+      if (modalEl) new bootstrap.Modal(modalEl).show();
+    },
+    error: err => {
+      console.error("Error obteniendo categoría:", err);
+      Swal.fire("Error", "No se pudo cargar la categoría", "error");
+    },
+  });
+}
+
+
+  submitEditCategory() {
+    if (!this.selectedCategory) return;
+
+    const loggedUser = this.authService.getUser();
+
+    let categoriaPadreID = this.selectedCategory.categoriaPadreID;
+    
+    if (categoriaPadreID === undefined || categoriaPadreID === "")
+      categoriaPadreID = 0;
+
+    const updateData = {
+      categoriaID: Number(this.selectedCategory.categoriaID),
+      categoriaPadreID,
+      nombre: this.selectedCategory.nombre.trim(),
+      descripcion: this.selectedCategory.descripcion?.trim(),
+      limite: Number(this.selectedCategory.limite) || 0,
+      nivel: this.selectedCategory.nivel ?? 0,
+      orden: this.selectedCategory.orden ?? 0,
+      icono: this.selectedCategory.icono ?? null,
+      usuarioModificacion: loggedUser?.userName || "Admin",
+    };
+
+    console.log("📤 Datos enviados a actualización:", updateData);
+
+    this.userService.updateCategory(updateData).subscribe({
+      next: () => {
+        Swal.fire("Éxito", "Categoría actualizada", "success");
+        this.closeEditCategoryModal();
+        this.loadCategorys();
       },
       error: err => {
-        console.error("Error obteniendo categoría:", err);
-        Swal.fire("Error", "No se pudo cargar la categoría", "error");
+        console.error("Error actualizando categoría:", err);
+        Swal.fire("Error", "No se pudo actualizar", "error");
       },
     });
   }
 
-  submitEditCategory() {
-  if (!this.selectedCategory) return;
-
-  const loggedUser = this.authService.getUser();
-
-  const updateData = {
-    categoriaID: Number(this.selectedCategory.categoriaID),
-    nombre: this.selectedCategory.nombre || "",
-    descripcion: this.selectedCategory.descripcion || "",
-    usuarioModificacion: loggedUser?.userName || "Admin",
-  };
-
-  this.userService.updateCategory(updateData).subscribe({
-    next: () => {
-      Swal.fire("Éxito", "Categoría actualizada", "success");
-      this.closeEditCategoryModal();
-
-      this.loadCategorys(); // 🔥 Recargar tabla COMPLETA de forma segura
-    },
-    error: err => {
-      console.error("Error actualizando categoría:", err);
-      Swal.fire("Error", "No se pudo actualizar", "error");
-    },
-  });
-}
 
 
   closeEditCategoryModal() {

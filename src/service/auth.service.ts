@@ -7,8 +7,8 @@ import { Observable } from 'rxjs';
 })
 export class AuthService {
 
-  private API_URL = 'http://caeteringdcodepe.runasp.net/api/v1/usuario';
-  private API_URL_ROL = 'http://caeteringdcodepe.runasp.net/api/v1/rol';
+  private API_URL = 'https://aylluperuback.premiumasp.net/api/v1/usuario';
+  private API_URL_ROL = 'https://aylluperuback.premiumasp.net/api/v1/rol';
   private readonly TOKEN_KEY = 'token';
   private readonly USER_KEY = 'user';
   private readonly EXPIRES_KEY = 'expires_at';

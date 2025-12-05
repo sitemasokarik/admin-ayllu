@@ -25,6 +25,7 @@
             </th>
             <th scope="col">Nombre</th>
             <!-- <th scope="col">Productos</th> -->
+             <th scope="col">Tipo</th>
             <th scope="col" class="text-center">Estado</th>
             <th scope="col" class="text-center">Acciones</th>
           </tr>
@@ -43,6 +44,11 @@
                 </div>
               </div>
             </td>
+            <td>
+              <span class="fw-medium text-sm">
+                {{ category.categoriaPadreID ? "Subcategoría" : "Categoría" }}
+              </span>
+            </td>            
             <!-- <td>
               <div class="d-flex align-items-center">
                 <div class="flex-grow-1">
@@ -148,6 +154,11 @@
               <input type="text" class="form-control" [(ngModel)]="selectedCategory.descripcion" name="descripcion"
                 [ngModelOptions]="{ standalone: true }" />
             </div>
+            <div class="col-md-6">
+              <label class="form-label">Limite Elección</label>
+              <input type="text" class="form-control" [(ngModel)]="selectedCategory.limite" name="limite"
+                [ngModelOptions]="{ standalone: true }" />
+            </div>            
           </div>
 
           <div class="modal-footer mt-3">

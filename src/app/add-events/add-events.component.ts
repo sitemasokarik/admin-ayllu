@@ -22,7 +22,7 @@ export class AddEventsComponent {
     descripcion: "",
     precio: 0,
     fotosUrls: [] as string[],
-    usuarioCreacion: "desconocido",
+    usuarioCreacion: "Admin",
     estado: true
   };
 
@@ -59,7 +59,7 @@ export class AddEventsComponent {
     const payload = {
       nombre: this.servicio.nombre,
       descripcion: this.servicio.descripcion,
-      fotos: JSON.stringify(this.servicio.fotosUrls), // 👈 IMPORTANTE
+      fotos: this.servicio.fotosUrls[0] || '',
       estadoEvento: this.servicio.estado === true ? "Activo" : "Inactivo",
       usuarioCreacion: this.servicio.usuarioCreacion
     };

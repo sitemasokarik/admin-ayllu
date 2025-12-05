@@ -38,7 +38,81 @@ export async function generarPDF(data: any) {
     page.drawText(text, { x: MARGIN, y, size: 14, font, color: rgb(0.2, 0.2, 0.2) });
     y -= spacing;
   };
+  const wrapText = (text: string, maxWidth: number, fontSize = 11) => {
+    const words = text.split(' ');
+    const lines = [];
+    let current = '';
 
+    for (let w of words) {
+      const testLine = current ? current + ' ' + w : w;
+      const testWidth = font.widthOfTextAtSize(testLine, fontSize);
+
+      if (testWidth < maxWidth) {
+        current = testLine;
+      } else {
+        lines.push(current);
+        current = w;
+      }
+    }
+    if (current) lines.push(current);
+
+    return lines;
+  };
+const insertImage = async (url: string, maxHeight = 400) => {
+  // Cargar imagen
+  const imgBytes = await fetch(url).then(r => r.arrayBuffer());
+
+  let img;
+  if (url.endsWith('.png')) {
+    img = await pdfDoc.embedPng(imgBytes);
+  } else {
+    img = await pdfDoc.embedJpg(imgBytes);
+  }
+
+  const { width: imgW, height: imgH } = img;
+
+  const maxWidth = width - (MARGIN * 2);
+  let scale = maxWidth / imgW;
+
+  // Limitar altura máxima
+  if (imgH * scale > maxHeight) {
+    scale = maxHeight / imgH;
+  }
+
+  const scaledW = imgW * scale;
+  const scaledH = imgH * scale;
+
+  // Salto de página si falta espacio
+  if (y - scaledH < 100) {
+    newPage();
+  }
+
+  page.drawImage(img, {
+    x: MARGIN,
+    y: y - scaledH,
+    width: scaledW,
+    height: scaledH
+  });
+
+  y -= scaledH + 20;
+};
+
+  const longLine = (text: string, spacing = 16, indent = false) => {
+    const maxWidth = width - (indent ? LIST_INDENT : MARGIN) - MARGIN;
+
+    const lines = wrapText(text, maxWidth, 11);
+
+    lines.forEach(l => {
+      if (y < 80) newPage();
+      page.drawText(l, {
+        x: indent ? LIST_INDENT : MARGIN,
+        y,
+        size: 11,
+        font
+      });
+      y -= spacing;
+    });
+  };  
   const line = (text: string, spacing = 16, indent = false) => {
     if (y < 80) newPage();
     page.drawText(text, { x: indent ? LIST_INDENT : MARGIN, y, size: 11, font });
@@ -71,28 +145,43 @@ export async function generarPDF(data: any) {
   line(`Cantidad de invitados: ${data.evento.invitados}`);
   line(`Salón deseado: ${data.local?.nombre || "No seleccionado"}`);
 
+  // Cargar imagen
+  await insertImage("https://diintec.com/ayllu/assets/images/servicio-decoracion.jpg", 400);
+
+  // SI LA IMAGEN YA USÓ TODA LA HOJA, FORZAR UNA NUEVA PÁGINA
+  if (y < 200) {   // puedes ajustar 200 según el espacio que quieras
+    newPage();
+  }  
   // ========================================
   // SERVICIO DE CATERING
   // ========================================
   sectionTitle("Servicio de Catering");
-  line("El cóctel de bienvenida se brinda al inicio de la recepción.");
+  longLine("El coctel de bienvenida se brinda al inicio de la recepción, los invitados socializan mientras esperan la llegada de los novios, a continuación, deben elegir 1 (una) variedad entre las siguientes opciones:");
   line("A continuación, los productos seleccionados son:");
-
+  
   // Coctel
-  if (data.categorias.coctel) line(`• Cóctel: ${data.categorias.coctel.nombre}`, 16, true);
+  if (data.categorias.coctel?.length) {
+    const coctelNames = data.categorias.coctel.map(p => p.nombre).join(', ');
+    line(`• Cóctel: ${coctelNames}`, 16, true);
+  }
 
   // Entradas
-  if (data.categorias.entrada) line(`• Entrada: ${data.categorias.entrada.nombre}`, 16, true);
+  if (data.categorias.entrada?.length) {
+    const entradaNames = data.categorias.entrada.map(p => p.nombre).join(', ');
+    line(`• Entrada: ${entradaNames}`, 16, true);
+  }
 
   // Fondos
-  if (data.categorias.fondo) line(`• Fondo: ${data.categorias.fondo.nombre}`, 16, true);
-
+  if (data.categorias.fondo?.length) {
+    const fondoNames = data.categorias.fondo.map(p => p.nombre).join(', ');
+    line(`• Fondo: ${fondoNames}`, 16, true);
+  }
   // Entremeses
   if (data.categorias.entremeses?.length) {
     sectionTitle("Entremeses");
     data.categorias.entremeses.forEach((item: any) => line(`• ${item.nombre}`, 16, true));
   }
-
+   
   // ========================================
   // MOBILIARIO Y DECORACIÓN
   // ========================================
@@ -110,7 +199,13 @@ export async function generarPDF(data: any) {
     sectionTitle("Fuentes");
     data.categorias.fuentes.forEach((m: any) => line(`• ${m.nombre}`, 16, true));
   }
-
+    // Cargar imagen
+  await insertImage("https://diintec.com/ayllu/assets/images/servicio-locales.jpg", 400);
+  
+  // SI LA IMAGEN YA USÓ TODA LA HOJA, FORZAR UNA NUEVA PÁGINA
+  if (y < 200) {   // puedes ajustar 200 según el espacio que quieras
+    newPage();
+  }  
   // ========================================
   // PERSONAL
   // ========================================
@@ -167,11 +262,35 @@ export async function generarPDF(data: any) {
   // ========================================
   // RESUMEN Y TOTALES
   // ========================================
+  const drawTable = (rows: any[]) => {
+    const col1X = MARGIN;
+    const col2X = width - MARGIN - 120;
+    const rowHeight = 20;
+
+    // Encabezado
+    page.drawText("Descripción", { x: col1X, y, size: 12, font });
+    page.drawText("Monto", { x: col2X, y, size: 12, font });
+    y -= rowHeight;
+
+    rows.forEach(r => {
+      if (y < 80) newPage();
+
+      page.drawText(r.label, { x: col1X, y, size: 11, font });
+      page.drawText(r.value, { x: col2X, y, size: 11, font });
+
+      y -= rowHeight;
+    });
+  };
+
+  // USO
   sectionTitle("Resumen de Presupuesto");
-  line(`Costo por invitado: S/ ${data.totales?.costoPorInvitado || 0}`);
-  line(`Garantía Catering: S/ ${data.totales?.garantia || 0}`);
-  line(`Alquiler de salón: S/ ${data.local?.precioAlquiler || 0}`);
-  line(`Total Final: S/ ${data.totales?.totalFinal || 0}`);
+
+  drawTable([
+    { label: "Costo por invitado", value: `S/ ${data.totales?.costoPorInvitado || 0}` },
+    { label: "Garantía Catering", value: `S/ ${data.totales?.garantia || 0}` },
+    { label: "Alquiler de salón", value: `S/ ${data.local?.precioAlquiler || 0}` },
+  ]);
+
 
   drawFooter();
 

@@ -405,74 +405,100 @@
 
                          </div>                            
                         <!-- LOCAL -->
-                        <div class="my-5">
-                            <h6 class="text-dark fw-bold mb-1">Local seleccionado</h6>
-                            <div class="ps-2">
-                                <p class="m-0">
-                                    <b>{{ resumen.local?.nombre || '—' }}</b>
-                                    <br>
-                                    <b>{{ resumen.local?.direccion || '—' }}</b>
-                                    <br>
-                                    <!-- <b>{{resumen.evento?.invitados || '—'}}</b> -->
-                                </p>
-                            </div>
-                        </div>
+<div class="my-5">
+    <h6 class="text-dark fw-bold mb-1">Local seleccionado</h6>
+    <div class="ps-2">
+        <p class="m-0">
+            <b>{{ resumen.local?.nombre || '—' }}</b><br>
+            <b>{{ resumen.local?.direccion || '—' }}</b>
+        </p>
+    </div>
+</div>
 
-                        
+<!-- CATEGORÍAS -->
+<h6 class="fw-bold text-dark mb-3">Servicios Incluidos</h6>
 
-                        <!-- CATEGORÍAS -->
-                        <h6 class="fw-bold text-dark mb-3">Servicios Incluidos</h6>
+<div class="row g-3 ps-2">
 
-                        <div class="row g-3 ps-2">
+    <!-- COCTEL (1 producto) -->
+    <div class="col-md-2">
+        <p class="m-0 text-secondary">Coctel ({{ resumen.coctel?.length || 0 }})</p>
+        <div *ngIf="resumen.coctel?.length; else sinCoctel">
+            <ng-container *ngFor="let e of resumen.coctel">
+                <span class="d-block fw-bold">• {{ e.nombre }}</span>
+            </ng-container>
+        </div>
+        <ng-template #sinCoctel>
+            <h6 class="fw-bold text-secondary">—</h6>
+        </ng-template>
+    </div>
 
-                            <div class="col-md-2">
-                                <p class="m-0 text-secondary">Coctel</p>
-                                <h6 class="fw-bold">{{ resumen.coctel?.nombre || '—' }}</h6>
-                            </div>
+    <!-- ENTRADA (varios) -->
+    <div class="col-md-4">
+        <p class="m-0 text-secondary">
+            Entrada ({{ resumen.entrada?.length || 0 }})
+        </p>
+        <div *ngIf="resumen.entrada?.length; else sinEntrada">
+            <ng-container *ngFor="let e of resumen.entrada">
+                <span class="d-block fw-bold">• {{ e.nombre }}</span>
+            </ng-container>
+        </div>
+        <ng-template #sinEntrada>
+            <h6 class="fw-bold text-secondary">—</h6>
+        </ng-template>
+    </div>
 
-                            <div class="col-md-4">
-                                <p class="m-0 text-secondary">Entrada</p>
-                                <h6 class="fw-bold">{{ resumen.entrada?.nombre || '—' }}</h6>
-                            </div>
+    <!-- FONDO (varios) -->
+    <div class="col-md-4">
+        <p class="m-0 text-secondary">
+            Fondo ({{ resumen.fondo?.length || 0 }})
+        </p>
+        <div *ngIf="resumen.fondo?.length; else sinFondo">
+            <ng-container *ngFor="let f of resumen.fondo">
+                <span class="d-block fw-bold">• {{ f.nombre }}</span>
+            </ng-container>
+        </div>
+        <ng-template #sinFondo>
+            <h6 class="fw-bold text-secondary">—</h6>
+        </ng-template>
+    </div>
 
-                            <div class="col-md-4">
-                                <p class="m-0 text-secondary">Fondo</p>
-                                <h6 class="fw-bold">{{ resumen.fondo?.nombre || '—' }}</h6>
-                            </div>
+    <!-- ENTREMES -->
+    <div class="col-md-12 mt-3">
+        <p class="m-0 text-secondary">
+            Entremeses ({{ resumen.entremeses?.length || 0 }}/5)
+        </p>
 
-                            <!-- ENTREMES -->
-                            <div class="col-md-12 mt-3">
-                                <p class="m-0 text-secondary">Entremeses ({{ resumen.entremeses.length }}/5)</p>
-                                <ul class="list-unstyled mt-1">
-                                    <li *ngFor="let e of resumen.entremeses" class="mb-1">
-                                        <span class=" bg-light text-dark  px-3 py-2 w-100 d-flex justify-content-between align-items-center">
-                                            <span>• {{ e.nombre }}</span>
-                                            <!-- <b>S/ {{ e.precio }}</b> -->
-                                        </span>
-                                    </li>
-                                </ul>
-                            </div>
+        <ul class="list-unstyled mt-1">
+            <li *ngFor="let e of resumen.entremeses" class="mb-1">
+                <span class="bg-light text-dark px-3 py-2 w-100 d-flex justify-content-between align-items-center">
+                    <span>• {{ e.nombre }}</span>
+                </span>
+            </li>
+            
+            <li *ngIf="resumen.entremeses?.length === 0" class="text-secondary fst-italic">—</li>
+        </ul>
+    </div>
 
-                        </div>
+</div>
 
-                        
+<!-- ADICIONALES -->
+<div class="my-3">
+    <h6 class="fw-bold text-dark mb-2">Servicios Adicionales</h6>
 
-                        <!-- ADICIONALES -->
-                        <div class="my-3">
-                            <h6 class="fw-bold text-dark mb-2">Servicios Adicionales</h6>
+    <ul class="list-unstyled">
+        <li *ngFor="let a of resumen.adicionales" class="mb-1">
+            <span class="bg-opacity-10 text-dark px-3 py-2 w-100">
+                {{ a.nombre }}
+            </span>
+        </li>
 
-                            <ul class="">
-                                <li *ngFor="let a of resumen.adicionales" class="mb-1">
-                                    <span class=" bg-opacity-10 text-dark px-3 py-2 w-100">
-                                        {{ a.nombre }}
-                                    </span>
-                                </li>
+        <li *ngIf="resumen.adicionales?.length === 0" class="text-secondary fst-italic">
+            — Sin adicionales —
+        </li>
+    </ul>
+</div>
 
-                                <li *ngIf="resumen.adicionales.length === 0" class="text-secondary fst-italic">
-                                    — Sin adicionales —
-                                </li>
-                            </ul>
-                        </div>
 
                         <hr>
 

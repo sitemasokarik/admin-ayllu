@@ -11,19 +11,19 @@
     </a>
   </div>
     <div class="sidebar-menu-area">
-    <!-- <ul id="sidebar-menu" class="sidebar-menu">
+    <ul id="sidebar-menu" class="sidebar-menu">
       <li *ngFor="let item of menuVisible">
         <a [routerLink]="item.ruta">
-          <iconify-icon icon="solar:home-smile-angle-outline" class="menu-icon"></iconify-icon>
+          <i class="ri-{{item.icono}} text-xl me-6 d-flex w-auto"></i>
           <span>{{ item.nombre }}</span>
         </a>
       </li>
-    </ul> -->
+    </ul>
     
-     <ul class="sidebar-menu" id="sidebar-menu">
+     <!-- <ul class="sidebar-menu" id="sidebar-menu">
       <li class="">
         <a routerLink="/home">
-          <iconify-icon icon="solar:home-smile-angle-outline" class="menu-icon"></iconify-icon>
+          <i class="ri-home-line text-xl me-6 d-flex w-auto"></i>
           <span>Inicio</span>
         </a>
       </li>
@@ -37,13 +37,13 @@
 
       <li>
         <a routerLink="/table-cotizaciones">
-          <iconify-icon icon="mingcute:storage-line" class="menu-icon"></iconify-icon>
+          <i class="ri-article-line text-xl me-6 d-flex w-auto"></i>
           <span>Listado Cotizaciones</span>
         </a>
       </li>
       <li>
         <a routerLink="/table-forms">
-          <iconify-icon icon="bi:chat-dots" class="menu-icon"></iconify-icon>
+          <i class="ri-contacts-book-2-line text-xl me-6 d-flex w-auto"></i>
           <span>Contáctanos</span>
         </a>
       </li>
@@ -119,7 +119,7 @@
           <span>Empresa</span>
         </a>
       </li>               
-    </ul>
+    </ul> -->
   </div>
 </aside>
 

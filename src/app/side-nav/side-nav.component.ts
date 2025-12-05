@@ -45,7 +45,8 @@ export class SideNavComponent implements AfterViewInit, OnInit, OnDestroy {
       .map(p => ({
         paginaID: p.paginaID,
         nombre: p.paginaNombre,
-        ruta: "/" + this.slugify(p.paginaNombre)
+        ruta: p.url,
+        icono: p.icono
       }));
     
     const localStorageTheme = localStorage.getItem('theme');

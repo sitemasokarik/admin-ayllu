@@ -124,54 +124,56 @@ pendingLoads = 4; // locales, categories, products, servicios
   selectedCategory: any = null;
   selectedSubcategory: any = null;
  
-seleccionarProducto(subcat: any, producto: any) {
-  const key = subcat.nombre
-    .toLowerCase()
-    .replace(/\s+/g, '')
-    .replace(/[^a-z0-9]/g, '');
+  seleccionarProducto(subcat: any, producto: any) {
+    const key = this.normalizeKey(subcat.nombre);
+    const categorias = this.presupuesto.categorias;
 
-  const c = this.presupuesto.categorias;
-
-  if (c[key] === undefined) {
-    const limite = PresupuestadorConfig.limitesCategorias[key] || Infinity;
-    c[key] = limite === 1 ? null : [];
-  }
-
-  const limite = PresupuestadorConfig.limitesCategorias[key] || Infinity;
-
-  if (Array.isArray(c[key])) {
-    if (c[key].some(p => p.productoID === producto.productoID)) {
-      c[key] = c[key].filter(p => p.productoID !== producto.productoID);
-    } else {
-      if (c[key].length >= limite) {
-        // 🔥 Mensaje bonito con SweetAlert2
-        Swal.fire({
-          toast: true,
-          position: 'top-end',
-          icon: 'warning',
-          title: `Máximo ${limite} ${key} alcanzado`,
-          showConfirmButton: false,
-          timer: 2000,
-          timerProgressBar: true,
-          background: '#f8d7da', // fondo rosa claro
-          color: '#721c24',      // texto
-          width: 'auto',   // que ajuste al contenido
-          padding: '0.25rem 0.75rem',
-
-        });
-        return;
-      }
-      c[key].push(producto);
+    // Inicializar estructura dinámica
+    if (!categorias[key]) {
+      categorias[key] = subcat.limite === 1 ? null : [];
     }
-  } else {
-    c[key] = producto;
+
+    const limite = subcat.limite ?? Infinity;
+
+    // 🔹 Selección única
+    if (!Array.isArray(categorias[key])) {
+      if (categorias[key]?.productoID === producto.productoID) {
+        categorias[key] = null; // deselecciona
+      } else {
+        categorias[key] = producto; // selecciona
+      }
+    }
+
+    // 🔹 Multi-selección
+    else {
+      const existe = categorias[key].some(p => p.productoID === producto.productoID);
+
+      if (existe) {
+        categorias[key] = categorias[key].filter(p => p.productoID !== producto.productoID);
+      } else {
+
+        // 🔥 Validar límite desde la BD
+        if (categorias[key].length >= limite) {
+          Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'warning',
+            title: `Máximo ${limite} ${subcat.nombre}`,
+            showConfirmButton: false,
+            timer: 2000
+          });
+          return;
+        }
+
+        categorias[key].push(producto);
+      }
+    }
+
+    this.save();
+    this.calcularTotales();
+    this.actualizarResumen();
+
   }
-
-  this.save();
-  this.calcularTotales();
-}
-
-
 
 
   selectCategory(cat: any) {
@@ -183,28 +185,18 @@ seleccionarProducto(subcat: any, producto: any) {
     this.selectedSubcategory = { ...sub, categoriaPadreID: cat.categoriaID };
   }
 
-isProductoSeleccionado(producto: any, subcategoria: any) {
-  if (!subcategoria || !subcategoria.nombre) return false;
+  isProductoSeleccionado(producto: any, subcat: any): boolean {
+    const key = this.normalizeKey(subcat.nombre);
+    const val = this.presupuesto.categorias[key];
 
-  const key = subcategoria.nombre
-    .toLowerCase()
-    .replace(/\s+/g, '')
-    .replace(/[^a-z0-9]/g, '');
+    if (!val) return false;
 
-  const c = this.presupuesto.categorias;
+    if (Array.isArray(val)) {
+      return val.some(p => p.productoID === producto.productoID);
+    }
 
-  if (key === 'coctel' || key === 'entrada' || key === 'fondo') {
-    return c[key]?.productoID === producto.productoID;
+    return val.productoID === producto.productoID;
   }
-
-  if (key === 'entremeses') {
-    return c.entremeses.some(p => p.productoID === producto.productoID);
-  }
-
-  // para todas las demás subcategorías
-  return c[key]?.some(p => p.productoID === producto.productoID);
-}
-
 
 
 
@@ -261,6 +253,7 @@ loadServiciosAdicionales(): void {
       }
       if (cat.subcategorias && cat.subcategorias.length > 0) {
         leaves = leaves.concat(this.getLeafCategories(cat.subcategorias));
+        console.log(leaves);
       }
     });
 
@@ -270,6 +263,7 @@ loadServiciosAdicionales(): void {
 loadCategories(): void {
   this.userService.getAllHierarchy().subscribe({
     next: res => {
+      console.log(res);
       this.categories = res.data || [];
 
       // Crea un mapa dinámico de categorías
@@ -280,14 +274,10 @@ loadCategories(): void {
       leaves.forEach(sub => {
         const key = this.normalizeKey(sub.nombre);
 
-        if (sub.nombre === 'Entremeses') {
-          this.presupuesto.categorias[key] = [];
-        }
-        else if (['coctel','entrada','fondo'].includes(key)) {
+        if (sub.limite === 1) {
           this.presupuesto.categorias[key] = null;
-        }
-        else {
-          this.presupuesto.categorias[key] = []; // múltiple por defecto
+        } else {
+          this.presupuesto.categorias[key] = [];  // Multi selección
         }
       });
 

@@ -21,6 +21,7 @@ export class AddCategorysComponent {
     categoriaPadreID: null, // <- padre por defecto
     nombre: "",
     descripcion: "",
+    limite: null,
     nivel: 0, // se calculará antes de enviar
     usuarioCreacion: ""
   };

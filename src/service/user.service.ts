@@ -4,20 +4,20 @@ import { Observable } from "rxjs";
 
 @Injectable({ providedIn: "root" })
 export class UserService {
-	private apiUrl = "http://caeteringdcodepe.runasp.net/api/v1/usuario"; // URL completa de tu API
-	private apiUrlCategorias = "http://caeteringdcodepe.runasp.net/api/v1/categoria"; // URL completa de tu API
-	private apiUrlProductos = "http://caeteringdcodepe.runasp.net/api/v1/Producto"; // URL completa de tu API
-	private apiUrlClientes = "http://caeteringdcodepe.runasp.net/api/v1/Cliente"; // URL completa de tu API
-	private apiUrlLocales = "http://caeteringdcodepe.runasp.net/api/v1/local"; // URL de tu API de Local
-	private apiUrlEmpresa = "http://caeteringdcodepe.runasp.net/api/v1/empresa"; // <-- URL de Empresa
-	private apiUrlBlog = "http://caeteringdcodepe.runasp.net/api/v1/blog";
-	private apiUrlFormulario = "http://caeteringdcodepe.runasp.net/api/v1/contactanos";
-	private apiUrlServicio = "http://caeteringdcodepe.runasp.net/api/v1/ServicioAdicional";
-	private apiUrlCotizacion = "http://caeteringdcodepe.runasp.net/api/v1/cotizacion";
-	private apiUrlEvento = "http://caeteringdcodepe.runasp.net/api/v1/evento";
-	private apiUrlRol = "http://caeteringdcodepe.runasp.net/api/v1/rol";
-	private apiUrlPage = "http://caeteringdcodepe.runasp.net/api/v1/pagina";
-	private apiUrlPermiso = "http://caeteringdcodepe.runasp.net/api/v1/permiso";
+	private apiUrl = "https://aylluperuback.premiumasp.net/api/v1/usuario"; // URL completa de tu API
+	private apiUrlCategorias = "https://aylluperuback.premiumasp.net/api/v1/categoria"; // URL completa de tu API
+	private apiUrlProductos = "https://aylluperuback.premiumasp.net/api/v1/Producto"; // URL completa de tu API
+	private apiUrlClientes = "https://aylluperuback.premiumasp.net/api/v1/Cliente"; // URL completa de tu API
+	private apiUrlLocales = "https://aylluperuback.premiumasp.net/api/v1/local"; // URL de tu API de Local
+	private apiUrlEmpresa = "https://aylluperuback.premiumasp.net/api/v1/empresa"; // <-- URL de Empresa
+	private apiUrlBlog = "https://aylluperuback.premiumasp.net/api/v1/blog";
+	private apiUrlFormulario = "https://aylluperuback.premiumasp.net/api/v1/contactanos";
+	private apiUrlServicio = "https://aylluperuback.premiumasp.net/api/v1/ServicioAdicional";
+	private apiUrlCotizacion = "https://aylluperuback.premiumasp.net/api/v1/cotizacion";
+	private apiUrlEvento = "https://aylluperuback.premiumasp.net/api/v1/evento";
+	private apiUrlRol = "https://aylluperuback.premiumasp.net/api/v1/rol";
+	private apiUrlPage = "https://aylluperuback.premiumasp.net/api/v1/pagina";
+	private apiUrlPermiso = "https://aylluperuback.premiumasp.net/api/v1/permiso";
 
 	constructor(private http: HttpClient) {}
 
