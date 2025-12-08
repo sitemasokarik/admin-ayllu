@@ -11,6 +11,7 @@ import jsPDF from 'jspdf';
 import { PDFDocument, rgb } from 'pdf-lib';
 import { generarPDF } from './pdf-generator';
 import { PresupuestadorConfig } from './presupuestador.config';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-presupuestador',
@@ -34,6 +35,7 @@ export class PresupuestadorComponent {
   modalImage: string | null = null;
   personal: any[] = [];
 
+  eventos: any[] = [];
   // =========================================================
   // 🔥 OBJETO PRESUPUESTO COMPLETO Y CORRECTO
   // =========================================================
@@ -48,7 +50,7 @@ export class PresupuestadorComponent {
       documento: "",
       personal: []
     },
-    
+    eventoID: null,
     evento: {
       tipo: "",
       invitados: 0,
@@ -85,7 +87,7 @@ export class PresupuestadorComponent {
     private userService: UserService,
     private authService: AuthService
   ) {}
-pendingLoads = 4; // locales, categories, products, servicios
+  pendingLoads = 4; // locales, categories, products, servicios
   onSubmit() {
     console.log("Formulario enviado");
     // más lógica luego
@@ -108,7 +110,179 @@ pendingLoads = 4; // locales, categories, products, servicios
     this.loadCategories();
     this.loadProducts();
     this.loadServiciosAdicionales();
+    this.loadEventos();
   }
+  onEventoChange() {
+    const ev = this.eventos.find(e => e.eventoID === this.presupuesto.eventoID);
+
+    if (ev) {
+      this.presupuesto.evento.tipo = ev.nombre;   // <-- Aquí sí se guarda
+      localStorage.setItem("tipoEvento", ev.nombre); // <-- Guardas en localStorage
+    } else {
+      this.presupuesto.evento.tipo = "";
+      localStorage.removeItem("tipoEvento");
+    }
+
+    this.save();
+  }
+
+  loadEventos(): void {
+    this.userService.getAllEventos().subscribe({
+      next: (res: any) => {
+        this.eventos = res.data || [];
+      },
+      error: err => {
+        console.error("Error cargando Eventos:", err);
+        Swal.fire("Error", "No se pudieron cargar las Eventos", "error");
+      }
+    });
+  }
+  async generarCotizacionSiNoExiste(): Promise<void> {
+
+    const data = this.presupuesto;
+
+    if (!data.cliente.clienteID) {
+
+      const doc = data.cliente.documento;
+
+      try {
+        const existingClient: any = await lastValueFrom(
+          this.userService.getByDocument(doc)
+        );
+
+        if (existingClient?.data?.clienteID) {
+          data.cliente.clienteID = existingClient.data.clienteID;
+          this.save();
+        } else {
+          const resCliente: any = await lastValueFrom(
+            this.userService.createCliente({
+              tipoDocumento: data.cliente.tipoDocumento,
+              numeroDocumento: data.cliente.documento,
+              nombreCompleto: `${data.cliente.nombre} ${data.cliente.apellido}`.trim(),
+              email: data.cliente.correo,
+              telefono: data.cliente.telefono1,
+              telefonoSecundario: data.cliente.telefono2,
+              direccion: data.cliente.direccion ?? "",
+              ciudad: "Lima",
+              pais: "Peru",
+              tipoCliente: "Natural",
+              observaciones: "",
+              esVIP: false,
+              fechaNacimiento: null,
+              usuarioCreacion: "Cesar"
+            })
+          );
+
+          data.cliente.clienteID = resCliente.data.clienteID;
+          this.save();
+        }
+
+      } catch (error) {
+        console.error("❌ Error verificando cliente:", error);
+        Swal.fire("Error", "No se pudo validar el cliente", "error");
+        this.loading = false;
+        return;
+      }
+    }
+
+    // Si ya existe cotización → no crear otra
+    if (data.cotizacionID) return;
+
+    // ============================================================
+    // 2️⃣ Armado de productos del menú
+    // ============================================================
+    const c = data.categorias;
+    const productos: any[] = [];
+
+    const agregar = (p: any) => {
+      if (!p) return;
+      productos.push({
+        productoID: p.productoID,
+        cantidad: 1,
+        precio: p.precio,
+        usuarioCreacion: "Cesar"
+      });
+    };
+
+    ["coctel", "entrada", "fondo"].forEach(key => {
+      const arr = c[key];
+      if (Array.isArray(arr)) arr.forEach(p => agregar(p));
+    });
+
+    ["entremeses", "menajeria", "mesassillas", "fuentes", "mesas", "sillas"].forEach(key => {
+      const arr = c[key];
+      if (Array.isArray(arr)) arr.forEach(p => agregar(p));
+    });
+
+    // ============================================================
+    // 3️⃣ Servicios adicionales
+    // ============================================================
+    const servicios = (data.adicionales || []).map(s => ({
+      servicioID: s.servicioID,
+      cantidad: 1,
+      precio: s.precio,
+      usuarioCreacion: "Cesar"
+    }));
+
+    // ============================================================
+    // 4️⃣ Body de Cotización
+    // ============================================================
+    const t = data.totales;
+
+    const subtotalMenu = t.totalEvento || 0;
+    const precioLocal = t.local || 0;
+    const garantia = t.garantia || 0;
+    const adicionales = t.adicionales || 0;
+
+    const totalEvento = subtotalMenu + precioLocal + garantia + adicionales;
+    const tarifaPorInvitado = t.costoPorInvitado || 0;
+    const precioPorCubierto =
+      data.evento.invitados > 0 ? totalEvento / data.evento.invitados : 0;
+
+    const bodyCotizacion = {
+      clienteID: data.cliente.clienteID,
+      localID: data.local?.localID ?? 0,
+      eventoID: data.eventoID,
+      localCapacidad: data.local?.capacidad ?? 0,
+
+      fechaTentativa: data.evento.fecha1,
+      fechaTentativaOpcional: data.evento.fecha2,
+      numeroInvitados: data.evento.invitados || 0,
+
+      costoDePersonal: PresupuestadorConfig.personal, 
+
+      garantia: garantia,
+      subtotalMenu: subtotalMenu,
+      totalEvento: totalEvento,
+      tarifaMenuPorInvitado: tarifaPorInvitado,
+      precioPorCubierto: precioPorCubierto,
+      precioPorCubiertoConDescuento: 0,
+
+      totalCotizacion: 0, // Como lo pediste
+
+      observacion: data.observacion ?? "",
+      usuarioCreacion: "Admin",
+      estadoCotizacion: "Activo",
+      estado: true,
+
+      cotizacionProducto: productos,
+      cotizacionServicio: servicios
+    };
+
+    // ============================================================
+    // 5️⃣ Crear Cotización
+    // ============================================================
+    const resCot: any = await lastValueFrom(
+      this.userService.createCotizaciones(bodyCotizacion)
+    );
+
+    data.cotizacionID = resCot.data.cotizacionID;
+    this.save();
+  }
+
+
+
+
   private normalizeKey(nombre: string): string {
     return nombre
       .toLowerCase()
@@ -417,20 +591,23 @@ calcularCostoPorInvitado() {
   // 2) Entremeses
   total += (c.entremeses || []).reduce((s, p) => s + (p.precio || 0), 0);
 
-  // 3) Otras categorías múltiples
+  // 3) Otras categorías múltiples (EXCLUYENDO entremeses)
   Object.keys(c).forEach(key => {
+    if (key === 'entremeses') return; // 👈 evitar doble suma
+
     const val = c[key];
     if (Array.isArray(val)) {
       total += val.reduce((s, p) => s + (p.precio || 0), 0);
     }
   });
 
-  // 4) Personal fijo +100
+  // 4) Personal fijo
   total += PresupuestadorConfig.personal;
 
   this.presupuesto.costoPorInvitado = total;
   return total;
 }
+
 
 
 
@@ -501,25 +678,100 @@ get resumenCompleto(): boolean {
   );
 }
 
-  async descargarPDF() {
-    const presupuesto = JSON.parse(localStorage.getItem('presupuesto') || '{}');
+async descargarPDF() {
+  try {
+    this.loading = true;
 
-    // Genera los bytes del PDF
+    // 1. Generar cotización si aún no existe
+    await this.generarCotizacionSiNoExiste();
+
+    // 2. Guardar datos antes del PDF
+    this.save();
+
+    const presupuesto = this.presupuesto;
     const pdfBytes = await generarPDF(presupuesto);
 
-    // Crea el BLOB
+    // 3. Descargar PDF
     const blob = new Blob([pdfBytes], { type: 'application/pdf' });
     const url = URL.createObjectURL(blob);
 
-    // Crea el enlace y dispara la descarga
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'presupuesto.pdf';
-    link.click();
-
-    // Limpieza
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Presupuesto - ${presupuesto.cliente.nombre} ${presupuesto.cliente.apellido}.pdf`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
     URL.revokeObjectURL(url);
+
+    // ============================
+    // 4. MOSTRAR MODAL DE ÉXITO
+    // ============================
+    await Swal.fire({
+      title: "¡Cotización Realizada!",
+      text: "El PDF ha sido generado correctamente.",
+      icon: "success",
+      confirmButtonText: "Aceptar"
+    });
+
+    // ============================
+    // 5. BORRAR LOCALSTORAGE
+    // ============================
+    localStorage.removeItem("presupuesto");
+
+    // ============================
+    // 6. REINICIAR TODO EL FORMULARIO
+    // ============================
+    this.presupuesto = {
+      cliente: {
+        nombre: "",
+        apellido: "",
+        telefono1: "",
+        telefono2: "",
+        correo: "",
+        tipoDocumento: "",
+        documento: "",
+        personal: []
+      },
+
+      eventoID: null,
+
+      evento: {
+        tipo: "",
+        invitados: 0,
+        fecha1: "",
+        fecha2: ""
+      },
+
+      local: null,
+
+      categorias: {
+        coctel: null,
+        entrada: null,
+        fondo: null,
+        entremeses: []
+      },
+
+      adicionales: [],
+      costoPorInvitado: 0,
+      totales: {}
+    };
+
+  } catch (error) {
+    console.error(error);
+
+    Swal.fire({
+      title: "Error",
+      text: "Ocurrió un problema al generar la cotización.",
+      icon: "error"
+    });
+
+  } finally {
+    this.loading = false;
   }
+}
+
+
+
 
   // =========================================================
   // 💾 GUARDAR EN LOCALSTORAGE

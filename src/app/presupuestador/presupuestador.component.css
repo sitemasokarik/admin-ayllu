@@ -70,6 +70,7 @@ p{
   height: 80px; */
   object-fit: cover;
   border-radius: 6px;
+  height: 100%;
 }
 
 .cursor-pointer {
@@ -90,4 +91,18 @@ p{
   max-width: 250px;         /* opcional, ancho máximo */
   padding: 0.25rem 0.75rem; /* ajustar padding */
   font-size: 0.85rem;       /* tamaño de letra más pequeño */
+}
+
+.product-card .product-images{
+  width: 100%;
+  height: 220px;
+}
+.img_servicio_adicional{
+    width: 100%;
+  height: 220px;
+}
+.img_servicio_adicional img{
+  object-fit: cover;
+  border-radius: 6px;
+  height: 100%;
 }

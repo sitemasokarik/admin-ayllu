@@ -18,6 +18,7 @@ export class UserService {
 	private apiUrlRol = "https://aylluperuback.premiumasp.net/api/v1/rol";
 	private apiUrlPage = "https://aylluperuback.premiumasp.net/api/v1/pagina";
 	private apiUrlPermiso = "https://aylluperuback.premiumasp.net/api/v1/permiso";
+	
 
 	constructor(private http: HttpClient) {}
 
@@ -94,7 +95,12 @@ export class UserService {
 	getAllClients(): Observable<any> {
 		return this.http.get(`${this.apiUrlClientes}/getall`);
 	}
-
+	getByDocument(numeroDocumento: number): Observable<any> {
+		return this.http.get(`${this.apiUrlClientes}/getbydocumento/${numeroDocumento}`);
+	}	
+	createCliente(clienteData: any): Observable<any> {
+		return this.http.post(`${this.apiUrlClientes}/create`, clienteData);
+	}
 	//LOCAL METHODS
 	getAllLocales(): Observable<any> {
 		return this.http.get(`${this.apiUrlLocales}/getall`);
@@ -174,6 +180,9 @@ export class UserService {
 	updateCotizaciones(localData: any): Observable<any> {
 		return this.http.put(`${this.apiUrlCotizacion}/update`, localData);
 	}
+	updateCotizacionComentario(localData: any): Observable<any> {
+		return this.http.put(`${this.apiUrlCotizacion}/update`, localData);
+	}	
 	deleteCotizaciones(id: number): Observable<any> {
 		return this.http.delete(`${this.apiUrlCotizacion}/delete/${id}`);
 	}	

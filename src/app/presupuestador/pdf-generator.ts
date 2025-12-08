@@ -256,7 +256,7 @@ const insertImage = async (url: string, maxHeight = 400) => {
   // ========================================
   if (data.adicionales?.length) {
     sectionTitle("Servicios Adicionales");
-    data.adicionales.forEach((a: any) => line(`• ${a.nombre} - S/ ${a.precio}`, 16, true));
+    data.adicionales.forEach((a: any) => line(`• ${a.nombre}`, 16, true));
   }
 
   // ========================================
@@ -283,7 +283,9 @@ const insertImage = async (url: string, maxHeight = 400) => {
   };
 
   y -= 20; 
-
+  const totalAdicionales = data.adicionales?.reduce((sum: number, a: any) => {
+    return sum + (a.precio || 0);
+  }, 0) || 0;
   // USO
   sectionTitle("Resumen de Presupuesto");
 
@@ -291,6 +293,7 @@ const insertImage = async (url: string, maxHeight = 400) => {
     { label: "Costo por invitado", value: `S/ ${data.totales?.costoPorInvitado || 0}` },
     { label: "Garantía Catering", value: `S/ ${data.totales?.garantia || 0}` },
     { label: "Alquiler de salón", value: `S/ ${data.local?.precioAlquiler || 0}` },
+    { label: "Servicios adicionales", value: `S/ ${totalAdicionales}` },
   ]);
 
 

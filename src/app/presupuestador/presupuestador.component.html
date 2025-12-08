@@ -15,17 +15,18 @@
                     <label class="form-label">Nombre Cliente</label>
                     <div class="icon-field has-validation">
                         <span class="icon">
-                        <iconify-icon icon="f7:person"></iconify-icon>
+                            <iconify-icon icon="f7:person"></iconify-icon>
                         </span>
-<input 
-  type="text" 
-  [(ngModel)]="presupuesto.cliente.nombre" 
-  name="cli_nombre"
-  (input)="save()" 
-  class="form-control" 
-  placeholder="Nombres" 
-  required>                        <div class="invalid-feedback">
-                        Please provide first name
+                        <input 
+                        type="text" 
+                        [(ngModel)]="presupuesto.cliente.nombre" 
+                        name="cli_nombre"
+                        (input)="save()" 
+                        class="form-control" 
+                        placeholder="Nombres" 
+                        required>                        
+                        <div class="invalid-feedback">
+                            Please provide first name
                         </div>
                     </div>
                 </div>  
@@ -33,90 +34,96 @@
                     <label class="form-label">Apellido Cliente</label>
                     <div class="icon-field has-validation">
                         <span class="icon">
-                        <iconify-icon icon="f7:person"></iconify-icon>
+                            <iconify-icon icon="f7:person"></iconify-icon>
                         </span>
-<input 
-  type="text" 
-  [(ngModel)]="presupuesto.cliente.apellido" 
-  name="cli_apellido"
-  (input)="save()" 
-  class="form-control" 
-  placeholder="Apellidos" 
-  required>
+                        <input 
+                        type="text" 
+                        [(ngModel)]="presupuesto.cliente.apellido" 
+                        name="cli_apellido"
+                        (input)="save()" 
+                        class="form-control" 
+                        placeholder="Apellidos" 
+                        required>
                         <div class="invalid-feedback">
-                        Please provide first name
+                            Please provide first name
                         </div>
                     </div>
                 </div>     
                 <div class="col-md-3">
                     <label class="form-label">Celular 1</label>
-<input 
-  type="text" 
-  [(ngModel)]="presupuesto.cliente.telefono1"
-  name="cli_tel1"
-  (input)="save()" 
-  class="form-control" 
-  placeholder="(+51) 987 654 321">
+                    <input 
+                    type="text" 
+                    [(ngModel)]="presupuesto.cliente.telefono1"
+                    name="cli_tel1"
+                    (input)="save()" 
+                    class="form-control" 
+                    placeholder="(+51) 987 654 321">
                 </div>     
                 <div class="col-md-3">
                     <label class="form-label">Celular 2</label>
-<input 
-  type="text" 
-  [(ngModel)]="presupuesto.cliente.telefono2"
-  name="cli_tel2"
-  (input)="save()" 
-  class="form-control" 
-  placeholder="(+51) 987 654 321">
+                    <input 
+                    type="text" 
+                    [(ngModel)]="presupuesto.cliente.telefono2"
+                    name="cli_tel2"
+                    (input)="save()" 
+                    class="form-control" 
+                    placeholder="(+51) 987 654 321">
                 </div>                                       
                 <div class="col-md-4">
                     <label class="form-label">Correo</label>
                     <div class="icon-field has-validation">
                         <span class="icon">
-                        <iconify-icon icon="mage:email"></iconify-icon>
+                            <iconify-icon icon="mage:email"></iconify-icon>
                         </span>
-<input 
-  type="email" 
-  [(ngModel)]="presupuesto.cliente.correo"
-  name="cli_correo"
-  (input)="save()" 
-  class="form-control" 
-  placeholder="Correo" 
-  required>
+                        <input 
+                        type="email" 
+                        [(ngModel)]="presupuesto.cliente.correo"
+                        name="cli_correo"
+                        (input)="save()" 
+                        class="form-control" 
+                        placeholder="Correo" 
+                        required>
                         <div class="invalid-feedback">
-                        Please provide email address
+                            Please provide email address
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Tipo Documento</label>
-<select 
-  class="form-select"
-  [(ngModel)]="presupuesto.cliente.tipoDocumento"
-  name="cli_tipo_doc"
-  (change)="save()"
->
-    <option>Seleccionar</option>
-    <option>DNI</option>
-    <option>Pasaporte</option>
-</select>
-
+                    <select class="form-select" [(ngModel)]="presupuesto.cliente.tipoDocumento"
+                    name="cli_tipo_doc" (change)="save()">
+                        <option>Seleccionar</option>
+                        <option>DNI</option>
+                        <option>Pasaporte</option>
+                    </select>
                 </div>                
                 <div class="col-md-4">
                     <label class="form-label">Documento</label>
-<input 
-  type="text" 
-  [(ngModel)]="presupuesto.cliente.documento"
-  name="cli_doc"
-  (input)="save()" 
-  class="form-control" 
-  placeholder="Número Documento">
+                    <input 
+                    type="text" 
+                    [(ngModel)]="presupuesto.cliente.documento"
+                    name="cli_doc"
+                    (input)="save()" 
+                    class="form-control" 
+                    placeholder="Número Documento">
                 </div> 
                 
                 
                 <h6 class="mb-4 text-xl mt-5">Sobre mi Evento</h6>
                 <div class="col-md-3">
                     <label class="form-label">Tipo de Evento</label>
-                    <select 
+                    <select class="form-select radius-8" 
+                            [(ngModel)]="presupuesto.eventoID" 
+                            name="eventoID"
+                            (change)="onEventoChange()"
+                            required>
+                        <option [ngValue]="null" disabled>Seleccionar</option>
+                        <option *ngFor="let cat of eventos" [ngValue]="cat.eventoID">
+                            {{ cat.nombre }}
+                        </option>
+                    </select>
+                  
+                    <!-- <select 
                         class="form-select"
                         [(ngModel)]="presupuesto.evento.tipo"
                         name="evento_tipo"
@@ -127,42 +134,34 @@
                         <option>Quinceañero</option>
                         <option>Aniversario</option>
                         <option>Corporativo</option>
-                    </select>
+                    </select> -->
                 </div>
 
-<div class="col-md-3">
-  <label class="form-label">N° DE INVITADOS</label>
-    <input 
-    type="number" 
-    [(ngModel)]="presupuesto.evento.invitados"
-    name="evento_invitados"
-    (input)="save(); filtrarLocalesPorInvitados()" 
-    class="form-control"
-    >
-
-</div>
+                <div class="col-md-3">
+                <label class="form-label">N° DE INVITADOS</label>
+                    <input type="number" [(ngModel)]="presupuesto.evento.invitados"
+                    name="evento_invitados"
+                    (input)="save(); filtrarLocalesPorInvitados()" 
+                    class="form-control">
+                </div>
   
-<div class="col-md-3">
-  <label class="form-label">FECHA TENTATIVA 1</label>
-  <input 
-    type="date" 
-    [(ngModel)]="presupuesto.evento.fecha1"
-    name="evento_fecha1"
-    (change)="save()" 
-    class="form-control"
-  >
-</div>
+                <div class="col-md-3">
+                <label class="form-label">FECHA TENTATIVA 1</label>
+                <input 
+                    type="date" 
+                    [(ngModel)]="presupuesto.evento.fecha1"
+                    name="evento_fecha1"
+                    (change)="save()" 
+                    class="form-control">
+                </div>
 
-<div class="col-md-3">
-  <label class="form-label">FECHA TENTATIVA 2</label>
-  <input 
-    type="date" 
-    [(ngModel)]="presupuesto.evento.fecha2"
-    name="evento_fecha2"
-    (change)="save()" 
-    class="form-control"
-  >
-</div>
+                <div class="col-md-3">
+                <label class="form-label">FECHA TENTATIVA 2</label>
+                <input type="date" [(ngModel)]="presupuesto.evento.fecha2"
+                    name="evento_fecha2"
+                    (change)="save()" 
+                    class="form-control">
+                </div>
 
                 
                 <h6 class="mb-4 text-xl mt-5"></h6>
@@ -171,8 +170,6 @@
                     <div class="card p-0 overflow-hidden position-relative radius-12 h-100">
                         <div class="card-header py-16 px-24 bg-base border border-end-0 border-start-0 border-top-0 d-flex align-items-center justify-content-between">
                             <h6 class="text-lg mb-3">Mi Evento</h6>
-
-
                         </div>
 
                         <div class="card-body p-24 pt-10">
@@ -217,8 +214,7 @@
 
                                             <div class="row">
                                                 <div class="col-md-6 mb-3" *ngFor="let local of localesFiltrados">
-                                                    <div 
-                                                        class="card radius-12 p-3" 
+                                                    <div class="card radius-12 p-3" 
                                                         [ngClass]="{'border-primary border-3': presupuesto.local?.localID === local.localID}">
                                                         
                                                         <h6 class="fw-bold">{{ local.nombre }}</h6>
@@ -240,24 +236,19 @@
                                                         {{ presupuesto.local?.localID === local.localID ? 'Seleccionado' : 'Seleccionar Local' }}
                                                         </button>
                                                     </div>
-                                                    </div>
-
-
+                                                </div>
                                             </div>
                                         </div>
-
                                     </div>
-                                    <div class="tab-pane fade"
-                                        *ngFor="let cat of categories"
+                                    <div class="tab-pane fade" *ngFor="let cat of categories"
                                         [attr.id]="'tab-'+cat.categoriaID"
                                         role="tabpanel">
-
                                         <div class="category-container p-3">
                                             <h5 class="mb-4 fw-bold text-dark">{{ cat.nombre }}</h5>
 
                                             <!-- Subcategorías en grid -->
                                             <div class="row g-3 my-4">
-                                                <div class="col-md-2" *ngFor="let sub of cat.subcategorias">
+                                                <div class="col" *ngFor="let sub of cat.subcategorias">
                                                     <div class="card subcategory-card p-3 h-100 cursor-pointer"
                                                         [class.selected]="
                                                             selectedSubcategory?.subcategoriaID === sub.subcategoriaID &&
@@ -274,46 +265,41 @@
                                                 <h6 class="my-3">Productos de {{ selectedSubcategory.nombre }}</h6>
                                                 <h6 class="my-3"> {{ selectedSubcategory.descripcion }}</h6>
                                                 <div class="row g-3">
-                                                <div class="col-md-4" *ngFor="let p of getProductsByLeafCategory(selectedSubcategory)">
-                                                    <div class="card product-card h-100 p-3"
-                                                        [class.selected]="isProductoSeleccionado(p, selectedSubcategory)">
-                                                    
-                                                    <h6 class="fw-bold">{{ p.nombre }}</h6>
-                                                    <p class="mb-2 text-">{{ p.descripcion }}</p>
+                                                    <div class="col-md-4" *ngFor="let p of getProductsByLeafCategory(selectedSubcategory)">
+                                                        <div class="card product-card h-100 p-3"
+                                                            [class.selected]="isProductoSeleccionado(p, selectedSubcategory)">
+                                                        
+                                                            <h6 class="fw-bold">{{ p.nombre }}</h6>
+                                                            <p class="mb-2 text-">{{ p.descripcion }}</p>
 
-                                                    <div class="product-images d-flex gap-3 py-3 overflow-auto">
-                                                        <img *ngFor="let foto of p.fotosUrls"
-                                                            [src]="foto"
-                                                            (click)="openImageModal(foto)"
-                                                            class="img-fluid rounded cursor-zoom">
+                                                            <div class="product-images d-flex gap-3 py-3 overflow-auto">
+                                                                <img *ngFor="let foto of p.fotosUrls"
+                                                                    [src]="foto"
+                                                                    (click)="openImageModal(foto)"
+                                                                    class="img-fluid rounded cursor-zoom">
+                                                            </div>
+
+                                                            <button type="button" class="btn"
+                                                                    [ngClass]="isProductoSeleccionado(p, selectedSubcategory) ? 'btn-success' : 'btn-primary'"
+                                                                    (click)="seleccionarProducto(selectedSubcategory, p)">
+                                                                {{ isProductoSeleccionado(p, selectedSubcategory) ? 'Seleccionado' : 'Agregar al evento' }}
+                                                            </button>
+                                                        </div>
                                                     </div>
-
-                                                   <button type="button" 
-        class="btn"
-        [ngClass]="isProductoSeleccionado(p, selectedSubcategory) ? 'btn-success' : 'btn-primary'"
-        (click)="seleccionarProducto(selectedSubcategory, p)">
-    {{ isProductoSeleccionado(p, selectedSubcategory) ? 'Seleccionado' : 'Agregar al evento' }}
-</button>
-                                                    </div>
-
                                                 </div>
-                                                </div>
-
                                                 <ng-template #noProducts>
-                                                <p class="text-muted fst-italic">No hay productos para esta subcategoría</p>
+                                                    <p class="text-muted fst-italic">No hay productos para esta subcategoría</p>
                                                 </ng-template>
                                             </div>
                                         </div>
                                     </div>
-
-
 
                                     <div class="tab-pane fade show" id="pills-vertical-servicios" role="tabpanel" aria-labelledby="pills-vertical-servicios-tab" tabindex="0">
                                         <div class="flex-grow-1">
                                             <h6 class="text-lg my-3">Servicios Adicionales</h6>
 
                                             <div class="row" *ngIf="serviciosAdicionales?.length > 0">
-                                                <div class="col-md-3 mb-3" *ngFor="let servicio of serviciosAdicionales">
+                                                <div class="col-md-4 mb-3" *ngFor="let servicio of serviciosAdicionales">
                                                     <div class="card radius-12 p-3">
                                                         <h6 class="fw-bold">{{ servicio.nombre }}</h6>
                                                         <p class="mb-1"><strong>Descripcion:</strong> {{ servicio.descripcion }}</p>
@@ -321,7 +307,7 @@
                                                         <p class="mb-1"><strong>Horas Evento:</strong> {{ servicio.horasEvento }}</p> -->
 
                                                         <!-- Mostrar fotos -->
-                                                        <div class="d-flex gap-2 mt-2 overflow-x-scroll">
+                                                        <div class="d-flex gap-2 mt-2 overflow-x-scroll img_servicio_adicional">
                                                             <img *ngFor="let foto of servicio.fotosUrls"
                                                                  [src]="foto"
                                                                 (click)="openImageModal(foto)"
@@ -329,11 +315,11 @@
                                                         </div>
 
                                                        <button type="button"
-        class="btn mt-3 w-100"
-        [ngClass]="isAdicionalSeleccionado(servicio) ? 'btn-success' : 'btn-primary'"
-        (click)="addAdicional(servicio)">
-    {{ isAdicionalSeleccionado(servicio) ? 'Seleccionado' : 'Añadir' }}
-</button>
+                                                                class="btn mt-3 w-100"
+                                                                [ngClass]="isAdicionalSeleccionado(servicio) ? 'btn-success' : 'btn-primary'"
+                                                                (click)="addAdicional(servicio)">
+                                                            {{ isAdicionalSeleccionado(servicio) ? 'Seleccionado' : 'Añadir' }}
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -386,132 +372,109 @@
                 
                 <div class="col-12 mt-4">
                     <div class="card radius-12 p-5 shadow-sm " style="background:#fafafa;">
-                         <div class="card-header py-16 px-24 border border-end-0 border-start-0 border-top-0 d-flex align-items-center justify-content-between">
+                        <div class="card-header py-16 px-24 border border-end-0 border-start-0 border-top-0 d-flex align-items-center justify-content-between">
                             <h5 class="fw-bold ">Resumen del Presupuesto</h5>
-                            <button 
-                            type="button" 
-                            class="btn d-flex align-items-center gap-1"
+                            <button type="button" class="btn d-flex align-items-center gap-1"
                             [ngClass]="resumenCompleto ? 'btn-light' : 'btn-secondary'"
                             [disabled]="!resumenCompleto"
                             (click)="descargarPDF()"
                             >
-                            <iconify-icon icon="solar:download-linear" class="text-xl"></iconify-icon>
-                            Descargar
+                                <iconify-icon icon="solar:download-linear" class="text-xl"></iconify-icon>
+                                Descargar
                             </button>
-<p *ngIf="!resumenCompleto" class="text-danger mt-2">
-  Complete todos los campos del presupuesto para poder descargar Proforma.
-</p>
-
-
-                         </div>                            
+                            <p *ngIf="!resumenCompleto" class="text-danger mt-2">
+                                Complete todos los campos del presupuesto para poder descargar Proforma.
+                            </p>
+                        </div>                            
                         <!-- LOCAL -->
-<div class="my-5">
-    <h6 class="text-dark fw-bold mb-1">Local seleccionado</h6>
-    <div class="ps-2">
-        <p class="m-0">
-            <b>{{ resumen.local?.nombre || '—' }}</b><br>
-            <b>{{ resumen.local?.direccion || '—' }}</b>
-        </p>
-    </div>
-</div>
+                        <div class="my-5">
+                            <h6 class="text-dark fw-bold mb-1">Local seleccionado</h6>
+                            <div class="ps-2">
+                                <p class="m-0">
+                                    <b>{{ resumen.local?.nombre || '—' }}</b><br>
+                                    <b>{{ resumen.local?.direccion || '—' }}</b>
+                                </p>
+                            </div>
+                        </div>
 
-<!-- CATEGORÍAS -->
-<h6 class="fw-bold text-dark mb-3">Servicios Incluidos</h6>
+                        <!-- CATEGORÍAS -->
+                        <h6 class="fw-bold text-dark mb-3">Servicios Incluidos</h6>
 
-<div class="row g-3 ps-2">
+                        <div class="row g-3 ps-2">
+                            <!-- COCTEL (1 producto) -->
+                            <div class="col-md-2">
+                                <p class="m-0 text-secondary">Coctel ({{ resumen.coctel?.length || 0 }})</p>
+                                <div *ngIf="resumen.coctel?.length; else sinCoctel">
+                                    <ng-container *ngFor="let e of resumen.coctel">
+                                        <span class="d-block fw-bold">• {{ e.nombre }}</span>
+                                    </ng-container>
+                                </div>
+                                <ng-template #sinCoctel>
+                                    <h6 class="fw-bold text-secondary">—</h6>
+                                </ng-template>
+                            </div>
 
-    <!-- COCTEL (1 producto) -->
-    <div class="col-md-2">
-        <p class="m-0 text-secondary">Coctel ({{ resumen.coctel?.length || 0 }})</p>
-        <div *ngIf="resumen.coctel?.length; else sinCoctel">
-            <ng-container *ngFor="let e of resumen.coctel">
-                <span class="d-block fw-bold">• {{ e.nombre }}</span>
-            </ng-container>
-        </div>
-        <ng-template #sinCoctel>
-            <h6 class="fw-bold text-secondary">—</h6>
-        </ng-template>
-    </div>
+                            <!-- ENTRADA (varios) -->
+                            <div class="col-md-4">
+                                <p class="m-0 text-secondary">
+                                    Entrada ({{ resumen.entrada?.length || 0 }})
+                                </p>
+                                <div *ngIf="resumen.entrada?.length; else sinEntrada">
+                                    <ng-container *ngFor="let e of resumen.entrada">
+                                        <span class="d-block fw-bold">• {{ e.nombre }}</span>
+                                    </ng-container>
+                                </div>
+                                <ng-template #sinEntrada>
+                                    <h6 class="fw-bold text-secondary">—</h6>
+                                </ng-template>
+                            </div>
+                            <!-- FONDO (varios) -->
+                            <div class="col-md-4">
+                                <p class="m-0 text-secondary">
+                                    Fondo ({{ resumen.fondo?.length || 0 }})
+                                </p>
+                                <div *ngIf="resumen.fondo?.length; else sinFondo">
+                                    <ng-container *ngFor="let f of resumen.fondo">
+                                        <span class="d-block fw-bold">• {{ f.nombre }}</span>
+                                    </ng-container>
+                                </div>
+                                <ng-template #sinFondo>
+                                    <h6 class="fw-bold text-secondary">—</h6>
+                                </ng-template>
+                            </div>
+                            <!-- ENTREMES -->
+                            <div class="col-md-12 mt-3">
+                                <p class="m-0 text-secondary">
+                                    Entremeses ({{ resumen.entremeses?.length || 0 }}/5)
+                                </p>
+                                <ul class="list-unstyled mt-1">
+                                    <li *ngFor="let e of resumen.entremeses" class="mb-1">
+                                        <span class="bg-light text-dark px-3 py-2 w-100 d-flex justify-content-between align-items-center">
+                                            <span>• {{ e.nombre }}</span>
+                                        </span>
+                                    </li>
+                                    <li *ngIf="resumen.entremeses?.length === 0" class="text-secondary fst-italic">—</li>
+                                </ul>
+                            </div>
+                        </div>
 
-    <!-- ENTRADA (varios) -->
-    <div class="col-md-4">
-        <p class="m-0 text-secondary">
-            Entrada ({{ resumen.entrada?.length || 0 }})
-        </p>
-        <div *ngIf="resumen.entrada?.length; else sinEntrada">
-            <ng-container *ngFor="let e of resumen.entrada">
-                <span class="d-block fw-bold">• {{ e.nombre }}</span>
-            </ng-container>
-        </div>
-        <ng-template #sinEntrada>
-            <h6 class="fw-bold text-secondary">—</h6>
-        </ng-template>
-    </div>
-
-    <!-- FONDO (varios) -->
-    <div class="col-md-4">
-        <p class="m-0 text-secondary">
-            Fondo ({{ resumen.fondo?.length || 0 }})
-        </p>
-        <div *ngIf="resumen.fondo?.length; else sinFondo">
-            <ng-container *ngFor="let f of resumen.fondo">
-                <span class="d-block fw-bold">• {{ f.nombre }}</span>
-            </ng-container>
-        </div>
-        <ng-template #sinFondo>
-            <h6 class="fw-bold text-secondary">—</h6>
-        </ng-template>
-    </div>
-
-    <!-- ENTREMES -->
-    <div class="col-md-12 mt-3">
-        <p class="m-0 text-secondary">
-            Entremeses ({{ resumen.entremeses?.length || 0 }}/5)
-        </p>
-
-        <ul class="list-unstyled mt-1">
-            <li *ngFor="let e of resumen.entremeses" class="mb-1">
-                <span class="bg-light text-dark px-3 py-2 w-100 d-flex justify-content-between align-items-center">
-                    <span>• {{ e.nombre }}</span>
-                </span>
-            </li>
-            
-            <li *ngIf="resumen.entremeses?.length === 0" class="text-secondary fst-italic">—</li>
-        </ul>
-    </div>
-
-</div>
-
-<!-- ADICIONALES -->
-<div class="my-3">
-    <h6 class="fw-bold text-dark mb-2">Servicios Adicionales</h6>
-
-    <ul class="list-unstyled">
-        <li *ngFor="let a of resumen.adicionales" class="mb-1">
-            <span class="bg-opacity-10 text-dark px-3 py-2 w-100">
-                {{ a.nombre }}
-            </span>
-        </li>
-
-        <li *ngIf="resumen.adicionales?.length === 0" class="text-secondary fst-italic">
-            — Sin adicionales —
-        </li>
-    </ul>
-</div>
-
-
+                        <!-- ADICIONALES -->
+                        <div class="my-3">
+                            <h6 class="fw-bold text-dark mb-2">Servicios Adicionales</h6>
+                            <ul class="list-unstyled">
+                                <li *ngFor="let a of resumen.adicionales" class="mb-1">
+                                    <span class="bg-opacity-10 text-dark px-3 py-2 w-100">
+                                        {{ a.nombre }}
+                                    </span>
+                                </li>
+                                <li *ngIf="resumen.adicionales?.length === 0" class="text-secondary fst-italic">
+                                    — Sin adicionales —
+                                </li>
+                            </ul>
+                        </div>
                         <hr>
-
-                        <!-- TOTAL -->
-                        <!-- <div class="my-5">
-                            <h6 class="fw-bold text-success">
-                                TOTAL FINAL: S/ {{ resumen.total }}
-                            </h6>
-                        </div> -->
                     </div>
                 </div>
-
-                
             </form>
         </div>
     </div>

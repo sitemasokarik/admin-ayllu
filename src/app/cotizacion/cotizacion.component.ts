@@ -94,6 +94,98 @@ openServicioModal(cotizacionID: number) {
   });
 }
 
+operObservacion(cotizacionID: number) {
+  this.userService.getCotizacionesById(cotizacionID).subscribe({
+    next: (res: any) => {
+      this.selectedCotizaciones = res.data[0]; // solo objeto
+
+      setTimeout(() => {
+        const modalEl = document.getElementById("cotizacionModalComentario");
+        if (modalEl) {
+          const modal = new bootstrap.Modal(modalEl);
+          modal.show();
+        }
+      }, 50);
+    },
+    error: () => Swal.fire("Error", "No se pudo cargar la información", "error"),
+  });
+}
+
+openEstadoModal(cotizacionID: number) {
+  this.userService.getCotizacionesById(cotizacionID).subscribe({
+    next: (res: any) => {
+      this.selectedCotizaciones = res.data[0]; // solo objeto
+
+      setTimeout(() => {
+        const modalEl = document.getElementById("modalEstadoCotizacion");
+        if (modalEl) {
+          const modal = new bootstrap.Modal(modalEl);
+          modal.show();
+        }
+      }, 50);
+    },
+    error: () => Swal.fire("Error", "No se pudo cargar la información", "error"),
+  });
+}
+guardarEstado() {
+  const data = {
+    ...this.selectedCotizaciones,
+    usuarioModificacion: "Admin"
+  };
+
+  this.userService.updateCotizaciones(data).subscribe({
+    next: () => {
+      Swal.fire("¡Guardado!", "Estado actualizado correctamente.", "success").then(() => {
+
+        // 👉 Cerrar modal
+        const modalEl = document.getElementById("cotizacionModalComentario");
+        const modal = bootstrap.Modal.getInstance(modalEl!);
+        modal?.hide();
+
+        // 👉 Limpiar la variable
+        this.selectedCotizaciones = null;
+
+        // 👉 Recargar toda la vista
+        window.location.reload();
+      });
+    },
+    error: () => {
+      Swal.fire("Error", "No se pudo guardar el Estado", "error");
+    }
+  });
+}
+
+guardarObservacion() {
+  const data = {
+    ...this.selectedCotizaciones,
+    usuarioModificacion: "Admin"
+  };
+
+  this.userService.updateCotizacionComentario(data).subscribe({
+    next: () => {
+      Swal.fire("¡Guardado!", "Observación registrada correctamente.", "success").then(() => {
+
+        // 👉 Cerrar modal
+        const modalEl = document.getElementById("cotizacionModalComentario");
+        const modal = bootstrap.Modal.getInstance(modalEl!);
+        modal?.hide();
+
+        // 👉 Limpiar la variable
+        this.selectedCotizaciones = null;
+
+        // 👉 Recargar toda la vista
+        window.location.reload();
+      });
+    },
+    error: () => {
+      Swal.fire("Error", "No se pudo guardar la observación", "error");
+    }
+  });
+}
+
+
+
+
 
 editServicio(cotizacionID: number) {
   const item = this.cotizaciones.find(c => c.cotizacionID === cotizacionID);
@@ -129,28 +221,40 @@ editServicio(cotizacionID: number) {
     });
   }
 
-submitEditServicio() {
-  if (!this.selectedCotizaciones) return;
+  submitEditServicio() {
+    if (!this.selectedCotizaciones) return;
 
-  // Agregar usuario que modifica
-  this.selectedCotizaciones.usuarioModificacion = this.authService.getUser()?.username || "desconocido";
+    const nuevoPrecio = Number(this.selectedCotizaciones.precioPorCubierto);
 
+    // 👉 No modificamos precioPorCubierto original
+    this.selectedCotizaciones.precioPorCubiertoConDescuento = nuevoPrecio;
 
-  this.userService.updateServicio(this.selectedCotizaciones).subscribe({
-    next: () => {
-      Swal.fire("Éxito", "Servicio actualizado correctamente", "success");
-      // Actualizar tabla local
-      const index = this.cotizaciones.findIndex(s => s.cotizacionID === this.selectedCotizaciones.cotizacionID);
-      if (index > -1) this.cotizaciones[index] = { ...this.selectedCotizaciones };
-      this.selectedCotizaciones = null;
+    // 👉 Recalcular total
+    const invitados = Number(this.selectedCotizaciones.numeroInvitados || 0);
+    this.selectedCotizaciones.totalCotizacion = nuevoPrecio * invitados;
 
-      // Cerrar modal
-      const modalEl = document.getElementById("editServicioModal");
-      const modal = bootstrap.Modal.getInstance(modalEl);
-      modal?.hide();
-    },
-    error: err => Swal.fire("Error", "No se pudo actualizar el servicio", "error")
-  });
-}  
+    // 👉 Agregar usuario que modifica
+    this.selectedCotizaciones.usuarioModificacion = "Admin";
+
+    // 👉 Llamar a UPDATE
+    this.userService.updateCotizaciones(this.selectedCotizaciones)
+      .subscribe({
+        next: () => {
+          Swal.fire("Éxito", "Descuento actualizado correctamente", "success")
+            .then(() => {
+              
+              // 👉 Cerrar modal
+              const modalEl = document.getElementById("editServicioModal");
+              const modal = bootstrap.Modal.getInstance(modalEl!);
+              modal?.hide();
+
+              // 👉 Refrescar toda la vista
+              window.location.reload();
+            });
+        },
+        error: () => Swal.fire("Error", "No se pudo actualizar el Descuento", "error")
+      });
+  }
+
 
 }
