@@ -3,7 +3,7 @@ import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router
 import { Subscription } from 'rxjs';
 import { ThemeService } from '../services/theme.service';
 import { CommonModule } from '@angular/common';
-
+import { AuthService } from "../../service/auth.service";
 
 @Component({
   selector: 'app-side-nav',
@@ -15,6 +15,10 @@ import { CommonModule } from '@angular/common';
 })
 export class SideNavComponent implements AfterViewInit, OnInit, OnDestroy {
   title = 'SideNav';
+
+  userName: string = '';
+  userRole: string = '';
+
   currentYear: number = new Date().getFullYear();
   private routerSubscription!: Subscription;
   @ViewChild('themeButton') themeButton!: ElementRef<HTMLElement>;
@@ -25,7 +29,8 @@ export class SideNavComponent implements AfterViewInit, OnInit, OnDestroy {
   constructor(private router: Router,
     private themeService: ThemeService,
     private renderer: Renderer2,
-    private el: ElementRef
+    private el: ElementRef,
+    private authService: AuthService
   ) { }
   slugify(text: string): string {
     return text
@@ -38,7 +43,11 @@ export class SideNavComponent implements AfterViewInit, OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.permisos = JSON.parse(localStorage.getItem("permisos") || "[]");
+    const user = this.authService.getUser();
 
+    this.userName = user.nombre;   // Usa tu campo real
+    this.userRole = user.rolNombre; 
+    
     // Construimos el menú dinámico
     this.menuVisible = this.permisos
       .filter(p => p.puedeVer)

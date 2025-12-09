@@ -90,11 +90,11 @@
                       title="Eliminar" (click)="deleteServicio(c.cotizacionID)">
                 <i class="bx bx-trash text-xl"></i>
               </button>
-              <button 
-                class="btn btn-sm btn-primary" 
-                (click)="openEstadoModal(c.cotizacionID)">
-                Cambiar Estado
-              </button>
+              <button class="bg-info-focus bg-hover-info-200 text-info-600 fw-medium
+                            w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
+                      title="Cambiar Estado" (click)="openEstadoModal(c.cotizacionID)">
+                <i class="bx bx-refresh text-xl"></i>
+              </button>              
             </div>
           </td>
 
@@ -275,16 +275,16 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
 
-      <div class="modal-body">
+    <div class="modal-body" *ngIf="selectedCotizaciones">
+      <label class="fw-bold">Estado:</label>
+      <select class="form-select mt-2"
+              [(ngModel)]="selectedCotizaciones.estadoCotizacion">
+        <option value="Activo">Activo</option>
+        <option value="Anulado">Anulado</option>
+        <option value="Evento">Evento</option>
+      </select>
+    </div>
 
-        <label class="fw-bold">Estado:</label>
-        <select class="form-select mt-2" [(ngModel)]="selectedCotizaciones.estadoCotizacion">
-          <option value="Activo">Activo</option>
-          <option value="Anulado">Anulado</option>
-          <option value="Evento">Evento</option>
-        </select>
-
-      </div>
 
       <div class="modal-footer">
         <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>

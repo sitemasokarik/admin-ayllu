@@ -137,6 +137,32 @@ export class PresupuestadorComponent {
       }
     });
   }
+
+private async crearNuevoCliente(data: any) {
+  const resCliente: any = await lastValueFrom(
+    this.userService.createCliente({
+      tipoDocumento: data.cliente.tipoDocumento,
+      numeroDocumento: data.cliente.documento,
+      nombreCompleto: `${data.cliente.nombre} ${data.cliente.apellido}`.trim(),
+      email: data.cliente.correo,
+      telefono: data.cliente.telefono1,
+      telefonoSecundario: data.cliente.telefono2,
+      direccion: data.cliente.direccion ?? "",
+      ciudad: "Lima",
+      pais: "Peru",
+      tipoCliente: "Natural",
+      observaciones: "",
+      esVIP: false,
+      fechaNacimiento: null,
+      usuarioCreacion: "Cesar"
+    })
+  );
+
+  data.cliente.clienteID = resCliente.data.clienteID;
+  this.save();
+}
+
+
   async generarCotizacionSiNoExiste(): Promise<void> {
 
     const data = this.presupuesto;
@@ -146,43 +172,33 @@ export class PresupuestadorComponent {
       const doc = data.cliente.documento;
 
       try {
-        const existingClient: any = await lastValueFrom(
+        const resp: any = await lastValueFrom(
           this.userService.getByDocument(doc)
         );
 
-        if (existingClient?.data?.clienteID) {
-          data.cliente.clienteID = existingClient.data.clienteID;
+        const idExistente = resp?.data?.clienteID ?? null;
+
+        if (idExistente) {
+          // Cliente ya existe
+          data.cliente.clienteID = idExistente;
           this.save();
         } else {
-          const resCliente: any = await lastValueFrom(
-            this.userService.createCliente({
-              tipoDocumento: data.cliente.tipoDocumento,
-              numeroDocumento: data.cliente.documento,
-              nombreCompleto: `${data.cliente.nombre} ${data.cliente.apellido}`.trim(),
-              email: data.cliente.correo,
-              telefono: data.cliente.telefono1,
-              telefonoSecundario: data.cliente.telefono2,
-              direccion: data.cliente.direccion ?? "",
-              ciudad: "Lima",
-              pais: "Peru",
-              tipoCliente: "Natural",
-              observaciones: "",
-              esVIP: false,
-              fechaNacimiento: null,
-              usuarioCreacion: "Cesar"
-            })
-          );
-
-          data.cliente.clienteID = resCliente.data.clienteID;
-          this.save();
+          // Respuesta sin cliente → se crea
+          await this.crearNuevoCliente(data);
         }
 
-      } catch (error) {
-        console.error("❌ Error verificando cliente:", error);
-        Swal.fire("Error", "No se pudo validar el cliente", "error");
-        this.loading = false;
-        return;
+      } catch (error: any) {
+        // Si el error viene con 404 → no existe → crear
+        if (error?.status === 404) {
+          await this.crearNuevoCliente(data);
+        } else {
+          console.error("❌ Error verificando cliente:", error);
+          Swal.fire("Error", "No se pudo comprobar el cliente", "error");
+          this.loading = false;
+          return;
+        }
       }
+
     }
 
     // Si ya existe cotización → no crear otra
@@ -668,13 +684,13 @@ closeImageModal() {
 
 get resumenCompleto(): boolean {
   const r = this.resumen;
-  
+
   return !!(
-    r.local &&
-    r.coctel &&
-    r.entrada &&
-    r.fondo &&
-    r.entremeses.length > 0
+    r?.local &&
+    r?.coctel &&
+    r?.entrada &&
+    r?.fondo &&
+    (r?.entremeses?.length ?? 0) > 0
   );
 }
 
