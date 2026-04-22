@@ -1,0 +1,62 @@
+<div *ngIf="loading" class="d-flex flex-column align-items-center justify-content-center py-80">
+  <div class="spinner-grow text-primary mb-3" style="width: 3rem; height: 3rem;"></div>
+  <p class="text-primary-light">Cargando Clientes...</p>
+</div> 
+
+
+<div *ngIf="!loading" class="dashboard-main-body">
+  <app-breadcrumb [title]="title"></app-breadcrumb>
+  <div class="card basic-data-table">
+    <div class="card-body">
+      <table class="table bordered-table sm-table mb-0" id="dataTable">
+        <thead>
+          <tr>
+            <th scope="col">
+              <div class="d-flex align-items-center gap-10">
+                ID
+              </div>
+            </th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Correo</th>
+            <th scope="col" class="text-center">Número</th>
+            <th scope="col" class="text-center">Número Documento</th>
+            <th scope="col" class="text-center">Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let cliente of clients">
+            <td>
+              <div class="d-flex align-items-center gap-10">
+                {{ cliente.clienteID}}
+              </div>
+            </td>
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="flex-grow-1">
+                  <span class="text-md mb-0 fw-normal text-secondary-light">{{ cliente.nombreCompleto }}</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <span class="text-md mb-0 fw-normal text-secondary-light">{{ cliente.email }}</span>
+            </td>
+            <td>
+              <span class="text-md mb-0 fw-normal text-secondary-light">{{ cliente.telefono }}</span>
+            </td>
+            <td>
+              <span class="text-md mb-0 fw-normal text-secondary-light">{{ cliente.numeroDocumento }}</span>
+            </td>
+            <td class="text-center">
+              <span [ngClass]="{
+                  'bg-success-focus text-success-600 border border-success-main': cliente.estado,
+                  'bg-danger-200 text-danger-600 border border-danger-main': !cliente.estado
+                }" class="px-24 py-4 radius-4 fw-medium text-sm">
+                {{ cliente.estado ? "Activo" : "Inactivo" }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -3,7 +3,7 @@ import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router
 import { Subscription } from 'rxjs';
 import { ThemeService } from '../services/theme.service';
 import { CommonModule } from '@angular/common';
-
+import { AuthService } from "../../service/auth.service";
 
 @Component({
   selector: 'app-side-nav',
@@ -15,20 +15,49 @@ import { CommonModule } from '@angular/common';
 })
 export class SideNavComponent implements AfterViewInit, OnInit, OnDestroy {
   title = 'SideNav';
+
+  userName: string = '';
+  userRole: string = '';
+
   currentYear: number = new Date().getFullYear();
   private routerSubscription!: Subscription;
   @ViewChild('themeButton') themeButton!: ElementRef<HTMLElement>;
 
   currentThemeSetting: string = 'light';
   isSidebarOpen = true;
-
+  menuVisible: any[] = [];
   constructor(private router: Router,
     private themeService: ThemeService,
     private renderer: Renderer2,
-    private el: ElementRef
+    private el: ElementRef,
+    private authService: AuthService
   ) { }
-  ngOnInit(): void {
+  slugify(text: string): string {
+    return text
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '') // quitar tildes
+      .replace(/[^a-z0-9]+/g, '-')     // reemplazar espacios por -
+      .replace(/^-+|-+$/g, '');        // quitar guiones sobrantes
+  }
 
+  ngOnInit(): void {
+    this.permisos = JSON.parse(localStorage.getItem("permisos") || "[]");
+    const user = this.authService.getUser();
+
+    this.userName = user.nombre;   // Usa tu campo real
+    this.userRole = user.rolNombre; 
+    
+    // Construimos el menú dinámico
+    this.menuVisible = this.permisos
+      .filter(p => p.puedeVer)
+      .map(p => ({
+        paginaID: p.paginaID,
+        nombre: p.paginaNombre,
+        ruta: p.url,
+        icono: p.icono
+      }));
+    
     const localStorageTheme = localStorage.getItem('theme');
     this.currentThemeSetting = this.themeService.calculateSettingAsThemeString(localStorageTheme);
 
@@ -211,7 +240,12 @@ export class SideNavComponent implements AfterViewInit, OnInit, OnDestroy {
       });
     });
   }
+permisos: any[] = [];
+ 
 
+canViewPage(paginaID: number): boolean {
+  return this.permisos.some(p => p.paginaID === paginaID && p.puedeVer === true);
+}
   toggleTheme(): void {
     const newTheme = this.currentThemeSetting === 'dark' ? 'light' : 'dark';
 

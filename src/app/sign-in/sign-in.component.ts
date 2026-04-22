@@ -1,55 +1,92 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import Swal from 'sweetalert2';
+import { Component, CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
+import { Router, RouterLink } from "@angular/router";
+import { FormsModule } from "@angular/forms";
+import { CommonModule } from "@angular/common";
+import Swal from "sweetalert2";
+import { AuthService } from "../../service/auth.service";
 
 @Component({
-  selector: 'app-sign-in',
-  standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  templateUrl: './sign-in.component.html',
-  styleUrls: ['./sign-in.component.css'],
+	selector: "app-sign-in",
+	standalone: true,
+	imports: [CommonModule, FormsModule, RouterLink],
+	schemas: [CUSTOM_ELEMENTS_SCHEMA],
+	templateUrl: "./sign-in.component.html",
+	styleUrls: ["./sign-in.component.css"],
 })
 export class SignInComponent {
-  title = 'Iniciar sesión';
-  email: string = 'admin@ayllu.com';
-  password: string = 'Password';
-  errorMessage: string = '';
-  showPassword: boolean = false;
+	userName: string = "";
+	password: string = "";
+	showPassword = false;
+	loading: boolean = false;
 
-  constructor(private readonly router: Router) {}
+	constructor(private readonly router: Router, private readonly authService: AuthService) {}
 
-  onSubmit(): void {
-    this.errorMessage = '';
-    const validEmail = 'admin@ayllu.com';
-    const validPassword = 'Password';
+onSubmit(): void {
+  this.loading = true;
 
-    if (this.email !== validEmail) {
-      this.errorMessage = 'Email inválido';
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Email inválido'
+  const credentials = {
+    userName: this.userName,
+    password: this.password,
+  };
+
+  this.authService.login(credentials).subscribe({
+    next: (resp: any) => {
+      this.loading = false;
+
+      const token = resp?.data?.token;
+      const user = resp?.data;
+
+      console.log("LOGIN:", user);
+
+      if (!token || !user) {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "No se recibió información válida",
+        });
+        return;
+      }
+
+      // Guardar token y usuario
+      this.authService.saveToken(token);
+      this.authService.saveUser(user);
+
+      // 🔥 TRAER PERMISOS SEGÚN EL ROL
+      this.authService.getRolById(user.rolID).subscribe((rolResp: any) => {
+
+        console.log("PERMISOS:", rolResp);
+
+        const permisos = rolResp?.data?.permisos || [];
+
+        // Guardar permisos en localStorage
+        localStorage.setItem("permisos", JSON.stringify(permisos));
+
+        Swal.fire({
+          icon: "success",
+          title: "Bienvenido",
+          text: `Hola ${user.nombre}!`,
+        });
+
+        this.router.navigate(["/home"]);
       });
-      return;
-    }
 
-    if (this.password !== validPassword) {
-      this.errorMessage = 'Contraseña incorrecta';
+    },
+
+    error: err => {
+      this.loading = false;
+      console.error("Error login:", err);
       Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Contraseña incorrecta'
+        icon: "error",
+        title: "Error",
+        text: "Credenciales incorrectas",
       });
-      return;
     }
+  });
+}
 
-    this.router.navigate(['/home']);
-  }
 
-  togglePassword(): void {
-    this.showPassword = !this.showPassword;
-  }
+
+	togglePassword() {
+		this.showPassword = !this.showPassword;
+	}
 }

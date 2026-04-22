@@ -1,0 +1,220 @@
+<div *ngIf="loading" class="d-flex flex-column align-items-center justify-content-center py-80">
+  <div class="spinner-grow text-primary mb-3" style="width: 3rem; height: 3rem;"></div>
+  <p class="text-primary-light">Cargando Productos...</p>
+</div> 
+
+<div *ngIf="!loading" class="dashboard-main-body">
+  <app-breadcrumb [title]="title"></app-breadcrumb>
+  <div class="card basic-data-table">
+    <div class="card-body">
+      <div class="justify-content-start d-flex pb-3">
+        <a routerLink="/add-product"
+          class="btn btn-primary text-sm btn-sm px-12 py-12 radius-8 d-flex align-items-center gap-2">
+          <iconify-icon icon="ic:baseline-plus" class="icon text-xl line-height-1"></iconify-icon>
+          Agregar Producto
+        </a>
+      </div>
+      <div class="table-responsive">
+      <table class="table bordered-table sm-table mb-0" id="dataTable">
+        <thead>
+          <tr>
+            <th scope="col">
+              <div class="d-flex align-items-center gap-10">
+                ID
+              </div>
+            </th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Categoría</th>
+            <th scope="col" class="text-center">Estado</th>
+            <th scope="col" class="text-center">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let category of productos">
+            <td>
+              <div class="d-flex align-items-center gap-10">
+                {{ category.productoID }}
+              </div>
+            </td>
+            <td>
+              <span class="text-md mb-0 fw-normal text-secondary-light">{{ category.nombre }}</span>
+            </td>
+            <td>
+              <span class="text-md mb-0 fw-normal text-secondary-light">{{ category.categoria }}</span>
+            </td>
+            <td class="text-center">
+              <span [ngClass]="{
+                      'bg-success-focus text-success-600 border border-success-main': category.estado,
+                      'bg-danger-200 text-danger-600 border border-danger-main': !category.estado
+                    }" class="px-24 py-4 radius-4 fw-medium text-sm">
+                {{ category.estado ? "Activo" : "Inactivo" }}
+              </span>
+            </td>
+            <td class="text-center">
+              <div class="d-flex align-items-center gap-10 justify-content-center">
+                <button type="button"
+                  class="bg-info-focus bg-hover-info-200 text-info-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
+                  title="Ver producto" (click)="openProductModal(category)">
+                  <i class="bx bx-show text-xl"></i>
+                </button>
+                <button type="button"
+                  class="bg-success-focus text-success-600 bg-hover-success-200 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
+                  title="Editar producto" (click)="editProduct(category)">
+                  <i class="bx bx-edit-alt text-xl"></i>
+                </button>
+                <button *ngIf="category.estado" type="button"
+                  class="remove-item-btn bg-danger-focus bg-hover-danger-200 text-danger-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
+                  title="Desactivar producto" (click)="deleteProduct(category.productoID)">
+                  <i class="bx bx-block text-xl"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>        
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Clásico Bootstrap -->
+<div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <!-- Header -->
+      <div class="modal-header">
+        <h5 class="modal-title" id="productModalLabel">Detalles del Producto</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body" *ngIf="selectedProduct">
+        <div class="p-4">
+          <div class="row g-3">
+            <!-- Nombre -->
+            <div class="col-md-6">
+              <h6 class="fw-semibold text-secondary mb-1">Nombre</h6>
+              <p class="mb-0">{{ selectedProduct.nombre }}</p>
+            </div>
+
+            <!-- Descripción -->
+            <div class="col-md-6">
+              <h6 class="fw-semibold text-secondary mb-1">Descripción</h6>
+              <p class="mb-0">{{ selectedProduct.descripcion }}</p>
+            </div>
+
+            <!-- Precio -->
+            <div class="col-md-6">
+              <h6 class="fw-semibold text-secondary mb-1">Precio</h6>
+              <p class="mb-0">{{ selectedProduct.precio | currency }}</p>
+            </div>
+
+            <!-- Precio de Costo -->
+            <div class="col-md-6">
+              <h6 class="fw-semibold text-secondary mb-1">Precio Costo</h6>
+              <p class="mb-0">{{ selectedProduct.precioCosto | currency }}</p>
+            </div>
+
+
+            <!-- Categoría -->
+            <div class="col-md-6">
+              <h6 class="fw-semibold text-secondary mb-1">Categoría</h6>
+              <p class="mb-0">{{ selectedProduct.categoryName }}</p>
+            </div>
+
+
+            <!-- Creado por -->
+            <div class="col-md-6">
+              <h6 class="fw-semibold text-secondary mb-1">Creado por</h6>
+              <p class="mb-0">{{ selectedProduct.usuarioCreacion }}</p>
+            </div>
+
+            <!-- Imagen -->
+            <div class="col-md-6">
+              <h6 class="fw-semibold text-secondary mb-1">Imagen</h6>
+              <img *ngIf="selectedProduct.imagenUrl" [src]="selectedProduct.imagenUrl" alt="Producto"
+                class="img-fluid rounded" />
+              <p *ngIf="!selectedProduct.imagenUrl">-</p>
+            </div>
+
+
+            <!-- Estado -->
+            <div class="col-md-6">
+              <h6 class="fw-semibold text-secondary mb-1">Estado</h6>
+              <p class="mb-0" [ngClass]="selectedProduct.estado ? 'text-success' : 'text-danger'">
+                {{ selectedProduct.estado ? "Activo" : "Inactivo" }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="editProductModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Editar Producto</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <form #editProductForm="ngForm" (ngSubmit)="submitEditProduct()" *ngIf="selectedProduct">
+          <div class="row g-3">
+            <!-- Nombre -->
+            <div class="col-md-6">
+              <label class="form-label">Nombre</label>
+              <input type="text" class="form-control" [(ngModel)]="selectedProduct.nombre" name="nombre" required
+                [ngModelOptions]="{standalone:true}" />
+            </div>
+
+            <!-- Descripción -->
+            <div class="col-md-6">
+              <label class="form-label">Descripción</label>
+              <textarea class="form-control" [(ngModel)]="selectedProduct.descripcion" name="descripcion" required
+                [ngModelOptions]="{standalone:true}"></textarea>
+            </div>
+
+            <!-- Precio -->
+            <div class="col-md-6">
+              <label class="form-label">Precio Venta</label>
+              <input type="number" class="form-control" [(ngModel)]="selectedProduct.precio" name="precio" required
+                [ngModelOptions]="{standalone:true}" />
+            </div>
+
+            <!-- Precio Costo -->
+            <div class="col-md-6">
+              <label class="form-label">Precio Costo</label>
+              <input type="number" class="form-control" [(ngModel)]="selectedProduct.precioCosto" name="precioCosto"
+                required [ngModelOptions]="{standalone:true}" />
+            </div>
+
+            <!-- URL Imagen -->
+            <div class="col-md-6">
+              <label class="form-label">Imagen URL</label>
+              <input type="text" class="form-control" [(ngModel)]="selectedProduct.imagenUrl" name="imagenUrl"
+                [ngModelOptions]="{standalone:true}" />
+            </div>
+
+            <!-- Categoría -->
+            <div class="col-md-6">
+              <label class="form-label">Categoría</label>
+              <select class="form-select" [(ngModel)]="selectedProduct.categoriaID" name="categoriaID" required>
+                <option value="" disabled selected>Seleccione una categoría</option>
+                <option *ngFor="let cat of categories" [value]="cat.categoriaID">{{ cat.nombre }}</option>
+              </select>
+            </div>
+
+          </div>
+
+          <div class="modal-footer mt-3">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            <button type="submit" class="btn btn-primary" [disabled]="editProductForm.invalid">Guardar Cambios</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

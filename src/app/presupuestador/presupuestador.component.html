@@ -1,3 +1,486 @@
-<div class="dashboard-main-body">
- 
+<div *ngIf="loading" class="d-flex flex-column align-items-center justify-content-center py-80">
+  <div class="spinner-grow text-primary mb-3" style="width: 3rem; height: 3rem;"></div>
+  <p class="text-primary-light">Cargando Datos Necesarios...</p>
+</div>
+
+<div *ngIf="!loading" class="dashboard-main-body">
+    <app-breadcrumb [title]="title"></app-breadcrumb>
+        
+    <div class="card h-100 p-0 radius-12">
+        <div class="border-bottom bg-base py-16 px-24">
+            
+            <form class="row gy-2" (ngSubmit)="onSubmit()">
+                <h6 class="mb-4 text-xl">Datos Cliente</h6>
+                <div class="col-md-3">
+                    <label class="form-label">Nombre Cliente</label>
+                    <div class="icon-field has-validation">
+                        <span class="icon">
+                            <iconify-icon icon="f7:person"></iconify-icon>
+                        </span>
+                        <input 
+                        type="text" 
+                        [(ngModel)]="presupuesto.cliente.nombre" 
+                        name="cli_nombre"
+                        (input)="save()" 
+                        class="form-control" 
+                        placeholder="Nombres" 
+                        required>                        
+                        <div class="invalid-feedback">
+                            Please provide first name
+                        </div>
+                    </div>
+                </div>  
+                <div class="col-md-3">
+                    <label class="form-label">Apellido Cliente</label>
+                    <div class="icon-field has-validation">
+                        <span class="icon">
+                            <iconify-icon icon="f7:person"></iconify-icon>
+                        </span>
+                        <input 
+                        type="text" 
+                        [(ngModel)]="presupuesto.cliente.apellido" 
+                        name="cli_apellido"
+                        (input)="save()" 
+                        class="form-control" 
+                        placeholder="Apellidos" 
+                        required>
+                        <div class="invalid-feedback">
+                            Please provide first name
+                        </div>
+                    </div>
+                </div>     
+                <div class="col-md-3">
+                    <label class="form-label">Celular 1</label>
+                    <input 
+                    type="text" 
+                    [(ngModel)]="presupuesto.cliente.telefono1"
+                    name="cli_tel1"
+                    (input)="save()" 
+                    class="form-control" 
+                    placeholder="(+51) 987 654 321">
+                </div>     
+                <div class="col-md-3">
+                    <label class="form-label">Celular 2</label>
+                    <input 
+                    type="text" 
+                    [(ngModel)]="presupuesto.cliente.telefono2"
+                    name="cli_tel2"
+                    (input)="save()" 
+                    class="form-control" 
+                    placeholder="(+51) 987 654 321">
+                </div>                                       
+                <div class="col-md-4">
+                    <label class="form-label">Correo</label>
+                    <div class="icon-field has-validation">
+                        <span class="icon">
+                            <iconify-icon icon="mage:email"></iconify-icon>
+                        </span>
+                        <input 
+                        type="email" 
+                        [(ngModel)]="presupuesto.cliente.correo"
+                        name="cli_correo"
+                        (input)="save()" 
+                        class="form-control" 
+                        placeholder="Correo" 
+                        required>
+                        <div class="invalid-feedback">
+                            Please provide email address
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Tipo Documento</label>
+                    <select class="form-select" [(ngModel)]="presupuesto.cliente.tipoDocumento"
+                    name="cli_tipo_doc" (change)="save()">
+                        <option>Seleccionar</option>
+                        <option>DNI</option>
+                        <option>Pasaporte</option>
+                    </select>
+                </div>                
+                <div class="col-md-4">
+                    <label class="form-label">Documento</label>
+                    <input 
+                    type="text" 
+                    [(ngModel)]="presupuesto.cliente.documento"
+                    name="cli_doc"
+                    (input)="save()" 
+                    class="form-control" 
+                    placeholder="Número Documento">
+                </div> 
+                
+                
+                <h6 class="mb-4 text-xl mt-5">Sobre mi Evento</h6>
+                <div class="col-md-3">
+                    <label class="form-label">Tipo de Evento</label>
+                    <select class="form-select radius-8" 
+                            [(ngModel)]="presupuesto.eventoID" 
+                            name="eventoID"
+                            (change)="onEventoChange()"
+                            required>
+                        <option [ngValue]="null" disabled>Seleccionar</option>
+                        <option *ngFor="let cat of eventos" [ngValue]="cat.eventoID">
+                            {{ cat.nombre }}
+                        </option>
+                    </select>
+                  
+                    <!-- <select 
+                        class="form-select"
+                        [(ngModel)]="presupuesto.evento.tipo"
+                        name="evento_tipo"
+                        (change)="save()"
+                    >
+                        <option value="">Seleccionar</option>
+                        <option>Boda</option>
+                        <option>Quinceañero</option>
+                        <option>Aniversario</option>
+                        <option>Corporativo</option>
+                    </select> -->
+                </div>
+
+                <div class="col-md-3">
+                <label class="form-label">N° DE INVITADOS</label>
+                    <input type="number" [(ngModel)]="presupuesto.evento.invitados"
+                    name="evento_invitados"
+                    (input)="save(); filtrarLocalesPorInvitados()" 
+                    class="form-control">
+                </div>
+  
+                <div class="col-md-3">
+                <label class="form-label">FECHA TENTATIVA 1</label>
+                <input 
+                    type="date" 
+                    [(ngModel)]="presupuesto.evento.fecha1"
+                    name="evento_fecha1"
+                    (change)="save()" 
+                    class="form-control">
+                </div>
+
+                <div class="col-md-3">
+                <label class="form-label">FECHA TENTATIVA 2</label>
+                <input type="date" [(ngModel)]="presupuesto.evento.fecha2"
+                    name="evento_fecha2"
+                    (change)="save()" 
+                    class="form-control">
+                </div>
+
+                
+                <h6 class="mb-4 text-xl mt-5"></h6>
+
+                <div class="col-xxl-12">
+                    <div class="card p-0 overflow-hidden position-relative radius-12 h-100">
+                        <div class="card-header py-16 px-24 bg-base border border-end-0 border-start-0 border-top-0 d-flex align-items-center justify-content-between">
+                            <h6 class="text-lg mb-3">Mi Evento</h6>
+                        </div>
+
+                        <div class="card-body p-24 pt-10">
+                            <div class="row align-items-start">
+                                <ul class="nav button-tab nav-pills mb-16 col-md-3 d-block" id="pills-tab-five" role="tablist">
+                                    <li class="nav-item mb-3" role="presentation">
+                                        <button class="nav-link d-flex gap-2 align-items-center fw-semibold text-primary-light radius-4 px-16 py-10 active" id="pills-vertical-home-tab" data-bs-toggle="pill" data-bs-target="#pills-vertical-home" type="button" role="tab" aria-controls="pills-vertical-home" aria-selected="true">
+                                            <iconify-icon icon="solar:home-smile-angle-outline" class="text-xl"></iconify-icon>
+                                            <span class="line-height-1">Local</span>
+                                        </button>
+                                    </li>
+                                    <li class="nav-item mb-3"
+                                        role="presentation"
+                                        *ngFor="let cat of categories; let i = index">
+                                        <button
+                                            class="nav-link d-flex gap-2 fw-semibold text-primary-light radius-4 px-16 py-10"
+                                            [class.active]="false"   
+                                            data-bs-toggle="pill"
+                                            [attr.data-bs-target]="'#tab-'+cat.categoriaID">
+                                            
+                                            <iconify-icon icon="solar:home-smile-angle-outline" class="text-xl"></iconify-icon>
+                                            <span>{{ cat.nombre }}</span>
+                                        </button>
+                                    </li>
+                                    <li class="nav-item mb-3" role="presentation">
+                                        <button class="nav-link d-flex gap-2 align-items-center fw-semibold text-primary-light radius-4 px-16 py-10 " id="pills-vertical-servicios-tab" data-bs-toggle="pill" data-bs-target="#pills-vertical-servicios" type="button" role="tab" aria-controls="pills-vertical-servicios" aria-selected="true">
+                                            <iconify-icon icon="solar:home-smile-angle-outline" class="text-xl"></iconify-icon>
+                                            <span class="line-height-1">Servicios Adicionales</span>
+                                        </button>
+                                    </li>   
+                                    <li class="nav-item mb-3" role="presentation">
+                                        <button class="nav-link d-flex gap-2 align-items-center fw-semibold text-primary-light radius-4 px-16 py-10 " id="pills-vertical-personal-tab" data-bs-toggle="pill" data-bs-target="#pills-vertical-personal" type="button" role="tab" aria-controls="pills-vertical-personal" aria-selected="true">
+                                            <iconify-icon icon="solar:home-smile-angle-outline" class="text-xl"></iconify-icon>
+                                            <span class="line-height-1">Personal del Evento</span>
+                                        </button>
+                                    </li>                                                                                                                                                                                                                                                                                                                   
+                                </ul>
+                                <div class="tab-content col-md-9 d-block" id="pills-tab-fiveContent">
+                                    <div class="tab-pane fade show active" id="pills-vertical-home" role="tabpanel" aria-labelledby="pills-vertical-home-tab" tabindex="0">
+                                        <div class="flex-grow-1">
+                                            <h6 class="text-lg mb-8">Locales</h6>
+
+                                            <div class="row">
+                                                <div class="col-md-6 mb-3" *ngFor="let local of localesFiltrados">
+                                                    <div class="card radius-12 p-3" 
+                                                        [ngClass]="{'border-primary border-3': presupuesto.local?.localID === local.localID}">
+                                                        
+                                                        <h6 class="fw-bold">{{ local.nombre }}</h6>
+                                                        <p class="mb-1"><strong>Dirección:</strong> {{ local.direccion }}</p>
+                                                        <p class="mb-1"><strong>Capacidad:</strong> {{ local.capacidad }}</p>
+                                                        <p class="mb-1"><strong>Horas Evento:</strong> {{ local.horasEvento }}</p>
+
+                                                        <div class="d-flex gap-2 mt-2 overflow-x-scroll">
+                                                        <img *ngFor="let foto of local.fotosUrls"
+                                                            [src]="foto"
+                                                            (click)="openImageModal(foto)"
+                                                            style="width: 270px; height: 170px; object-fit: cover; border-radius: 10px; cursor: zoom-in;">
+                                                        </div>
+
+                                                        <button 
+                                                        (click)="selectLocal(local)" 
+                                                        class="btn mt-3 w-100"
+                                                        [ngClass]="presupuesto.local?.localID === local.localID ? 'btn-success' : 'btn-primary'">
+                                                        {{ presupuesto.local?.localID === local.localID ? 'Seleccionado' : 'Seleccionar Local' }}
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" *ngFor="let cat of categories"
+                                        [attr.id]="'tab-'+cat.categoriaID"
+                                        role="tabpanel">
+                                        <div class="category-container p-3">
+                                            <h5 class="mb-4 fw-bold text-dark">{{ cat.nombre }}</h5>
+
+                                            <!-- Subcategorías en grid -->
+                                            <div class="row g-3 my-4">
+                                                <div class="col" *ngFor="let sub of cat.subcategorias">
+                                                    <div class="card subcategory-card p-3 h-100 cursor-pointer"
+                                                        [class.selected]="
+                                                            selectedSubcategory?.subcategoriaID === sub.subcategoriaID &&
+                                                            selectedSubcategory?.categoriaPadreID === cat.categoriaID
+                                                        "
+                                                        (click)="selectSubcategory(sub, cat)">
+                                                        <h6 class="fw-semibold my-2">{{ sub.nombre }}</h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Productos de subcategoría seleccionada -->
+                                            <div *ngIf="selectedSubcategory?.categoriaPadreID === cat.categoriaID">
+                                                <h6 class="my-3">Productos de {{ selectedSubcategory.nombre }}</h6>
+                                                <h6 class="my-3"> {{ selectedSubcategory.descripcion }}</h6>
+                                                <div class="row g-3">
+                                                    <div class="col-md-4" *ngFor="let p of getProductsByLeafCategory(selectedSubcategory)">
+                                                        <div class="card product-card h-100 p-3"
+                                                            [class.selected]="isProductoSeleccionado(p, selectedSubcategory)">
+                                                        
+                                                            <h6 class="fw-bold">{{ p.nombre }}</h6>
+                                                            <p class="mb-2 text-">{{ p.descripcion }}</p>
+
+                                                            <div class="product-images d-flex gap-3 py-3 overflow-auto">
+                                                                <img *ngFor="let foto of p.fotosUrls"
+                                                                    [src]="foto"
+                                                                    (click)="openImageModal(foto)"
+                                                                    class="img-fluid rounded cursor-zoom">
+                                                            </div>
+
+                                                            <button type="button" class="btn"
+                                                                    [ngClass]="isProductoSeleccionado(p, selectedSubcategory) ? 'btn-success' : 'btn-primary'"
+                                                                    (click)="seleccionarProducto(selectedSubcategory, p)">
+                                                                {{ isProductoSeleccionado(p, selectedSubcategory) ? 'Seleccionado' : 'Agregar al evento' }}
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <ng-template #noProducts>
+                                                    <p class="text-muted fst-italic">No hay productos para esta subcategoría</p>
+                                                </ng-template>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="tab-pane fade show" id="pills-vertical-servicios" role="tabpanel" aria-labelledby="pills-vertical-servicios-tab" tabindex="0">
+                                        <div class="flex-grow-1">
+                                            <h6 class="text-lg my-3">Servicios Adicionales</h6>
+
+                                            <div class="row" *ngIf="serviciosAdicionales?.length > 0">
+                                                <div class="col-md-4 mb-3" *ngFor="let servicio of serviciosAdicionales">
+                                                    <div class="card radius-12 p-3">
+                                                        <h6 class="fw-bold">{{ servicio.nombre }}</h6>
+                                                        <p class="mb-1"><strong>Descripcion:</strong> {{ servicio.descripcion }}</p>
+                                                        <!-- <p class="mb-1"><strong>Capacidad:</strong> {{ servicio.capacidad }}</p>
+                                                        <p class="mb-1"><strong>Horas Evento:</strong> {{ servicio.horasEvento }}</p> -->
+
+                                                        <!-- Mostrar fotos -->
+                                                        <div class="d-flex gap-2 mt-2 overflow-x-scroll img_servicio_adicional">
+                                                            <img *ngFor="let foto of servicio.fotosUrls"
+                                                                 [src]="foto"
+                                                                (click)="openImageModal(foto)"
+                                                                style="width: 100%; height: 200px; object-fit: cover; border-radius: 6px; cursor: zoom-in;">
+                                                        </div>
+
+                                                       <button type="button"
+                                                                class="btn mt-3 w-100"
+                                                                [ngClass]="isAdicionalSeleccionado(servicio) ? 'btn-success' : 'btn-primary'"
+                                                                (click)="addAdicional(servicio)">
+                                                            {{ isAdicionalSeleccionado(servicio) ? 'Seleccionado' : 'Añadir' }}
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>    
+                                    <div class="tab-pane fade show" id="pills-vertical-personal" role="tabpanel" aria-labelledby="pills-vertical-personal-tab" tabindex="0">
+                                        <div class="flex-grow-1">
+                                            <div class="flex-grow-1">
+                                                <h6 class="text-lg my-3">Personal del Evento</h6>
+
+                                                <div class="card p-3 radius-12">
+                                                    <!-- PERSONAL DEL EVENTO -->
+                                                    <h6 class="fw-bold">Equipo de Trabajo</h6>
+                                                    <ul class="mt-2">
+                                                        <li>Personal de cocina</li>
+                                                        <li>1 mozo cada 20 invitados</li>
+                                                        <li>1 mozo para la atención de los novios</li>
+                                                        <li>Meitre</li>
+                                                        <li>Seguridad en puerta principal del Club para controlar el ingreso de invitados</li>
+                                                        <li>Anfitriona para dirigir a los invitados en el área de ascensores</li>
+                                                        <li>Supervisor/a del evento</li>
+                                                        <li>Ama de llaves para el aseo de los SS.HH. (incluyen todos los útiles de aseo)</li>
+                                                        <li>Maestro de Ceremonias</li>
+                                                    </ul>
+
+                                                    <hr class="my-3">
+
+                                                    <!-- DJ, SONIDO E ILUMINACIÓN -->
+                                                    <h6 class="fw-bold">DJ, Sonido e Iluminación Profesional</h6>
+                                                    <ul class="mt-2">
+                                                        <li>4 parlantes de 15 pulgadas marca JBL</li>
+                                                        <li>1 consola de audio marca Berengher de 6 canales</li>
+                                                        <li>08 tachos led para ambientación (baño de color)</li>
+                                                        <li>2 micrófonos inalámbricos</li>
+                                                        <li>2 esferas de luz</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+
+                                            
+                                        </div>
+
+                                    </div>                                                                    
+                                </div>
+                            </div>
+                        </div>  
+                    </div>
+                </div> 
+                
+                <div class="col-12 mt-4">
+                    <div class="card radius-12 p-5 shadow-sm " style="background:#fafafa;">
+                        <div class="card-header py-16 px-24 border border-end-0 border-start-0 border-top-0 d-flex align-items-center justify-content-between">
+                            <h5 class="fw-bold ">Resumen del Presupuesto</h5>
+                            <button type="button" class="btn d-flex align-items-center gap-1"
+                            [ngClass]="resumenCompleto ? 'btn-light' : 'btn-secondary'"
+                            [disabled]="!resumenCompleto"
+                            (click)="descargarPDF()"
+                            >
+                                <iconify-icon icon="solar:download-linear" class="text-xl"></iconify-icon>
+                                Descargar
+                            </button>
+                            <p *ngIf="!resumenCompleto" class="text-danger mt-2">
+                                Complete todos los campos del presupuesto para poder descargar Proforma.
+                            </p>
+                        </div>                            
+                        <!-- LOCAL -->
+                        <div class="my-5">
+                            <h6 class="text-dark fw-bold mb-1">Local seleccionado</h6>
+                            <div class="ps-2">
+                                <p class="m-0">
+                                    <b>{{ resumen.local?.nombre || '—' }}</b><br>
+                                    <b>{{ resumen.local?.direccion || '—' }}</b>
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- CATEGORÍAS -->
+                        <h6 class="fw-bold text-dark mb-3">Servicios Incluidos</h6>
+
+                        <div class="row g-3 ps-2">
+                            <!-- COCTEL (1 producto) -->
+                            <div class="col-md-2">
+                                <p class="m-0 text-secondary">Coctel ({{ resumen.coctel?.length || 0 }})</p>
+                                <div *ngIf="resumen.coctel?.length; else sinCoctel">
+                                    <ng-container *ngFor="let e of resumen.coctel">
+                                        <span class="d-block fw-bold">• {{ e.nombre }}</span>
+                                    </ng-container>
+                                </div>
+                                <ng-template #sinCoctel>
+                                    <h6 class="fw-bold text-secondary">—</h6>
+                                </ng-template>
+                            </div>
+
+                            <!-- ENTRADA (varios) -->
+                            <div class="col-md-4">
+                                <p class="m-0 text-secondary">
+                                    Entrada ({{ resumen.entrada?.length || 0 }})
+                                </p>
+                                <div *ngIf="resumen.entrada?.length; else sinEntrada">
+                                    <ng-container *ngFor="let e of resumen.entrada">
+                                        <span class="d-block fw-bold">• {{ e.nombre }}</span>
+                                    </ng-container>
+                                </div>
+                                <ng-template #sinEntrada>
+                                    <h6 class="fw-bold text-secondary">—</h6>
+                                </ng-template>
+                            </div>
+                            <!-- FONDO (varios) -->
+                            <div class="col-md-4">
+                                <p class="m-0 text-secondary">
+                                    Fondo ({{ resumen.fondo?.length || 0 }})
+                                </p>
+                                <div *ngIf="resumen.fondo?.length; else sinFondo">
+                                    <ng-container *ngFor="let f of resumen.fondo">
+                                        <span class="d-block fw-bold">• {{ f.nombre }}</span>
+                                    </ng-container>
+                                </div>
+                                <ng-template #sinFondo>
+                                    <h6 class="fw-bold text-secondary">—</h6>
+                                </ng-template>
+                            </div>
+                            <!-- ENTREMES -->
+                            <div class="col-md-12 mt-3">
+                                <p class="m-0 text-secondary">
+                                    Entremeses ({{ resumen.entremeses?.length || 0 }}/5)
+                                </p>
+                                <ul class="list-unstyled mt-1">
+                                    <li *ngFor="let e of resumen.entremeses" class="mb-1">
+                                        <span class="bg-light text-dark px-3 py-2 w-100 d-flex justify-content-between align-items-center">
+                                            <span>• {{ e.nombre }}</span>
+                                        </span>
+                                    </li>
+                                    <li *ngIf="resumen.entremeses?.length === 0" class="text-secondary fst-italic">—</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- ADICIONALES -->
+                        <div class="my-3">
+                            <h6 class="fw-bold text-dark mb-2">Servicios Adicionales</h6>
+                            <ul class="list-unstyled">
+                                <li *ngFor="let a of resumen.adicionales" class="mb-1">
+                                    <span class="bg-opacity-10 text-dark px-3 py-2 w-100">
+                                        {{ a.nombre }}
+                                    </span>
+                                </li>
+                                <li *ngIf="resumen.adicionales?.length === 0" class="text-secondary fst-italic">
+                                    — Sin adicionales —
+                                </li>
+                            </ul>
+                        </div>
+                        <hr>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL GLOBAL PARA AMPLIAR IMÁGENES -->
+<div class="image-modal" [class.open]="modalImage" (click)="closeImageModal()">
+  <img [src]="modalImage" class="image-modal-content" (click)="$event.stopPropagation()">
 </div>
