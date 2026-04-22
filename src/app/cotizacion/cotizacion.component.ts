@@ -54,7 +54,10 @@ export class CotizacionComponent {
       next: (res: any) => {
         console.log('Respuesta completa de la API:', res);
 
-        this.cotizaciones = res.data || [];
+        this.cotizaciones = (res.data || []).filter((c: any) =>
+          c.estadoCotizacion === "Activo" || c.estadoCotizacion === "Evento"
+        );
+
         this.loading = false;
 
         // Esperar a que Angular pinte la tabla

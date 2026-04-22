@@ -45,6 +45,7 @@ export class UsersComponent implements OnInit {
 	loadRoles(): void {
 		this.userService.getAllRoles().subscribe({
 		next: (res: any) => {
+			console.log("Roles cargados:", res);
 			this.categories = res.data || [];
 		},
 		error: err => {
@@ -53,10 +54,10 @@ export class UsersComponent implements OnInit {
 		}
 		});
 	}
+
 	loadUsers(): void {
 	this.loading = true;
 
-	// 🔥 Destruir DataTable ANTES de cargar datos
 	if (this.dataTable) {
 		this.dataTable.destroy();
 		this.dataTable = null;
@@ -64,11 +65,17 @@ export class UsersComponent implements OnInit {
 
 	this.userService.getAll().subscribe({
 		next: (res: any) => {
-			console.log("✅ Usuarios cargados", res);
+		console.log("✅ Usuarios cargados", res);
 		this.users = res.data || [];
+
+		// 🔥 AGREGAR nombre del rol dinámicamente
+		this.users = this.users.map(u => ({
+			...u,
+			rolNombre: this.getRoleName(u.rolID)
+		}));
+
 		this.loading = false;
 
-		// 🔥 Esperar que Angular pinte la tabla
 		setTimeout(() => this.initDataTable(), 150);
 		},
 		error: (err) => {
@@ -79,6 +86,10 @@ export class UsersComponent implements OnInit {
 	}
 
 
+	getRoleName(rolID: number): string {
+	const role = this.categories.find(r => r.rolID === rolID);
+	return role ? role.nombre : 'Sin rol';
+	}
 
 
 	initDataTable(): void {
