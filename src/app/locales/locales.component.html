@@ -1,0 +1,474 @@
+<div class="dashboard-main-body">
+
+  <app-breadcrumb [title]="title"></app-breadcrumb>
+
+  <div class="card basic-data-table">
+
+    <div class="card-body">
+
+      <app-admin-table-shell
+
+        [data]="locales"
+
+        [loading]="loading"
+
+        [filterFields]="tableFilterFields"
+
+        emptyMessage="No hay locales registrados">
+
+
+
+        <div adminTableActions class="justify-content-start d-flex">
+
+          <a routerLink="/add-local"
+
+            class="btn btn-primary text-sm btn-sm px-12 py-12 radius-8 d-flex align-items-center gap-2">
+
+            <iconify-icon icon="ic:baseline-plus" class="icon text-xl line-height-1"></iconify-icon>
+
+            Agregar Locales
+
+          </a>
+
+        </div>
+
+
+
+        <ng-template appAdminTableBody let-rows="rows">
+
+          <table class="table bordered-table sm-table mb-0">
+
+            <thead>
+
+              <tr>
+
+                <th>ID</th>
+
+                <th>Nombre</th>
+
+                <th>Dirección</th>
+
+                <th>Capacidad</th>
+
+                <th class="text-center">Estado</th>
+
+                <th class="text-center">Acciones</th>
+
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              <tr *ngFor="let local of rows; trackBy: trackByLocalId">
+
+                <td>{{ local.localID }}</td>
+
+                <td>{{ local.nombre }}</td>
+
+                <td>{{ local.direccion }}</td>
+
+                <td>{{ local.capacidad }}</td>
+
+                <td class="text-center">
+
+                  <span [ngClass]="{
+
+                      'bg-success-focus text-success-600 border border-success-main': local.estado,
+
+                      'bg-danger-200 text-danger-600 border border-danger-main': !local.estado
+
+                    }" class="px-24 py-4 radius-4 fw-medium text-sm">
+
+                    {{ local.estado ? "Activo" : "Inactivo" }}
+
+                  </span>
+
+                </td>
+
+                <td class="text-center">
+
+                  <div class="d-flex align-items-center gap-10 justify-content-center">
+
+                    <button type="button"
+
+                      class="bg-info-focus bg-hover-info-200 text-info-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
+
+                      title="Ver Local" (click)="openLocalModal(local)">
+
+                      <iconify-icon icon="iconamoon:eye-light"></iconify-icon>
+
+                    </button>
+
+
+
+                    <button type="button" (click)="editLocal(local)"
+
+                      class="bg-success-focus text-success-600 bg-hover-success-200 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
+
+                      title="Editar Local">
+
+                      <iconify-icon icon="lucide:edit"></iconify-icon>
+
+                    </button>
+
+
+
+                    <button *ngIf="local.estado" type="button" (click)="deleteLocal(local.localID)"
+
+                      class="remove-item-btn bg-danger-focus bg-hover-danger-200 text-danger-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
+
+                      title="Desactivar Local">
+
+                      <iconify-icon icon="solar:lock-keyhole-linear"></iconify-icon>
+
+                    </button>
+
+                  </div>
+
+                </td>
+
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </ng-template>
+
+      </app-admin-table-shell>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<!-- Modal Bootstrap para Local -->
+
+<div class="modal fade" id="localModal" tabindex="-1" aria-labelledby="localModalLabel" aria-hidden="true">
+
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+
+    <div class="modal-content">
+
+      <!-- Header -->
+
+      <div class="modal-header text-white">
+
+        <h5 class="modal-title" id="localModalLabel">Detalles del Local</h5>
+
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+      </div>
+
+
+
+      <!-- Body -->
+
+      <div class="modal-body" *ngIf="selectedLocal">
+
+        <div class="p-4">
+
+          <div class="row g-3">
+
+            <!-- Nombre -->
+
+            <div class="col-md-6">
+
+              <h6 class="fw-semibold text-secondary mb-1">Nombre</h6>
+
+              <p class="mb-0">{{ selectedLocal.nombre }}</p>
+
+            </div>
+
+
+
+            <!-- Dirección -->
+
+            <div class="col-md-6">
+
+              <h6 class="fw-semibold text-secondary mb-1">Dirección</h6>
+
+              <p class="mb-0">{{ selectedLocal.direccion }}</p>
+
+            </div>
+
+
+
+            <!-- Capacidad -->
+
+            <div class="col-md-6">
+
+              <h6 class="fw-semibold text-secondary mb-1">Capacidad</h6>
+
+              <p class="mb-0">{{ selectedLocal.capacidad }}</p>
+
+            </div>
+
+
+
+            <!-- Precio de Alquiler -->
+
+            <div class="col-md-6">
+
+              <h6 class="fw-semibold text-secondary mb-1">Precio de Alquiler</h6>
+
+              <p class="mb-0">{{ selectedLocal.precioAlquiler  }}</p>
+
+            </div>
+
+
+
+            <!-- Estado -->
+
+            <div class="col-md-6">
+
+              <h6 class="fw-semibold text-secondary mb-1">Estado</h6>
+
+              <p class="mb-0">{{ selectedLocal.estado ? 'Activo' : 'Inactivo' }}</p>
+
+            </div>
+
+
+
+            <!-- Horas de Evento -->
+
+            <div class="col-md-6">
+
+              <h6 class="fw-semibold text-secondary mb-1">Horas de Evento</h6>
+
+              <p class="mb-0">{{ selectedLocal.horasEvento }}</p>
+
+            </div>
+
+
+
+            <!-- Fecha de Creación -->
+
+            <div class="col-md-6">
+
+              <h6 class="fw-semibold text-secondary mb-1">Fecha de Creación</h6>
+
+              <p class="mb-0">{{ selectedLocal.fechaCreacion | date:'medium' }}</p>
+
+            </div>
+
+
+
+            <!-- Fotos -->
+
+            <div class="col-12">
+
+              <h6 class="fw-semibold text-secondary mb-1">Fotos</h6>
+
+              <div class="d-flex flex-wrap gap-2">
+
+                <img *ngFor="let foto of selectedLocal.fotosUrls" [src]="userService.resolveMediaUrl(foto)" class="img-thumbnail"
+
+                  style="width: 100px; height: 100px; object-fit: cover;">
+
+              </div>
+
+            </div>
+
+
+
+            <!-- Términos y Condiciones -->
+
+            <div class="col-12">
+
+              <h6 class="fw-semibold text-secondary mb-1">Términos y Condiciones</h6>
+
+              <p class="mb-0">{{ selectedLocal.terminosCondiciones }}</p>
+
+            </div>
+
+
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<!-- Modal para editar Local -->
+
+<div class="modal fade" id="editLocalModal" tabindex="-1" aria-hidden="true">
+
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+
+    <div class="modal-content">
+
+      <div class="modal-header">
+
+        <h5 class="modal-title">Editar Local</h5>
+
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+      </div>
+
+      <div class="modal-body">
+
+        <form #editLocalForm="ngForm" (ngSubmit)="submitEditLocal()" *ngIf="selectedLocal">
+
+          <div class="row g-3">
+
+            <!-- Nombre -->
+
+            <div class="col-md-6">
+
+              <label class="form-label">Nombre</label>
+
+              <input type="text" class="form-control" [(ngModel)]="selectedLocal.nombre" name="nombre" required
+
+                [ngModelOptions]="{ standalone: true }" />
+
+            </div>
+
+
+
+            <!-- Dirección -->
+
+            <div class="col-md-6">
+
+              <label class="form-label">Dirección</label>
+
+              <input type="text" class="form-control" [(ngModel)]="selectedLocal.direccion" name="direccion"
+
+                [ngModelOptions]="{ standalone: true }" />
+
+            </div>
+
+
+
+            <!-- Capacidad -->
+
+            <div class="col-md-6">
+
+              <label class="form-label">Capacidad</label>
+
+              <input type="number" class="form-control" [(ngModel)]="selectedLocal.capacidad" name="capacidad"
+
+                [ngModelOptions]="{ standalone: true }" />
+
+            </div>
+
+
+
+            <!-- Precio Alquiler -->
+
+            <div class="col-md-6">
+
+              <label class="form-label">Precio Alquiler</label>
+
+              <input type="number" class="form-control" [(ngModel)]="selectedLocal.precioAlquiler" name="precioAlquiler"
+
+                [ngModelOptions]="{ standalone: true }" />
+
+            </div>
+
+
+
+            <div class="col-md-6">
+
+              <label class="form-label">Garantía del local</label>
+
+              <input type="number" class="form-control" [(ngModel)]="selectedLocal.garantia" name="garantia"
+
+                [ngModelOptions]="{ standalone: true }" />
+
+            </div>
+
+
+
+            <!-- Horas Evento -->
+
+            <div class="col-md-6">
+
+              <label class="form-label">Horas del Evento</label>
+
+              <input type="number" class="form-control" [(ngModel)]="selectedLocal.horasEvento" name="horasEvento"
+
+                [ngModelOptions]="{ standalone: true }" />
+
+            </div>
+
+
+
+            <!-- Términos y Condiciones -->
+
+            <div class="col-md-6">
+
+              <label class="form-label">Términos y Condiciones</label>
+
+              <textarea class="form-control" [(ngModel)]="selectedLocal.terminosCondiciones" name="terminosCondiciones"
+
+                [ngModelOptions]="{ standalone: true }"></textarea>
+
+            </div>
+
+
+
+            <!-- Fotos -->
+
+            <div class="col-12">
+
+              <label class="form-label">Fotos del local</label>
+
+              <input type="file" class="form-control mb-2" accept="image/*"
+
+                (change)="onFotoSelected($event)" [disabled]="fotoUploading" />
+
+              <div class="text-secondary-light text-sm mb-2" *ngIf="fotoUploading">Subiendo imagen...</div>
+
+              <div class="d-flex flex-wrap gap-2 pt-2">
+
+                <div class="position-relative" *ngFor="let foto of selectedLocal.fotosUrls; let i = index">
+
+                  <img [src]="userService.resolveMediaUrl(foto)" alt="Local" class="radius-8"
+
+                    style="width: 96px; height: 72px; object-fit: cover;" />
+
+                  <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0"
+
+                    (click)="removeFotoUrl(i)">×</button>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+
+          <div class="modal-footer mt-3">
+
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+
+            <button type="submit" class="btn btn-primary" [disabled]="editLocalForm.invalid">Guardar Cambios</button>
+
+          </div>
+
+        </form>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+

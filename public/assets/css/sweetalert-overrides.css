@@ -1,0 +1,85 @@
+/* SweetAlert2 — tipografía compacta (no heredar h1/h2 del template) */
+
+div.swal2-container .swal2-popup {
+  font-size: 0.875rem !important;
+  border-radius: 12px !important;
+  padding: 0 0 1rem !important;
+  width: auto !important;
+  max-width: min(420px, calc(100vw - 2rem)) !important;
+}
+
+div.swal2-container .swal2-popup h2.swal2-title {
+  font-size: 1.05rem !important;
+  font-weight: 600 !important;
+  line-height: 1.35 !important;
+  padding: 1rem 1.25rem 0.35rem !important;
+  margin: 0 !important;
+}
+
+div.swal2-container .swal2-popup .swal2-html-container {
+  font-size: 0.8125rem !important;
+  line-height: 1.45 !important;
+  padding: 0.35rem 1.25rem 0.75rem !important;
+  margin: 0 !important;
+}
+
+div.swal2-container .swal2-popup .swal2-icon {
+  margin: 0.65rem auto 0.25rem !important;
+  transform: scale(0.65);
+}
+
+div.swal2-container .swal2-popup .swal2-actions {
+  margin: 0.5rem auto 0 !important;
+  padding: 0 1rem !important;
+}
+
+div.swal2-container .swal2-popup .swal2-styled.swal2-confirm,
+div.swal2-container .swal2-popup .swal2-styled.swal2-cancel,
+div.swal2-container .swal2-popup .swal2-styled.swal2-deny {
+  font-size: 0.8125rem !important;
+  padding: 0.45rem 1.1rem !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+}
+
+/* Toasts (presupuestador, límites de selección, etc.) */
+div.swal2-container .swal2-popup.swal2-toast {
+  font-size: 13px !important;
+  padding: 0.55rem 0.85rem !important;
+  min-height: unset !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12) !important;
+  max-width: min(320px, calc(100vw - 1.5rem)) !important;
+  width: max-content !important;
+  overflow: hidden !important;
+}
+
+div.swal2-container .swal2-popup.swal2-toast h2.swal2-title {
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  line-height: 1.35 !important;
+  padding: 0 !important;
+  margin: 0 0 0 0.4rem !important;
+  white-space: nowrap !important;
+}
+
+div.swal2-container .swal2-popup.swal2-toast .swal2-html-container {
+  font-size: 13px !important;
+  padding: 0 !important;
+  margin: 0 0 0 0.4rem !important;
+}
+
+div.swal2-container .swal2-popup.swal2-toast .swal2-icon {
+  transform: scale(0.5) !important;
+  margin: 0 0.4rem 0 0 !important;
+  width: 1.75em !important;
+  height: 1.75em !important;
+}
+
+div.swal2-container .swal2-popup.swal2-toast .swal2-actions {
+  display: none !important;
+}
+
+div.swal2-container .swal2-popup.swal2-toast-custom {
+  min-width: 0 !important;
+  max-width: min(320px, calc(100vw - 1.5rem)) !important;
+}

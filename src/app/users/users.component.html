@@ -1,0 +1,243 @@
+<div class="dashboard-main-body">
+  <app-breadcrumb [title]="title"></app-breadcrumb>
+  <div class="card basic-data-table">
+    <div class="card-body">
+      <app-admin-table-shell
+        [data]="users"
+        [loading]="loading"
+        [filterFields]="tableFilterFields"
+        emptyMessage="No hay usuarios registrados">
+
+        <div adminTableActions class="justify-content-start d-flex">
+          <a routerLink="/add-user"
+            class="btn btn-primary text-sm btn-sm px-12 py-12 radius-8 d-flex align-items-center gap-2">
+            <iconify-icon icon="ic:baseline-plus" class="icon text-xl line-height-1"></iconify-icon>
+            Agregar Usuario
+          </a>
+        </div>
+
+        <ng-template appAdminTableBody let-rows="rows">
+          <table class="table bordered-table sm-table mb-0">
+            <thead>
+              <tr>
+                <th scope="col">
+                  <div class="d-flex align-items-center gap-10">
+                    ID
+                  </div>
+                </th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Email</th>
+                <th scope="col">Rol</th>
+                <th scope="col" class="text-center">Estado</th>
+                <th scope="col" class="text-center">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let user of rows; trackBy: trackByUsuarioId">
+                <td>
+                  <div class="d-flex align-items-center gap-10">
+                    {{ user.usuarioID }}
+                  </div>
+                </td>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <div class="flex-grow-1">
+                      <span class="text-md mb-0 fw-normal text-secondary-light">{{ user.nombre }}</span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <span class="text-md mb-0 fw-normal text-secondary-light">{{ user.email }}</span>
+                </td>
+                <td>
+                  <span class="text-md mb-0 fw-normal text-secondary-light">{{ getRoleName(user.rolID) }}</span>
+                </td>
+                <td class="text-center">
+                  <span [ngClass]="{
+                      'bg-success-focus text-success-600 border border-success-main': user.estado,
+                      'bg-danger-200 text-danger-600 border border-danger-main': !user.estado
+                    }" class="px-24 py-4 radius-4 fw-medium text-sm">
+                    {{ user.estado ? "Activo" : "Inactivo" }}
+                  </span>
+                </td>
+                <td class="text-center">
+                  <div class="d-flex align-items-center gap-10 justify-content-center">
+                    <button type="button"
+                      class="bg-info-focus bg-hover-info-200 text-info-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
+                      title="Ver usuario" (click)="openUserModal(user)">
+                      <iconify-icon icon="iconamoon:eye-light"></iconify-icon>
+                    </button>
+
+                    <button type="button" (click)="editUser(user)"
+                      class="bg-success-focus text-success-600 bg-hover-success-200 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
+                      title="Editar usuario">
+                      <iconify-icon icon="lucide:edit"></iconify-icon>
+                    </button>
+                    <button *ngIf="user.estado" type="button" (click)="deleteUser(user.usuarioID)"
+                      class="remove-item-btn bg-danger-focus bg-hover-danger-200 text-danger-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
+                      title="Desactivar usuario">
+                      <iconify-icon icon="solar:user-cross-linear"></iconify-icon>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </ng-template>
+      </app-admin-table-shell>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Clásico Bootstrap -->
+<div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+
+      <!-- Header -->
+      <div class="modal-header text-white">
+        <h5 class="modal-title" id="userModalLabel">
+          Detalles del usuario
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body" *ngIf="selectedUser">
+        <div class="p-4">
+          <div class="row g-3">
+
+            <!-- Email -->
+            <div class="col-md-6">
+              <h6 class="fw-semibold text-secondary mb-1">Email</h6>
+              <p class="mb-0">{{ selectedUser.email }}</p>
+            </div>
+
+            <!-- Usuario -->
+            <div class="col-md-6">
+              <h6 class="fw-semibold text-secondary mb-1">Usuario</h6>
+              <p class="mb-0">{{ selectedUser.userName }}</p>
+            </div>
+
+            <!-- Rol -->
+            <div class="col-md-6">
+              <h6 class="fw-semibold text-secondary mb-1">Rol</h6>
+              <p class="mb-0 text-dark">
+                {{ selectedUser.rolNombre }}
+              </p>
+            </div>
+
+            <!-- Estado -->
+            <div class="col-md-6">
+              <h6 class="fw-semibold text-secondary mb-1">Estado</h6>
+              <p class="mb-0" [ngClass]="selectedUser.estado ? 'text-success' : 'text-danger'">
+                {{ selectedUser.estado ? 'Activo' : 'Inactivo' }}
+              </p>
+            </div>
+
+            <!-- Fecha de creación -->
+            <div class="col-md-6">
+              <h6 class="fw-semibold text-secondary mb-1">Fecha de creación</h6>
+              <p class="mb-0">{{ selectedUser.fechaCreacion | date:'medium' }}</p>
+            </div>
+
+            <!-- Fecha de modificación -->
+            <div class="col-md-6">
+              <h6 class="fw-semibold text-secondary mb-1">Fecha de modificación</h6>
+              <p class="mb-0">{{ selectedUser.fechaModificacion ? (selectedUser.fechaModificacion | date:'medium') : '-'
+                }}</p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal para editar usuario -->
+<div class="modal fade" id="editUserModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Editar Usuario</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Solo mostrar formulario si selectedUser existe -->
+        <form #editUserForm="ngForm" (ngSubmit)="submitEditUser()" *ngIf="selectedUser">
+          <div class="row g-3">
+
+            <!-- Nombre -->
+            <div class="col-md-6">
+              <label class="form-label">Nombre</label>
+              <input type="text" class="form-control" [(ngModel)]="selectedUser.nombre" name="nombre" required
+                [ngModelOptions]="{standalone: true}">
+            </div>
+
+            <!-- Usuario -->
+            <div class="col-md-6">
+              <label class="form-label">Usuario</label>
+              <input type="text" class="form-control" [(ngModel)]="selectedUser.userName" name="userName" required
+                [ngModelOptions]="{standalone: true}">
+            </div>
+
+            <!-- Email -->
+            <div class="col-md-6">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-control" [(ngModel)]="selectedUser.email" name="email" required
+                [ngModelOptions]="{standalone: true}">
+            </div>
+								<div class="mb-20">
+									<label class="form-label fw-semibold text-primary-light text-sm mb-8">
+										Rol <span class="text-danger-600">*</span>
+									</label>
+                  <select class="form-select radius-8" 
+                          [(ngModel)]="selectedUser.rolID" 
+                          name="rolID" 
+                          required 
+                          [ngModelOptions]="{standalone: true}">
+                    
+                    <option [ngValue]="null" disabled>Seleccione un Rol</option>
+
+                    <option *ngFor="let cat of categories" 
+                            [ngValue]="cat.rolID">
+                      {{ cat.nombre }}
+                    </option>
+                  </select>
+								</div>
+
+            <!-- Contraseña Actual -->
+            <div class="col-md-6">
+              <label class="form-label">Contraseña Actual</label>
+              <input type="password" class="form-control" [(ngModel)]="passwords.currentPassword" name="currentPassword"
+                [ngModelOptions]="{standalone: true}">
+            </div>
+
+            <!-- Nueva Contraseña -->
+            <div class="col-md-6">
+              <label class="form-label">Nueva Contraseña</label>
+              <input type="password" class="form-control" [(ngModel)]="passwords.newPassword" name="newPassword"
+                [ngModelOptions]="{standalone: true}">
+            </div>
+
+            <!-- Confirmar Nueva Contraseña -->
+            <div class="col-md-6">
+              <label class="form-label">Confirmar Nueva Contraseña</label>
+              <input type="password" class="form-control" [(ngModel)]="passwords.confirmPassword" name="confirmPassword"
+                [ngModelOptions]="{standalone: true}">
+            </div>
+
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            <button type="submit" class="btn btn-primary" [disabled]="editUserForm.invalid">
+              Guardar Cambios
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,59 @@
+<div class="admin-table">
+  <div class="admin-table__toolbar">
+    <div class="admin-table__actions">
+      <ng-content select="[adminTableActions]"></ng-content>
+    </div>
+    <div class="admin-table__search-wrap">
+      <iconify-icon icon="solar:magnifer-linear" class="admin-table__search-icon"></iconify-icon>
+      <input
+        type="search"
+        class="form-control admin-table__search"
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="onSearchChange()"
+        placeholder="Buscar en la tabla..."
+        aria-label="Buscar en la tabla"
+      />
+    </div>
+  </div>
+
+  <div class="admin-table__meta">
+    <div class="admin-table__length">
+      <label>Mostrar</label>
+      <select class="form-select form-select-sm" [(ngModel)]="pageSize" (ngModelChange)="onPageSizeChange()">
+        <option *ngFor="let size of pageSizeOptions" [ngValue]="size">{{ size }}</option>
+      </select>
+      <span>registros</span>
+    </div>
+    <div class="admin-table__info">{{ pageReport }}</div>
+  </div>
+
+  <div class="admin-table__surface" [class.admin-table__surface--loading]="loading">
+    <div class="admin-table__loading" *ngIf="loading">
+      <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
+      <span>Cargando datos...</span>
+    </div>
+
+    <div class="table-responsive" *ngIf="bodyTpl">
+      <ng-container *ngTemplateOutlet="bodyTpl.template; context: { rows: paginatedRows }"></ng-container>
+    </div>
+
+    <div class="admin-table__empty" *ngIf="!loading && filteredRows.length === 0">
+      {{ emptyMessage }}
+    </div>
+  </div>
+
+  <div class="admin-table__pagination" *ngIf="filteredRows.length > pageSize">
+    <button type="button" class="admin-table__page-btn" [disabled]="currentPage <= 1" (click)="goToPage(1)" title="Primera">«</button>
+    <button type="button" class="admin-table__page-btn" [disabled]="currentPage <= 1" (click)="goToPage(currentPage - 1)" title="Anterior">‹</button>
+    <button
+      type="button"
+      class="admin-table__page-btn"
+      *ngFor="let page of visiblePages"
+      [class.is-active]="page === currentPage"
+      (click)="goToPage(page)">
+      {{ page }}
+    </button>
+    <button type="button" class="admin-table__page-btn" [disabled]="currentPage >= totalPages" (click)="goToPage(currentPage + 1)" title="Siguiente">›</button>
+    <button type="button" class="admin-table__page-btn" [disabled]="currentPage >= totalPages" (click)="goToPage(totalPages)" title="Última">»</button>
+  </div>
+</div>

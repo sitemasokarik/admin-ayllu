@@ -1,0 +1,427 @@
+<div class="dashboard-main-body">
+  <app-breadcrumb [title]="title"></app-breadcrumb>
+
+  <div class="card basic-data-table">
+    <div class="card-body">
+      <app-admin-table-shell
+        #tableShell
+        [data]="filteredCotizaciones"
+        [loading]="loading"
+        [filterFields]="tableFilterFields"
+        [emptyMessage]="listMode === 'evento' ? 'No hay cotizaciones en estado Evento' : 'No hay cotizaciones registradas'">
+
+        <div adminTableActions class="cotizacion-table-actions">
+          <div class="d-flex flex-wrap align-items-center gap-2">
+            <a routerLink="/presupuestador"
+              class="btn btn-primary text-sm btn-sm px-12 py-12 radius-8 d-flex align-items-center gap-2">
+              <iconify-icon icon="ic:baseline-plus" class="icon text-xl line-height-1"></iconify-icon>
+              Nueva Cotización
+            </a>
+            <span class="cotizacion-filter-count text-secondary-light text-sm" *ngIf="!loading">
+              {{ filteredCountLabel }}
+            </span>
+          </div>
+
+          <div class="cotizacion-filters">
+            <div class="cotizacion-filters__row">
+              <select class="form-select form-select-sm cotizacion-filters__select"
+                [(ngModel)]="filterEstado" (ngModelChange)="onFilterChange()">
+                <option value="">Todos los estados</option>
+                <option *ngFor="let e of estadoOptions" [value]="e">{{ e }}</option>
+              </select>
+
+              <select class="form-select form-select-sm cotizacion-filters__select"
+                [(ngModel)]="filterOrigen" (ngModelChange)="onFilterChange()" *ngIf="listMode !== 'evento'">
+                <option value="">Todos los orígenes</option>
+                <option *ngFor="let o of origenOptions" [value]="o">{{ o }}</option>
+              </select>
+            </div>
+
+            <div class="cotizacion-filters__row cotizacion-filters__row--dates">
+              <select class="form-select form-select-sm cotizacion-filters__select"
+                [(ngModel)]="filterDateField" (ngModelChange)="onFilterChange()">
+                <option *ngFor="let f of dateFieldOptions" [ngValue]="f.value">{{ f.label }}</option>
+              </select>
+
+              <label class="cotizacion-filters__date-label">
+                <span>Desde</span>
+                <input type="date" class="form-control form-control-sm"
+                  [(ngModel)]="filterDateFrom" (ngModelChange)="onFilterChange()">
+              </label>
+
+              <label class="cotizacion-filters__date-label">
+                <span>Hasta</span>
+                <input type="date" class="form-control form-control-sm"
+                  [(ngModel)]="filterDateTo" (ngModelChange)="onFilterChange()"
+                  [min]="filterDateFrom || null">
+              </label>
+
+              <button type="button"
+                class="btn btn-outline-secondary btn-sm"
+                (click)="clearFilters()"
+                [disabled]="!hasActiveFilters">
+                Limpiar filtros
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <ng-template appAdminTableBody let-rows="rows">
+          <table class="table bordered-table sm-table mb-0">
+            <thead>
+              <tr>
+                <th class="sortable-th" (click)="sortBy('cotizacionID')">ID <iconify-icon [icon]="sortIcon('cotizacionID')"></iconify-icon></th>
+                <th class="sortable-th" (click)="sortBy('clienteNombre')">Nombre Cliente <iconify-icon [icon]="sortIcon('clienteNombre')"></iconify-icon></th>
+                <th class="sortable-th" (click)="sortBy('clienteDocumento')">Documento <iconify-icon [icon]="sortIcon('clienteDocumento')"></iconify-icon></th>
+                <th class="sortable-th" (click)="sortBy('totalCotizacion')">Total (S/) <iconify-icon [icon]="sortIcon('totalCotizacion')"></iconify-icon></th>
+                <th class="sortable-th" (click)="sortBy('localNombre')">Local <iconify-icon [icon]="sortIcon('localNombre')"></iconify-icon></th>
+                <th class="sortable-th" (click)="sortBy('fechaCreacion')">Fecha registro <iconify-icon [icon]="sortIcon('fechaCreacion')"></iconify-icon></th>
+                <th class="sortable-th" (click)="sortBy('fechaTentativa')">Fecha Tentativa <iconify-icon [icon]="sortIcon('fechaTentativa')"></iconify-icon></th>
+                <th class="sortable-th" (click)="sortBy('fechaTentativaOpcional')">Fecha Opcional <iconify-icon [icon]="sortIcon('fechaTentativaOpcional')"></iconify-icon></th>
+                <th class="sortable-th" (click)="sortBy('fechaReservada')">Fecha Reservada <iconify-icon [icon]="sortIcon('fechaReservada')"></iconify-icon></th>
+                <th class="sortable-th" (click)="sortBy('origenCotizacion')">Origen <iconify-icon [icon]="sortIcon('origenCotizacion')"></iconify-icon></th>
+                <th class="sortable-th" (click)="sortBy('responsableNombre')">Responsable <iconify-icon [icon]="sortIcon('responsableNombre')"></iconify-icon></th>
+                <th class="sortable-th" (click)="sortBy('estadoCotizacion')">Estado <iconify-icon [icon]="sortIcon('estadoCotizacion')"></iconify-icon></th>
+                <th class="text-center">Acciones</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let c of rows; trackBy: trackByCotizacionId"
+                [class.cotizacion-row-borrador]="c.estadoCotizacion === 'Borrador'"
+                (click)="onCotizacionRowClick(c, $event)">
+                <td>{{ c.cotizacionID }}</td>
+                <td>{{ c.clienteNombre }}</td>
+                <td>{{ c.clienteDocumento }}</td>
+                <td>
+                  S/
+                  {{
+                    c.totalCotizacion && c.totalCotizacion > 0
+                      ? c.totalCotizacion
+                      : c.totalEvento
+                  }}
+                </td>
+                <td>{{ c.localNombre || '—' }}</td>
+                <td>{{ c.fechaCreacion | date:'dd/MM/yyyy HH:mm' }}</td>
+                <td>{{ c.fechaTentativa | date:'dd/MM/yyyy' }}</td>
+                <td>{{ c.fechaTentativaOpcional | date:'dd/MM/yyyy' }}</td>
+                <td>
+                  <span *ngIf="c.fechaReservada" class="px-16 py-4 radius-4 fw-medium text-sm bg-warning-focus text-warning-600 border border-warning-main">
+                    {{ c.fechaReservada | date:'dd/MM/yyyy' }}
+                  </span>
+                  <span *ngIf="!c.fechaReservada" class="text-secondary-light">—</span>
+                </td>
+                <td>{{ origenLabel(c.origenCotizacion) }}</td>
+                <td>
+                  <span [class.text-warning-main]="puedeTomarCotizacion(c)">
+                    {{ responsableLabel(c) }}
+                  </span>
+                </td>
+                <td class="text-center">
+                  <span [ngClass]="estadoClass(c.estadoCotizacion)" class="px-24 py-4 radius-4 fw-medium text-sm">
+                    {{ c.estadoCotizacion }}
+                  </span>
+                </td>
+
+                <td class="text-center">
+                  <div class="d-flex align-items-center gap-10 justify-content-center flex-wrap">
+                    <button *ngIf="puedeTomarCotizacion(c)" type="button"
+                      class="btn btn-sm btn-warning px-12 py-6 radius-8"
+                      title="Tomar cotización de landing" (click)="tomarCotizacion(c, $event)">
+                      Tomar
+                    </button>
+
+                    <button *ngIf="c.estadoCotizacion === 'Borrador'" type="button"
+                      class="btn btn-sm btn-warning px-12 py-6 radius-8"
+                      title="Continuar borrador" (click)="continuarBorrador(c)">
+                      Continuar
+                    </button>
+
+                    <button type="button"
+                      class="bg-info-focus bg-hover-info-200 text-info-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
+                      title="Comentarios" (click)="operObservacion(c.cotizacionID)">
+                      <iconify-icon icon="solar:chat-round-line-linear"></iconify-icon>
+                    </button>
+
+                    <button type="button"
+                      class="bg-info-focus bg-hover-info-200 text-info-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
+                      title="Ver detalle" (click)="openServicioModal(c.cotizacionID)">
+                      <iconify-icon icon="iconamoon:eye-light"></iconify-icon>
+                    </button>
+
+                    <button type="button" *ngIf="c.estadoCotizacion !== 'Borrador'"
+                      class="bg-success-focus text-success-600 bg-hover-success-200 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
+                      title="Editar descuento" (click)="editServicio(c.cotizacionID)">
+                      <iconify-icon icon="lucide:edit"></iconify-icon>
+                    </button>
+
+                    <button type="button"
+                      class="remove-item-btn bg-danger-focus bg-hover-danger-200 text-danger-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
+                      title="Eliminar" (click)="deleteServicio(c.cotizacionID)">
+                      <iconify-icon icon="mingcute:delete-2-line"></iconify-icon>
+                    </button>
+
+                    <button type="button"
+                      class="bg-info-focus bg-hover-info-200 text-info-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
+                      title="Cambiar Estado" (click)="openEstadoModal(c.cotizacionID)">
+                      <iconify-icon icon="solar:refresh-linear"></iconify-icon>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </ng-template>
+      </app-admin-table-shell>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Bootstrap para Servicio -->
+<div class="modal fade" id="cotizacionModalComentario" tabindex="-1" aria-labelledby="servicioModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header text-white">
+        <h5 class="modal-title">Comentarios</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" *ngIf="selectedCotizaciones">
+        <div class="p-3">
+          <div class="card mb-3 shadow-sm border-0">
+            <div class="card-body">
+              <label class="text-secondary fw-semibold">Observación</label>
+              <textarea
+                [(ngModel)]="selectedCotizaciones.observacion"
+                class="form-control"
+                rows="3"
+                placeholder="Agregar observación..."></textarea>
+            </div>
+          </div>
+          <div class="text-end">
+            <button class="btn btn-primary" (click)="guardarObservacion()">
+              Guardar Comentario
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal Bootstrap para Servicio -->
+<div class="modal fade" id="servicioModal" tabindex="-1" aria-labelledby="servicioModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header text-white">
+        <h5 class="modal-title" id="servicioModalLabel">Detalles del Servicio</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" *ngIf="selectedCotizaciones?.length > 0">
+
+        <div class="p-3">
+
+          <div *ngFor="let item of selectedCotizaciones" class="card mb-4 shadow-sm border-0">
+            <div class="card-body">
+
+              <h5 class="fw-bold text-primary mb-3">
+                Cotización #{{ item.cotizacionID }}
+              </h5>
+
+              <div class="row g-3">
+
+                <div class="col-md-6">
+                  <label class="text-secondary fw-semibold">Cliente</label>
+                  <p class="mb-0">{{ item.clienteNombre }}</p>
+                </div>
+
+                <div class="col-md-6">
+                  <label class="text-secondary fw-semibold">Email</label>
+                  <p class="mb-0">{{ item.clienteEmail }}</p>
+                </div>
+
+                <div class="col-md-6">
+                  <label class="text-secondary fw-semibold">Teléfono</label>
+                  <p class="mb-0">{{ item.clienteTelefono }}</p>
+                </div>
+
+                <div class="col-md-6">
+                  <label class="text-secondary fw-semibold">Local</label>
+                  <p class="mb-0">{{ item.localNombre }}</p>
+                </div>
+
+                <div class="col-md-6">
+                  <label class="text-secondary fw-semibold">Dirección</label>
+                  <p class="mb-0">{{ item.localDireccion }}</p>
+                </div>
+
+                <div class="col-md-6">
+                  <label class="text-secondary fw-semibold">Cantidad de Invitados</label>
+                  <p class="mb-0">{{ item.numeroInvitados }}</p>
+                </div>
+
+                <div class="col-md-6">
+                  <label class="text-secondary fw-semibold">Origen</label>
+                  <p class="mb-0">{{ origenLabel(item.origenCotizacion) }}</p>
+                </div>
+
+                <div class="col-md-6">
+                  <label class="text-secondary fw-semibold">Creado por</label>
+                  <p class="mb-0">{{ creadoPorLabel(item) }}</p>
+                </div>
+
+                <div class="col-md-6">
+                  <label class="text-secondary fw-semibold">
+                    {{ origenLabel(item.origenCotizacion) === 'Landing' ? 'Tomado por' : 'Administrador' }}
+                  </label>
+                  <p class="mb-0 fw-semibold">{{ responsableLabel(item) }}</p>
+                  <small *ngIf="item.fechaAsignacion && origenLabel(item.origenCotizacion) === 'Landing'" class="text-secondary">
+                    {{ item.fechaAsignacion | date:'dd/MM/yyyy HH:mm' }}
+                  </small>
+                </div>
+
+                <div class="col-md-6" *ngIf="item.comprobanteNumero">
+                  <label class="text-secondary fw-semibold">Comprobante</label>
+                  <p class="mb-0">{{ item.comprobanteNumero }}</p>
+                </div>
+
+                <div class="col-md-6">
+                  <label class="text-secondary fw-semibold">Fecha de registro</label>
+                  <p class="mb-0">{{ item.fechaCreacion | date:'dd/MM/yyyy HH:mm' }}</p>
+                </div>
+
+                <div class="col-md-6">
+                  <label class="text-secondary fw-semibold">Fecha tentativa</label>
+                  <p>{{ item.fechaTentativa | date:'dd/MM/yyyy HH:mm' }}</p>
+                </div>
+                <div class="col-md-6">
+                  <label class="text-secondary fw-semibold">Fecha Opcional</label>
+                  <p>{{ item.fechaTentativaOpcional | date:'dd/MM/yyyy HH:mm' }}</p>
+                </div>
+                <div class="col-md-6" *ngIf="item.fechaReservada">
+                  <label class="text-secondary fw-semibold">Fecha reservada</label>
+                  <p class="mb-0 fw-semibold text-warning-main">{{ item.fechaReservada | date:'dd/MM/yyyy' }}</p>
+                </div>
+                <div class="col-md-6">
+                  <label class="text-secondary fw-semibold">Estado cotización</label>
+                  <span class="badge bg-info text-dark">
+                    {{ item.estadoCotizacion }}
+                  </span>
+                </div>
+
+                <div class="col-md-12">
+                  <label class="text-secondary fw-semibold">Observación</label>
+                  <p>{{ item.observacion || 'Sin observaciones' }}</p>
+                </div>
+
+                <div class="col-md-6">
+                  <label class="text-secondary fw-semibold">Costo Total</label>
+                  <p>S/. {{ item.totalEvento | number:'1.2-2' }}</p>
+                </div>
+
+                <div class="col-md-6">
+                  <label class="text-secondary fw-semibold">Precio por persona catering</label>
+                  <p>S/. {{ precioCateringBase(item) | number:'1.2-2' }}</p>
+                </div>
+
+                <div class="col-md-6">
+                  <label class="text-secondary fw-semibold">Cotización por persona (promedio total)</label>
+                  <p>S/. {{ item.precioPorCubierto | number:'1.2-2' }}</p>
+                </div>
+
+                <ng-container *ngIf="tieneDescuento(item)">
+                  <div class="col-md-6">
+                    <label class="text-secondary fw-semibold">Costo total con descuento</label>
+                    <p class="text-success fw-semibold">S/. {{ item.totalCotizacion | number:'1.2-2' }}</p>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="text-secondary fw-semibold">Precio catering con descuento</label>
+                    <p class="text-success fw-semibold">S/. {{ item.precioPorCubiertoConDescuento | number:'1.2-2' }}</p>
+                  </div>
+                </ng-container>
+
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Editar Servicio -->
+<div class="modal fade" id="editServicioModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Descuento por Persona / Invitados</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" *ngIf="selectedCotizaciones">
+        <form #editServicioForm="ngForm" (ngSubmit)="submitEditServicio()">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Invitados a facturar (con descuento)</label>
+              <input type="number" class="form-control" [(ngModel)]="selectedCotizaciones.invitadosConDescuento" name="invitadosConDescuento" min="1" [max]="selectedCotizaciones.numeroInvitados" [ngModelOptions]="{standalone: true}">
+              <small class="text-secondary-light">Original: {{ selectedCotizaciones.numeroInvitados }} invitados</small>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Precio por persona catering (con descuento)</label>
+              <input type="number" class="form-control" [(ngModel)]="selectedCotizaciones.precioCateringDescuento" name="precioCateringDescuento" step="0.01" [ngModelOptions]="{standalone: true}">
+              <small class="text-secondary-light">Catering actual: S/ {{ selectedCotizaciones.precioCateringBase | number:'1.2-2' }}</small>
+            </div>
+            <div class="col-12" *ngIf="selectedCotizaciones">
+              <div class="alert alert-info py-12 mb-2">
+                Subtotal catering con descuento:
+                <strong>S/ {{ previewSubtotalCateringDescuento() | number:'1.2-2' }}</strong>
+              </div>
+              <div class="alert alert-light border py-12 mb-0">
+                Total cotización estimado (catering + local, garantías y adicionales):
+                <strong>S/ {{ previewTotalConDescuento() | number:'1.2-2' }}</strong>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer mt-3">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            <button type="submit" class="btn btn-primary" [disabled]="editServicioForm.invalid">Guardar Cambios</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="modalEstadoCotizacion" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Cambiar Estado de Cotización</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+    <div class="modal-body" *ngIf="selectedCotizaciones">
+      <label class="fw-bold">Estado:</label>
+      <select class="form-select mt-2"
+              [(ngModel)]="selectedCotizaciones.estadoCotizacion">
+        <option value="Activo">Activo</option>
+        <option value="Borrador">Borrador</option>
+        <option value="Pendiente">Pendiente</option>
+        <option value="Anulado">Anulado</option>
+        <option value="Evento">Evento</option>
+      </select>
+    </div>
+
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button class="btn btn-primary" (click)="guardarEstado()">Guardar</button>
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,777 @@
+:host {
+  display: block;
+}
+
+.ayllu-budget {
+  --ayllu-orange: #f47820;
+  --ayllu-dark: #1a1719;
+  --ayllu-muted: #6b7280;
+  --ayllu-border: rgba(26, 23, 25, 0.08);
+  --ayllu-shadow: 0 12px 32px rgba(26, 23, 25, 0.05);
+  --ayllu-radius: 16px;
+}
+
+.ayllu-budget h1,
+.ayllu-budget h2,
+.ayllu-budget h3,
+.ayllu-budget h4,
+.ayllu-budget h5,
+.ayllu-budget h6 {
+  font-size: inherit !important;
+  line-height: inherit !important;
+}
+
+.ayllu-budget-loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 320px;
+  gap: 14px;
+  color: var(--ayllu-muted);
+}
+
+.ayllu-budget-loader__spinner {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 3px solid rgba(244, 120, 32, 0.15);
+  border-top-color: var(--ayllu-orange);
+  animation: aylluBudgetSpin 0.8s linear infinite;
+}
+
+@keyframes aylluBudgetSpin {
+  to { transform: rotate(360deg); }
+}
+
+.ayllu-budget__header {
+  margin-bottom: 18px;
+}
+
+.ayllu-budget__eyebrow {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ayllu-orange);
+  margin-bottom: 4px;
+}
+
+.ayllu-budget__title {
+  margin: 0 0 4px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--ayllu-dark);
+}
+
+.ayllu-budget__subtitle {
+  margin: 0;
+  font-size: 0.84rem;
+  color: var(--ayllu-muted);
+}
+
+.ayllu-budget__draft-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: rgba(255, 193, 7, 0.15);
+  border: 1px solid rgba(255, 193, 7, 0.45);
+  color: #8a6100;
+  font-size: 0.92rem;
+}
+
+.ayllu-selection-limit {
+  background: rgba(244, 120, 32, 0.12);
+  color: #c45a10;
+  border: 1px solid rgba(244, 120, 32, 0.25);
+  font-weight: 600;
+}
+
+.ayllu-budget__shell {
+  background: #fff;
+  border: 1px solid var(--ayllu-border);
+  border-radius: calc(var(--ayllu-radius) + 2px);
+  box-shadow: var(--ayllu-shadow);
+  overflow: visible;
+}
+
+.ayllu-budget__form {
+  padding: 20px;
+}
+
+.ayllu-budget__section {
+  padding: 18px;
+  margin-bottom: 16px;
+  border: 1px solid var(--ayllu-border);
+  border-radius: var(--ayllu-radius);
+  background: linear-gradient(180deg, #ffffff 0%, #fcfbfa 100%);
+}
+
+.ayllu-budget__section-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--ayllu-border);
+}
+
+.ayllu-budget__section-head iconify-icon {
+  color: var(--ayllu-orange);
+  font-size: 1.15rem;
+}
+
+.ayllu-budget__section-title {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--ayllu-dark);
+}
+
+.ayllu-budget .form-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--ayllu-muted);
+  margin-bottom: 6px;
+}
+
+.ayllu-budget__input,
+.ayllu-budget .form-control,
+.ayllu-budget .form-select {
+  min-height: 42px;
+  border-radius: 10px;
+  border-color: rgba(26, 23, 25, 0.12);
+  font-size: 0.86rem;
+}
+
+.ayllu-budget .icon-field .form-control {
+  padding-inline-start: 2.5rem;
+}
+
+.ayllu-budget__input:focus,
+.ayllu-budget .form-control:focus,
+.ayllu-budget .form-select:focus {
+  border-color: rgba(244, 120, 32, 0.45);
+  box-shadow: 0 0 0 3px rgba(244, 120, 32, 0.12);
+}
+
+.ayllu-budget__panel {
+  border: 1px solid var(--ayllu-border) !important;
+  box-shadow: var(--ayllu-shadow);
+}
+
+.ayllu-budget .button-tab.nav-pills {
+  border-right: 1px solid var(--ayllu-border);
+  padding-right: 8px;
+}
+
+.ayllu-budget .button-tab.nav-pills .nav-link {
+  border-radius: 12px !important;
+  font-size: 0.82rem;
+  transition: all 0.2s ease;
+}
+
+.ayllu-budget .button-tab.nav-pills .nav-link.active {
+  background: rgba(244, 120, 32, 0.12) !important;
+  color: var(--ayllu-dark) !important;
+  box-shadow: inset 0 0 0 1px rgba(244, 120, 32, 0.18);
+}
+
+.ayllu-budget .subcategory-card.selected,
+.ayllu-budget .product-card.selected {
+  border-color: var(--ayllu-orange) !important;
+  box-shadow: 0 0 0 2px rgba(244, 120, 32, 0.15);
+}
+
+.ayllu-budget__summary {
+  background: #faf9f8 !important;
+  border: 1px solid var(--ayllu-border) !important;
+  box-shadow: var(--ayllu-shadow);
+}
+
+.ayllu-summary {
+  padding: 20px;
+  border: 1px solid var(--ayllu-border);
+  border-radius: calc(var(--ayllu-radius) + 2px);
+  background: linear-gradient(180deg, #ffffff 0%, #fcfbfa 100%);
+  box-shadow: var(--ayllu-shadow);
+}
+
+.ayllu-summary__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.ayllu-summary__title {
+  margin: 0 0 4px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--ayllu-dark);
+}
+
+.ayllu-summary__hint {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--ayllu-muted);
+}
+
+.ayllu-summary__top-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.ayllu-summary__progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ayllu-summary__progress-ring {
+  --progress: 0%;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: conic-gradient(var(--ayllu-orange) var(--progress), #ececec 0);
+  position: relative;
+}
+
+.ayllu-summary__progress-ring::before {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.ayllu-summary__progress-ring span {
+  position: relative;
+  z-index: 1;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--ayllu-dark);
+}
+
+.ayllu-summary__progress strong {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--ayllu-dark);
+}
+
+.ayllu-summary__progress span:last-child {
+  font-size: 0.72rem;
+  color: var(--ayllu-muted);
+}
+
+.ayllu-summary__alert {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  margin-bottom: 16px;
+  border-radius: 10px;
+  background: rgba(244, 120, 32, 0.08);
+  border: 1px solid rgba(244, 120, 32, 0.18);
+  color: #9a4b12;
+  font-size: 0.78rem;
+}
+
+.ayllu-summary__alert iconify-icon {
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.ayllu-summary__totals {
+  display: grid;
+  grid-template-columns: 1.2fr repeat(5, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.ayllu-summary__pricing {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 2px solid rgba(244, 120, 32, 0.15);
+}
+
+.ayllu-summary__pricing-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--ayllu-dark);
+}
+
+.ayllu-summary__pricing-title iconify-icon {
+  font-size: 1.1rem;
+  color: var(--ayllu-orange);
+}
+
+.ayllu-summary__pricing-table {
+  border: 1px solid var(--ayllu-border);
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.ayllu-summary__pricing-head,
+.ayllu-summary__pricing-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 160px;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+}
+
+.ayllu-summary__pricing-head {
+  background: #f8f9fb;
+  border-bottom: 1px solid var(--ayllu-border);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ayllu-muted);
+}
+
+.ayllu-summary__pricing-row {
+  border-bottom: 1px solid #eef0f3;
+}
+
+.ayllu-summary__pricing-row:last-child {
+  border-bottom: none;
+}
+
+.ayllu-summary__pricing-concept strong {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--ayllu-dark);
+}
+
+.ayllu-summary__pricing-concept small {
+  display: block;
+  margin-top: 3px;
+  font-size: 0.72rem;
+  color: var(--ayllu-muted);
+  line-height: 1.35;
+}
+
+.ayllu-summary__pricing-amount {
+  text-align: right;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--ayllu-dark);
+  font-variant-numeric: tabular-nums;
+}
+
+.ayllu-summary__pricing-row--total {
+  background: linear-gradient(135deg, rgba(244, 120, 32, 0.1), rgba(244, 120, 32, 0.03));
+}
+
+.ayllu-summary__pricing-row--total .ayllu-summary__pricing-concept strong,
+.ayllu-summary__pricing-row--total .ayllu-summary__pricing-amount {
+  color: var(--ayllu-orange);
+  font-size: 1rem;
+}
+
+.ayllu-summary__total-card {
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #fff;
+  border: 1px solid var(--ayllu-border);
+}
+
+.ayllu-summary__total-card span {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ayllu-muted);
+  margin-bottom: 4px;
+}
+
+.ayllu-summary__total-card strong {
+  display: block;
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: var(--ayllu-dark);
+}
+
+.ayllu-summary__total-card small {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.68rem;
+  color: var(--ayllu-muted);
+}
+
+.ayllu-summary__total-card--main {
+  background: linear-gradient(135deg, rgba(244, 120, 32, 0.12), rgba(244, 120, 32, 0.04));
+  border-color: rgba(244, 120, 32, 0.2);
+}
+
+.ayllu-summary__total-card--main strong {
+  font-size: 1.15rem;
+  color: var(--ayllu-orange);
+}
+
+.ayllu-summary__steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.ayllu-summary__step {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+.ayllu-summary__step iconify-icon {
+  font-size: 0.9rem;
+}
+
+.ayllu-summary__step.is-done {
+  background: rgba(31, 157, 106, 0.12);
+  color: #1f9d6a;
+}
+
+.ayllu-summary__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.ayllu-summary__block {
+  padding: 14px;
+  border-radius: 12px;
+  background: #fff;
+  border: 1px solid var(--ayllu-border);
+  min-height: 120px;
+}
+
+.ayllu-summary__block--wide {
+  grid-column: span 3;
+}
+
+.ayllu-summary__block header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(26, 23, 25, 0.06);
+}
+
+.ayllu-summary__block header iconify-icon {
+  color: var(--ayllu-orange);
+  font-size: 1rem;
+}
+
+.ayllu-summary__block header span {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--ayllu-dark);
+}
+
+.ayllu-summary__block strong {
+  display: block;
+  font-size: 0.86rem;
+  color: var(--ayllu-dark);
+  margin-bottom: 4px;
+}
+
+.ayllu-summary__block p {
+  margin: 0 0 8px;
+  font-size: 0.78rem !important;
+  color: var(--ayllu-muted);
+}
+
+.ayllu-summary__tag {
+  display: inline-flex;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  background: rgba(244, 120, 32, 0.1);
+  color: var(--ayllu-orange);
+}
+
+.ayllu-summary__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.ayllu-summary__list li {
+  font-size: 0.8rem;
+  color: var(--ayllu-dark);
+  padding-left: 12px;
+  position: relative;
+}
+
+.ayllu-summary__list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--ayllu-orange);
+}
+
+.ayllu-summary__chips {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ayllu-summary__chips li {
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  background: #f5f4f3;
+  color: var(--ayllu-dark);
+  border: 1px solid var(--ayllu-border);
+}
+
+.ayllu-summary__empty {
+  margin: 0;
+  font-size: 0.78rem !important;
+  color: #9ca3af;
+  font-style: italic;
+}
+
+.ayllu-budget__download {
+  background: var(--ayllu-orange) !important;
+  border-color: var(--ayllu-orange) !important;
+  color: #fff !important;
+  border-radius: 10px !important;
+  font-weight: 700;
+  padding: 10px 16px !important;
+}
+
+.ayllu-budget__download:disabled {
+  opacity: 0.55;
+}
+
+.ayllu-budget p {
+  font-size: 0.86rem !important;
+}
+
+.image-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 99999;
+}
+
+.image-modal.open {
+  display: flex;
+}
+
+.image-modal-content {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 10px;
+}
+
+#pills-vertical-personal ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.ayllu-included-panel {
+  background: #fffaf6;
+  border: 1px solid #f3dfd0;
+}
+
+.ayllu-included-checklist {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.65rem;
+}
+
+.ayllu-included-checklist__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  padding: 0.55rem 0.75rem;
+  border-radius: 10px;
+  background: #fff;
+  border: 1px solid #efe4da;
+  color: #3d3a38;
+  line-height: 1.45;
+}
+
+.ayllu-included-checklist__check {
+  flex-shrink: 0;
+  width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 999px;
+  background: #e8f7ee;
+  color: #1f8a4c;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-top: 0.1rem;
+}
+
+.category-container {
+  background: #fafafa;
+  border-radius: 12px;
+  border: 1px solid var(--ayllu-border);
+}
+
+.subcategory-card {
+  background: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 10px;
+  text-align: center;
+  padding: 1rem;
+  transition: all 0.2s;
+}
+
+.subcategory-card:hover {
+  background: rgba(244, 120, 32, 0.06);
+  border-color: rgba(244, 120, 32, 0.35);
+}
+
+.product-card {
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--ayllu-border);
+  transition: transform 0.2s;
+}
+
+.product-card:hover {
+  transform: translateY(-3px);
+}
+
+.product-images img {
+  object-fit: cover;
+  border-radius: 6px;
+  height: 100%;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.cursor-zoom {
+  cursor: zoom-in;
+}
+
+
+.product-card .product-images {
+  width: 100%;
+  height: 220px;
+}
+
+.img_servicio_adicional {
+  width: 100%;
+  height: 220px;
+}
+
+.img_servicio_adicional img {
+  object-fit: cover;
+  border-radius: 6px;
+  height: 100%;
+}
+
+@media (max-width: 1199px) {
+  .ayllu-summary__pricing-head,
+  .ayllu-summary__pricing-row {
+    grid-template-columns: minmax(0, 1fr) 130px;
+  }
+
+  .ayllu-summary__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ayllu-summary__block--wide {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 767px) {
+  .ayllu-budget__form {
+    padding: 14px;
+  }
+
+  .ayllu-budget__section {
+    padding: 14px;
+  }
+
+  .ayllu-summary {
+    padding: 14px;
+  }
+
+  .ayllu-summary__top {
+    flex-direction: column;
+  }
+
+.ayllu-summary__top-actions {
+    width: 100%;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .ayllu-summary__pricing-head,
+  .ayllu-summary__pricing-row {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
+  .ayllu-summary__pricing-amount {
+    text-align: left;
+    padding-top: 2px;
+  }
+
+  .ayllu-summary__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ayllu-summary__block--wide {
+    grid-column: span 1;
+  }
+}

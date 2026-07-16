@@ -1,0 +1,112 @@
+<div class="dashboard-main-body facturacion-page">
+  <app-breadcrumb [title]="title"></app-breadcrumb>
+
+  <div class="card radius-12">
+    <div class="card-body p-20">
+      <ul class="nav nav-tabs mb-20" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button
+            type="button"
+            class="nav-link"
+            [class.active]="activeTab === 'boleta'"
+            (click)="setTab('boleta')"
+          >
+            Boletas
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button
+            type="button"
+            class="nav-link"
+            [class.active]="activeTab === 'factura'"
+            (click)="setTab('factura')"
+          >
+            Facturas
+          </button>
+        </li>
+      </ul>
+
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-16">
+        <div class="d-flex align-items-center gap-2">
+          <span>Mostrar</span>
+          <select class="form-select form-select-sm w-auto" [(ngModel)]="pageSize">
+            <option [ngValue]="10">10</option>
+            <option [ngValue]="25">25</option>
+            <option [ngValue]="50">50</option>
+          </select>
+          <span>registros</span>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <label class="mb-0">Buscar:</label>
+          <input
+            type="text"
+            class="form-control form-control-sm"
+            [(ngModel)]="search"
+            (input)="applyFilter()"
+            placeholder="Comprobante, cliente o cotización"
+          />
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table bordered-table sm-table mb-0">
+          <thead>
+            <tr>
+              <th>Comprob.</th>
+              <th>Tipo venta</th>
+              <th>Fec. emisión</th>
+              <th>Forma pago</th>
+              <th>Ope. grav.</th>
+              <th>IGV</th>
+              <th>Total</th>
+              <th>Estado</th>
+              <th>Cotización</th>
+              <th class="text-center">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let c of filtered | slice:0:pageSize">
+              <td>{{ c.numeroCompleto }}</td>
+              <td>{{ activeTab === 'boleta' ? 'Boleta' : 'Factura' }}</td>
+              <td>{{ c.fechaEmision | date:'dd/MM/yyyy' }}</td>
+              <td>{{ c.formaPago }}</td>
+              <td>S/ {{ c.opGravadas | number:'1.2-2' }}</td>
+              <td>S/ {{ c.igv | number:'1.2-2' }}</td>
+              <td>S/ {{ c.total | number:'1.2-2' }}</td>
+              <td>
+                <span class="px-16 py-4 radius-4 fw-medium text-sm" [ngClass]="estadoClass(c.estado)">
+                  {{ c.estado }}
+                </span>
+              </td>
+              <td>#{{ c.cotizacionID }}</td>
+              <td class="text-center">
+                <div class="d-flex flex-wrap gap-1 justify-content-center">
+                  <button type="button" class="btn btn-sm btn-outline-primary" (click)="imprimirTicket(c)">Ticket</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary" *ngIf="c.rutaXml" (click)="descargarXml(c)">XML</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary" *ngIf="c.rutaCdr" (click)="descargarCdr(c)">CDR</button>
+                  <button type="button" class="btn btn-sm btn-outline-warning" *ngIf="c.estado === 'Rechazado' || c.estado === 'Pendiente SUNAT'" (click)="reenviarSunat(c)">Reenviar</button>
+                </div>
+                <small class="text-secondary-light d-block mt-4" *ngIf="c.sunatRespuesta">{{ c.sunatRespuesta }}</small>
+              </td>
+            </tr>
+            <tr *ngIf="filtered.length === 0">
+              <td colspan="10" class="text-center text-secondary-light py-24">
+                Ningún dato disponible en esta tabla
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="d-flex justify-content-between align-items-center mt-16">
+        <small class="text-secondary-light">
+          Mostrando registros del 1 al {{ filtered.length > pageSize ? pageSize : filtered.length }} de un total de {{ filtered.length }} registros
+        </small>
+        <div class="d-flex gap-2">
+          <button type="button" class="btn btn-sm btn-outline-secondary" disabled>Anterior</button>
+          <button type="button" class="btn btn-sm btn-outline-secondary" disabled>Siguiente</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

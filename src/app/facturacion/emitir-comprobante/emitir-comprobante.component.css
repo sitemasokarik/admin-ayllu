@@ -1,0 +1,178 @@
+.facturacion-page {
+  max-width: 1180px;
+}
+
+.fact-page-header {
+  margin-bottom: 18px;
+}
+
+.fact-page-title {
+  margin: 0 0 8px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1e3a5f;
+  line-height: 1.35;
+}
+
+.fact-page-intro {
+  margin: 0;
+  max-width: 920px;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: #6b7280;
+}
+
+.fact-modo-emision-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 28px;
+  margin: 0 0 22px;
+  padding: 0;
+  border: 0;
+}
+
+.fact-modo-option {
+  margin: 0;
+  min-height: auto;
+}
+
+.fact-modo-option .form-check-input {
+  width: 1.05rem;
+  height: 1.05rem;
+  margin-top: 0.15rem;
+  cursor: pointer;
+  border-color: #9ca3af;
+}
+
+.fact-modo-option .form-check-input:checked {
+  background-color: #487fff;
+  border-color: #487fff;
+}
+
+.fact-modo-option .form-check-label {
+  margin-left: 0.35rem;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+}
+
+.fact-main-cards {
+  margin-bottom: 0;
+}
+
+.fact-section-card {
+  border: 1px solid rgba(26, 23, 25, 0.08);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+  overflow: hidden;
+}
+
+.fact-section-card__head {
+  padding: 12px 20px;
+  background: #f3f4f6;
+  border-bottom: 1px solid rgba(26, 23, 25, 0.08);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #374151;
+}
+
+.fact-field-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #4b5563;
+  margin-bottom: 6px;
+}
+
+.fact-field-control {
+  border-radius: 8px;
+  border-color: #d1d5db;
+  font-size: 0.9rem;
+}
+
+.fact-field-control:focus {
+  border-color: #487fff;
+  box-shadow: 0 0 0 0.15rem rgba(72, 127, 255, 0.15);
+}
+
+.fact-field-control--readonly,
+.fact-field-control:disabled,
+.form-select:disabled {
+  background-color: #f3f4f6;
+  color: #6b7280;
+  opacity: 1;
+}
+
+.fact-doc-search .btn {
+  min-width: 88px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  border-color: #d1d5db;
+  color: #374151;
+  background: #fff;
+}
+
+.fact-doc-search .form-control {
+  border-left: 0;
+}
+
+.fact-search-box {
+  border: 1px dashed rgba(244, 120, 32, 0.35);
+  border-radius: 12px;
+  padding: 16px;
+  background: rgba(244, 120, 32, 0.04);
+}
+
+.fact-search-results {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.fact-search-item {
+  width: 100%;
+  text-align: left;
+  border: 1px solid rgba(26, 23, 25, 0.08);
+  background: #fff;
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.fact-search-item:hover {
+  border-color: rgba(244, 120, 32, 0.45);
+  background: rgba(244, 120, 32, 0.06);
+}
+
+.fact-totals-card {
+  position: sticky;
+  top: 90px;
+}
+
+.fact-total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(26, 23, 25, 0.06);
+  font-size: 0.88rem;
+}
+
+.fact-total-row--main {
+  margin-top: 8px;
+  padding-top: 12px;
+  font-size: 1rem;
+}
+
+.fact-total-row--main strong {
+  color: #f47820;
+  font-size: 1.15rem;
+}
+
+@media (max-width: 991px) {
+  .fact-modo-emision-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}

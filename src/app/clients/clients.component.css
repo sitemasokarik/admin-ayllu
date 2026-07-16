@@ -1,0 +1,21 @@
+.portal-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 42px;
+  padding: 4px 10px;
+  border-radius: 50px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.portal-badge--yes {
+  color: #16a34a;
+  background: rgba(22, 163, 74, 0.12);
+}
+
+.portal-badge--no {
+  color: #64748b;
+  background: rgba(100, 116, 139, 0.12);
+}

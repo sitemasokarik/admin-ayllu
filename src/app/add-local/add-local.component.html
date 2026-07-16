@@ -1,0 +1,100 @@
+<div class="dashboard-main-body">
+    <app-breadcrumb [title]="title"></app-breadcrumb>
+  
+    <div class="card h-100 p-0 radius-12">
+      <div class="card-body p-24">
+        <div class="row justify-content-center">
+          <div class="col-xxl-6 col-xl-8 col-lg-10">
+            <div class="card border">
+              <div class="card-body">
+                <form (ngSubmit)="saveLocal()">
+                  <!-- Nombre -->
+                  <div class="mb-20">
+                    <label class="form-label fw-semibold text-primary-light text-sm mb-8">
+                      Nombre del Local <span class="text-danger-600">*</span>
+                    </label>
+                    <input type="text" class="form-control radius-8" placeholder="Ingrese el nombre"
+                           [(ngModel)]="local.nombre" name="nombre" />
+                  </div>
+  
+                  <!-- Dirección -->
+                  <div class="mb-20">
+                    <label class="form-label fw-semibold text-primary-light text-sm mb-8">
+                      Dirección <span class="text-danger-600">*</span>
+                    </label>
+                    <input type="text" class="form-control radius-8" placeholder="Ingrese la dirección"
+                           [(ngModel)]="local.direccion" name="direccion" />
+                  </div>
+  
+                  <!-- Capacidad -->
+                  <div class="mb-20">
+                    <label class="form-label fw-semibold text-primary-light text-sm mb-8">Capacidad</label>
+                    <input type="number" class="form-control radius-8" [(ngModel)]="local.capacidad" name="capacidad" />
+                  </div>
+  
+                  <!-- Precio de Alquiler -->
+                  <div class="mb-20">
+                    <label class="form-label fw-semibold text-primary-light text-sm mb-8">Precio de Alquiler</label>
+                    <input type="number" class="form-control radius-8" [(ngModel)]="local.precioAlquiler" name="precioAlquiler" />
+                  </div>
+
+                  <!-- Garantía del local -->
+                  <div class="mb-20">
+                    <label class="form-label fw-semibold text-primary-light text-sm mb-8">Garantía del local</label>
+                    <input type="number" class="form-control radius-8" [(ngModel)]="local.garantia" name="garantia" />
+                  </div>
+  
+                  <!-- Horas del Evento -->
+                  <div class="mb-20">
+                    <label class="form-label fw-semibold text-primary-light text-sm mb-8">Horas del Evento</label>
+                    <input type="number" class="form-control radius-8" [(ngModel)]="local.horasEvento" name="horasEvento" />
+                  </div>
+  
+                  <!-- Términos y Condiciones -->
+                  <div class="mb-20">
+                    <label class="form-label fw-semibold text-primary-light text-sm mb-8">Términos y Condiciones</label>
+                    <textarea class="form-control radius-8" [(ngModel)]="local.terminosCondiciones" name="terminosCondiciones"></textarea>
+                  </div>
+  
+                  <!-- Estado -->
+                  <div class="mb-20">
+                    <label class="form-label fw-semibold text-primary-light text-sm mb-8">Estado</label>
+                    <select class="form-control radius-8" [(ngModel)]="local.estado" name="estado">
+                      <option [value]="true">Activo</option>
+                      <option [value]="false">Inactivo</option>
+                    </select>
+                  </div>
+  
+                  <!-- Fotos -->
+                  <div class="mb-20">
+                    <label class="form-label fw-semibold text-primary-light text-sm mb-8">Fotos del local</label>
+                    <input type="file" class="form-control radius-8 mb-2" accept="image/*"
+                           (change)="onFotoSelected($event)" [disabled]="fotoUploading" />
+                    <div class="text-secondary-light text-sm mb-2" *ngIf="fotoUploading">Subiendo imagen...</div>
+                    <div class="d-flex flex-wrap gap-2 pt-3">
+                      <div class="position-relative" *ngFor="let foto of local.fotosUrls; let i = index">
+                        <img [src]="userService.resolveMediaUrl(foto)" alt="Local" class="radius-8"
+                             style="width: 96px; height: 72px; object-fit: cover;" />
+                        <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0"
+                                (click)="removeFotoUrl(i)">×</button>
+                      </div>
+                    </div>
+                  </div>
+  
+                  <!-- Botones -->
+                  <div class="d-flex align-items-center justify-content-center gap-3">
+                    <button type="button" class="border border-danger-600 bg-hover-danger-200 text-danger-600 text-md px-56 py-11 radius-8"
+                            (click)="cancel()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary border border-primary-600 text-md px-56 py-12 radius-8">
+                      Guardar
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

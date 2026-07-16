@@ -1,0 +1,583 @@
+/* ============================================================
+   Ayllu Admin — CRUD tables, actions & modals (refined UI)
+   ============================================================ */
+
+/* --- Cards & table container --- */
+.dashboard-main-body .card.basic-data-table,
+.dashboard-main-body .card.radius-12 {
+  border: 1px solid rgba(26, 23, 25, 0.08);
+  border-radius: 12px;
+  box-shadow: none;
+}
+
+.dashboard-main-body .card.basic-data-table > .card-body,
+.dashboard-main-body .card.radius-12 > .card-body {
+  padding: 1rem 1.25rem;
+}
+
+.dashboard-main-body .card.basic-data-table .btn-primary.btn-sm,
+.dashboard-main-body .card.radius-12 .btn-primary.btn-sm {
+  font-size: 0.8125rem;
+  padding: 0.45rem 0.85rem;
+}
+
+.dashboard-main-body .card.basic-data-table .btn-primary iconify-icon,
+.dashboard-main-body .card.radius-12 .btn-primary iconify-icon {
+  font-size: 1rem;
+}
+
+/* --- Compact table density --- */
+.dashboard-main-body .table.sm-table thead th,
+.dashboard-main-body .table.sm-table tbody td,
+.basic-data-table .table.sm-table thead th,
+.basic-data-table .table.sm-table tbody td {
+  padding: 0.5rem 0.75rem !important;
+  vertical-align: middle;
+  font-size: 0.8125rem;
+  line-height: 1.35;
+  color: var(--text-primary-light, #1a1719);
+}
+
+.dashboard-main-body .table.sm-table thead th,
+.basic-data-table .table.sm-table thead th {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-secondary-light, #6b7280);
+  white-space: nowrap;
+  background: rgba(26, 23, 25, 0.02);
+}
+
+.dashboard-main-body .table.sm-table tbody tr:hover,
+.basic-data-table .table.sm-table tbody tr:hover {
+  background: rgba(26, 23, 25, 0.015);
+}
+
+.dashboard-main-body .table.sm-table .text-md,
+.basic-data-table .table.sm-table .text-md {
+  font-size: 0.8125rem !important;
+}
+
+/* --- Status badges --- */
+.dashboard-main-body .table .px-24.py-4.radius-4,
+.dashboard-main-body .table .px-16.py-4.radius-4,
+.basic-data-table .table .px-24.py-4.radius-4 {
+  padding: 0.15rem 0.55rem !important;
+  font-size: 0.6875rem !important;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  border-radius: 999px !important;
+}
+
+/* --- Action buttons (minimal) --- */
+.dashboard-main-body table button.rounded-circle,
+.basic-data-table table button.rounded-circle,
+table#dataTable button.rounded-circle {
+  width: 1.875rem !important;
+  height: 1.875rem !important;
+  min-width: 1.875rem;
+  padding: 0 !important;
+  flex-shrink: 0;
+  background: #fff !important;
+  border: 1px solid rgba(26, 23, 25, 0.1) !important;
+  box-shadow: none;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
+}
+
+.dashboard-main-body table button.rounded-circle iconify-icon,
+.basic-data-table table button.rounded-circle iconify-icon,
+table#dataTable button.rounded-circle iconify-icon {
+  font-size: 0.95rem;
+  line-height: 1;
+}
+
+/* Ver */
+.dashboard-main-body table button.text-info-600,
+.basic-data-table table button.text-info-600,
+table#dataTable button.text-info-600 {
+  color: #64748b !important;
+}
+
+.dashboard-main-body table button.text-info-600:hover,
+.basic-data-table table button.text-info-600:hover,
+table#dataTable button.text-info-600:hover {
+  background: rgba(59, 130, 246, 0.07) !important;
+  border-color: rgba(59, 130, 246, 0.28) !important;
+  color: #2563eb !important;
+  transform: translateY(-1px);
+}
+
+/* Editar */
+.dashboard-main-body table button.text-success-600,
+.basic-data-table table button.text-success-600,
+table#dataTable button.text-success-600 {
+  color: #64748b !important;
+}
+
+.dashboard-main-body table button.text-success-600:hover,
+.basic-data-table table button.text-success-600:hover,
+table#dataTable button.text-success-600:hover {
+  background: rgba(22, 163, 74, 0.07) !important;
+  border-color: rgba(22, 163, 74, 0.28) !important;
+  color: #15803d !important;
+  transform: translateY(-1px);
+}
+
+/* Desactivar / eliminar */
+.dashboard-main-body table button.text-danger-600,
+.basic-data-table table button.text-danger-600,
+table#dataTable button.text-danger-600 {
+  color: #64748b !important;
+}
+
+.dashboard-main-body table button.text-danger-600:hover,
+.basic-data-table table button.text-danger-600:hover,
+table#dataTable button.text-danger-600:hover {
+  background: rgba(220, 38, 38, 0.07) !important;
+  border-color: rgba(220, 38, 38, 0.28) !important;
+  color: #dc2626 !important;
+  transform: translateY(-1px);
+}
+
+.dashboard-main-body table .d-flex.gap-10,
+.basic-data-table table .d-flex.gap-10,
+table#dataTable .d-flex.gap-10 {
+  gap: 0.3rem !important;
+}
+
+.dashboard-main-body table .btn.btn-sm.btn-outline-primary,
+.facturacion-page .btn.btn-sm.btn-outline-primary {
+  font-size: 0.75rem;
+  padding: 0.28rem 0.6rem;
+  border-radius: 999px;
+  font-weight: 500;
+  color: #475569 !important;
+  border-color: rgba(26, 23, 25, 0.12) !important;
+  background: #fff !important;
+}
+
+.dashboard-main-body table .btn.btn-sm.btn-outline-primary:hover,
+.facturacion-page .btn.btn-sm.btn-outline-primary:hover {
+  color: #1a1719 !important;
+  background: rgba(26, 23, 25, 0.04) !important;
+  border-color: rgba(26, 23, 25, 0.2) !important;
+}
+
+.dashboard-main-body table .btn.btn-sm.btn-outline-primary iconify-icon,
+.facturacion-page .btn.btn-sm.btn-outline-primary iconify-icon {
+  font-size: 0.9rem;
+}
+
+.facturacion-page .table.sm-table thead th,
+.facturacion-page .table.sm-table tbody td {
+  padding: 0.5rem 0.75rem !important;
+  font-size: 0.8125rem;
+}
+
+.facturacion-page .table.sm-table thead th {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-secondary-light, #6b7280);
+}
+
+.facturacion-page .nav-tabs .nav-link {
+  font-size: 0.8125rem;
+  padding: 0.45rem 0.85rem;
+}
+
+/* --- DataTables controls (compact) --- */
+.basic-data-table .dt-layout-row {
+  padding-bottom: 0.65rem !important;
+}
+
+.basic-data-table .dt-layout-row select,
+.basic-data-table .dt-layout-row .dt-search .dt-input {
+  height: 2.125rem !important;
+  font-size: 0.8125rem !important;
+  padding: 0.35rem 0.65rem !important;
+}
+
+.basic-data-table .dt-layout-row div,
+.basic-data-table .dt-layout-row label {
+  font-size: 0.8125rem !important;
+}
+
+div.dt-container .dt-paging .dt-paging-button {
+  width: 1.75rem !important;
+  height: 1.75rem !important;
+  font-size: 0.75rem !important;
+}
+
+/* ============================================================
+   Modals — view & edit (professional, compact typography)
+   ============================================================ */
+.modal .modal-dialog {
+  margin: 1rem auto;
+}
+
+.modal .modal-dialog.modal-lg {
+  max-width: 520px;
+}
+
+.modal .modal-dialog.modal-md {
+  max-width: 460px;
+}
+
+.modal .modal-dialog:not(.modal-lg):not(.modal-xl):not(.modal-sm) {
+  max-width: 420px;
+}
+
+.modal .modal-content {
+  border: none;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(26, 23, 25, 0.12);
+}
+
+.modal .modal-header {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid rgba(26, 23, 25, 0.08);
+  background: #fff;
+}
+
+.modal .modal-header.text-white {
+  background: linear-gradient(135deg, #1a1719 0%, #2f2b2e 100%);
+  border-bottom: none;
+  color: #fff;
+}
+
+.modal .modal-header.text-white .modal-title,
+.modal .modal-header.text-white h5.modal-title {
+  color: #fff !important;
+  font-size: 0.875rem !important;
+  font-weight: 600;
+}
+
+.modal .modal-header.text-white .btn-close {
+  filter: invert(1) grayscale(100%) brightness(200%);
+  opacity: 0.85;
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.modal .modal-header.text-white .btn-close:hover {
+  opacity: 1;
+}
+
+.modal .modal-title,
+.modal .modal-title.h5,
+.modal h5.modal-title {
+  font-size: 0.875rem !important;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--text-primary-light, #1a1719);
+  margin-bottom: 0;
+}
+
+.modal .modal-body {
+  padding: 1.25rem 1.5rem;
+  font-size: 0.8125rem;
+}
+
+.modal .modal-body .p-4,
+.modal .modal-body .p-3 {
+  padding: 0 !important;
+}
+
+/* Detail view field labels (override global h6/h5 heading sizes) */
+.modal .modal-body h6,
+.modal .modal-body h6.fw-semibold,
+.modal .modal-body h6.text-secondary {
+  font-size: 0.5625rem !important;
+  font-weight: 600 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary-light, #6b7280) !important;
+  margin-bottom: 0.12rem !important;
+  line-height: 1.2;
+}
+
+.modal .modal-body p,
+.modal .modal-body span:not([class*="badge"]):not([class*="btn"]) {
+  font-size: 0.8125rem;
+  color: var(--text-primary-light, #1a1719);
+  line-height: 1.4;
+}
+
+/* Edit forms inside modals */
+.modal .form-label,
+.modal label.form-label {
+  font-size: 0.6875rem !important;
+  font-weight: 600 !important;
+  margin-bottom: 0.45rem;
+  color: var(--text-secondary-light, #6b7280) !important;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  display: block;
+}
+
+.modal .form-control,
+.modal .form-select,
+.modal textarea {
+  font-size: 0.8125rem;
+  padding: 0.5rem 0.85rem;
+  min-height: 2.25rem;
+  border-radius: 8px;
+  width: 100%;
+}
+
+.modal textarea.form-control {
+  min-height: 5rem;
+  resize: vertical;
+}
+
+.modal .form-control:focus,
+.modal .form-select:focus {
+  box-shadow: 0 0 0 3px rgba(26, 23, 25, 0.08);
+}
+
+.modal .modal-footer {
+  padding: 0.85rem 1.5rem;
+  border-top: 1px solid rgba(26, 23, 25, 0.08);
+  gap: 0.65rem;
+  margin-top: 0.25rem;
+}
+
+.modal .modal-body form .modal-footer {
+  padding-left: 0;
+  padding-right: 0;
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+}
+
+.modal .modal-footer .btn {
+  font-size: 0.8125rem;
+  padding: 0.42rem 0.9rem;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.modal .modal-footer .btn-primary {
+  min-width: 7rem;
+}
+
+/* Cotización & nested cards inside modals */
+.modal .modal-body h5,
+.modal .modal-body h5.fw-bold {
+  font-size: 0.8125rem !important;
+  font-weight: 600 !important;
+  margin-bottom: 0.5rem !important;
+  color: var(--text-primary-light, #1a1719) !important;
+}
+
+.modal .modal-body label.text-secondary,
+.modal .modal-body label.fw-semibold:not(.form-label) {
+  display: block;
+  font-size: 0.5625rem !important;
+  font-weight: 600 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary-light, #6b7280) !important;
+  margin-bottom: 0.12rem;
+}
+
+.modal .modal-body .card {
+  border: 1px solid rgba(26, 23, 25, 0.08) !important;
+  border-radius: 10px;
+  box-shadow: none !important;
+}
+
+.modal .modal-body .card .card-body {
+  padding: 0.85rem 1rem;
+}
+
+.modal .modal-body .badge {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  padding: 0.25rem 0.55rem;
+}
+
+.modal .modal-header:not(.text-white) {
+  background: rgba(26, 23, 25, 0.025);
+}
+
+/* Edit modal: form grid with proper gutters (do NOT zero column padding) */
+.modal .modal-body form .row.g-3,
+.modal .modal-body form .row.g-4 {
+  --bs-gutter-x: 1.25rem;
+  --bs-gutter-y: 1rem;
+  margin-left: calc(var(--bs-gutter-x) * -0.5);
+  margin-right: calc(var(--bs-gutter-x) * -0.5);
+}
+
+.modal .modal-body form .row.g-3 > [class*="col-"],
+.modal .modal-body form .row.g-4 > [class*="col-"] {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding-right: calc(var(--bs-gutter-x) * 0.5);
+  padding-left: calc(var(--bs-gutter-x) * 0.5);
+  margin-top: calc(var(--bs-gutter-y) * 0.5);
+  margin-bottom: calc(var(--bs-gutter-y) * 0.5);
+}
+
+.modal .modal-body form .row.g-3 > [class*="col-"] > .form-control,
+.modal .modal-body form .row.g-3 > [class*="col-"] > .form-select,
+.modal .modal-body form .row.g-3 > [class*="col-"] > textarea,
+.modal .modal-body form .row.g-4 > [class*="col-"] > .form-control,
+.modal .modal-body form .row.g-4 > [class*="col-"] > .form-select,
+.modal .modal-body form .row.g-4 > [class*="col-"] > textarea {
+  margin-bottom: 0;
+}
+
+/* View modal: compact tile layout for read-only fields */
+.modal .modal-body > .p-4 .row.g-3,
+.modal .modal-body > .p-3 .row.g-3 {
+  --bs-gutter-x: 1rem;
+  --bs-gutter-y: 0.85rem;
+}
+
+.modal .modal-body > .p-4 .row.g-3 > [class*="col-"],
+.modal .modal-body > .p-3 .row.g-3 > [class*="col-"]:not(:has(input)):not(:has(select)):not(:has(textarea)) {
+  padding: 0.65rem 0.85rem;
+  background: rgba(26, 23, 25, 0.025);
+  border: 1px solid rgba(26, 23, 25, 0.06);
+  border-radius: 6px;
+}
+
+/* Loading state */
+.dashboard-main-body + .d-flex .text-primary-light,
+.dashboard-main-body .text-primary-light {
+  font-size: 0.875rem;
+}
+
+/* --- Admin forms (company, add-*, settings) --- */
+.dashboard-main-body .card-body.p-40,
+.dashboard-main-body .card-body.p-24 {
+  padding: 1.35rem 1.5rem !important;
+}
+
+.dashboard-main-body .form-label.fw-semibold.text-primary-light.text-sm,
+.dashboard-main-body .form-label.fw-semibold.text-sm {
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.03em;
+  margin-bottom: 0.45rem !important;
+  color: var(--text-secondary-light, #6b7280) !important;
+}
+
+.dashboard-main-body h5,
+.dashboard-main-body .card-body h5 {
+  font-size: 0.9375rem !important;
+  font-weight: 600 !important;
+  margin-bottom: 0.85rem !important;
+}
+
+.dashboard-main-body .form-control,
+.dashboard-main-body .form-select,
+.dashboard-main-body textarea.form-control {
+  font-size: 0.8125rem;
+  padding: 0.5rem 0.85rem;
+  min-height: 2.25rem;
+  border-radius: 8px;
+}
+
+.dashboard-main-body .row > [class*="col-"] {
+  margin-bottom: 0.25rem;
+}
+
+.dashboard-main-body .mb-20 {
+  margin-bottom: 1rem !important;
+}
+
+.dashboard-main-body .admin-section-title {
+  font-size: 0.9375rem !important;
+  font-weight: 600 !important;
+  color: var(--text-primary-light, #1a1719) !important;
+  margin-bottom: 0.85rem !important;
+}
+
+/* --- DataTables controls --- */
+.basic-data-table .table-responsive {
+  overflow-x: auto;
+}
+
+.basic-data-table .table-responsive > .dt-container {
+  width: 100%;
+}
+
+.basic-data-table .dt-container .dt-layout-table {
+  overflow-x: auto;
+}
+
+.basic-data-table .dt-container .dt-layout-row:not(.dt-layout-table) {
+  display: flex !important;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
+  min-height: 2.25rem;
+}
+
+.basic-data-table .dt-container .dt-length,
+.basic-data-table .dt-container .dt-search {
+  display: flex !important;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.basic-data-table .dt-container .dt-search input,
+.basic-data-table .dt-container .dt-length select,
+.basic-data-table .dataTables_wrapper .dataTables_filter input,
+.basic-data-table .dataTables_wrapper .dataTables_length select {
+  font-size: 0.8125rem;
+  padding: 0.35rem 0.65rem;
+  border-radius: 8px;
+  border: 1px solid rgba(26, 23, 25, 0.12);
+  min-height: 2rem;
+  min-width: 140px;
+}
+
+.basic-data-table .dt-container .dt-layout-row:not(.dt-layout-table) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
+}
+
+.basic-data-table .dt-container .dt-search label,
+.basic-data-table .dt-container .dt-length label {
+  font-size: 0.8125rem;
+  color: var(--text-secondary-light, #6b7280);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+}
+
+.basic-data-table .dt-container .dt-info,
+.basic-data-table .dt-container .dt-paging,
+.basic-data-table .dataTables_wrapper .dataTables_filter,
+.basic-data-table .dataTables_wrapper .dataTables_length,
+.basic-data-table .dataTables_wrapper .dataTables_info,
+.basic-data-table .dataTables_wrapper .dataTables_paginate {
+  font-size: 0.8125rem;
+  margin-top: 0.75rem;
+}
+
+.basic-data-table .dt-container .dt-paging .dt-paging-button,
+.basic-data-table .dataTables_wrapper .dataTables_paginate .paginate_button {
+  padding: 0.25rem 0.55rem !important;
+  border-radius: 6px !important;
+  margin: 0 2px;
+}
+
+.basic-data-table .table-responsive {
+  overflow-x: auto;
+}

@@ -1,0 +1,214 @@
+<div class="dashboard-main-body ayllu-dash">
+  <header class="ayllu-dash__header">
+    <div class="ayllu-dash__header-copy">
+      <span class="ayllu-dash__eyebrow">Panel operativo</span>
+      <div class="ayllu-dash__title" role="heading" aria-level="1">Panel de Eventos</div>
+      <p class="ayllu-dash__subtitle">Cotizaciones por estado: Activo, Evento y Anulado.</p>
+    </div>
+    <div class="ayllu-dash__header-meta">
+      <div class="ayllu-dash__date-chip">
+        <iconify-icon icon="solar:calendar-minimalistic-bold"></iconify-icon>
+        <span>{{ todayLabel }}</span>
+      </div>
+    </div>
+  </header>
+
+  @if (showVoucherAlert && vouchersPendientesCount > 0) {
+    <a routerLink="/pagos-vouchers" class="ayllu-dash__alert">
+      <iconify-icon icon="solar:bell-bing-bold"></iconify-icon>
+      <span>
+        <strong>{{ vouchersPendientesCount }}</strong>
+        cliente{{ vouchersPendientesCount === 1 ? '' : 's' }} subió voucher de pago pendiente de revisión.
+        Revisar ahora →
+      </span>
+    </a>
+  }
+
+  <div class="ayllu-dash__kpi-grid">
+    @for (item of kpiCards; track item.id) {
+      <article class="ayllu-kpi" [ngClass]="'ayllu-kpi--' + item.accent" [class.is-loading]="loading">
+        <div class="ayllu-kpi__icon">
+          <iconify-icon [icon]="item.icon"></iconify-icon>
+        </div>
+        <div class="ayllu-kpi__content">
+          <span class="ayllu-kpi__label">{{ item.title }}</span>
+          <div class="ayllu-kpi__row">
+            @if (loading) {
+              <span class="ayllu-skeleton ayllu-skeleton--sm"></span>
+            } @else {
+              <strong class="ayllu-kpi__value">{{ item.value | number }}</strong>
+              <span class="ayllu-kpi__share">{{ item.share }}%</span>
+            }
+          </div>
+          <span class="ayllu-kpi__caption">{{ item.caption }}</span>
+        </div>
+        <div class="ayllu-kpi__bar" [style.--fill]="item.share + '%'" aria-hidden="true"></div>
+      </article>
+    }
+  </div>
+
+  <div class="ayllu-dash__analytics">
+    <section class="ayllu-panel ayllu-panel--wide">
+      <div class="ayllu-panel__head">
+        <div>
+          <div class="ayllu-panel__title" role="heading" aria-level="2">Ingresos estimados</div>
+          <p class="ayllu-panel__hint">Solo cotizaciones Activas y Evento</p>
+          <p class="ayllu-panel__metric">
+            @if (loading) {
+              <span class="ayllu-skeleton ayllu-skeleton--md"></span>
+            } @else {
+              S/ {{ totalIngresos | number:'1.0-0' }}
+            }
+          </p>
+        </div>
+        <div class="ayllu-dash__periods" role="tablist" aria-label="Periodo del gráfico">
+          @for (period of chartPeriods; track period.id) {
+            <button
+              type="button"
+              class="ayllu-dash__period-btn"
+              [class.is-active]="selectedPeriod === period.id"
+              (click)="selectPeriod(period.id)">
+              {{ period.label }}
+            </button>
+          }
+        </div>
+      </div>
+      <div class="ayllu-panel__body">
+        @if (!loading) {
+          <apx-chart
+            [series]="averageEarningChart.series"
+            [chart]="averageEarningChart.chart"
+            [xaxis]="averageEarningChart.xaxis"
+            [yaxis]="averageEarningChart.yaxis"
+            [dataLabels]="averageEarningChart.dataLabels"
+            [stroke]="averageEarningChart.stroke"
+            [fill]="averageEarningChart.fill"
+            [grid]="averageEarningChart.grid"
+            [markers]="averageEarningChart.markers"
+            [tooltip]="averageEarningChart.tooltip"
+            [colors]="averageEarningChart.colors">
+          </apx-chart>
+        } @else {
+          <div class="ayllu-skeleton ayllu-skeleton--chart"></div>
+        }
+      </div>
+    </section>
+
+    <section class="ayllu-panel">
+      <div class="ayllu-panel__head">
+        <div>
+          <div class="ayllu-panel__title" role="heading" aria-level="2">Estado de cotizaciones</div>
+          <p class="ayllu-panel__hint">Activo · Evento · Anulado</p>
+        </div>
+      </div>
+      <div class="ayllu-panel__body ayllu-panel__body--center">
+        @if (!loading && cotizaciones.length) {
+          <apx-chart
+            [series]="statusChart.series"
+            [chart]="statusChart.chart"
+            [labels]="statusChart.labels"
+            [colors]="statusChart.colors"
+            [stroke]="statusChart.stroke"
+            [dataLabels]="statusChart.dataLabels"
+            [legend]="statusChart.legend"
+            [plotOptions]="statusChart.plotOptions"
+            [tooltip]="statusChart.tooltip">
+          </apx-chart>
+          <ul class="ayllu-status-list">
+            @for (item of statusBreakdown; track item.label) {
+              <li>
+                <span class="ayllu-status-list__dot" [style.background]="item.color"></span>
+                <span>{{ item.label }}</span>
+                <strong>{{ item.value }}</strong>
+              </li>
+            }
+          </ul>
+        } @else if (!loading) {
+          <p class="ayllu-empty">Sin cotizaciones registradas.</p>
+        } @else {
+          <div class="ayllu-skeleton ayllu-skeleton--donut"></div>
+        }
+      </div>
+    </section>
+  </div>
+
+  <div class="ayllu-dash__bottom">
+    <section class="ayllu-panel ayllu-panel--wide">
+      <div class="ayllu-panel__head">
+        <div>
+          <div class="ayllu-panel__title" role="heading" aria-level="2">Últimas cotizaciones</div>
+          <p class="ayllu-panel__hint">Actividad más reciente del pipeline comercial</p>
+        </div>
+        <a routerLink="/table-cotizaciones" class="ayllu-panel__link">
+          Ver todas
+          <iconify-icon icon="solar:arrow-right-linear"></iconify-icon>
+        </a>
+      </div>
+      <div class="ayllu-panel__body ayllu-panel__body--flush">
+        @if (!loading && recentCotizaciones.length) {
+          <div class="ayllu-table-wrap">
+            <table class="ayllu-table">
+              <thead>
+                <tr>
+                  <th>Cliente</th>
+                  <th>Local</th>
+                  <th>Fecha</th>
+                  <th>Total</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (row of recentCotizaciones; track row.cotizacionID) {
+                  <tr>
+                    <td>
+                      <strong>{{ row.clienteNombre || 'Sin nombre' }}</strong>
+                      <span>{{ row.clienteDocumento || '—' }}</span>
+                    </td>
+                    <td>{{ row.localNombre || '—' }}</td>
+                    <td>{{ row.fechaTentativa | date:'dd/MM/yyyy' }}</td>
+                    <td class="ayllu-table__money">S/ {{ getRowTotal(row) | number:'1.0-0' }}</td>
+                    <td>
+                      <span class="ayllu-status-pill" [ngClass]="getStatusClass(row.estadoCotizacion)">
+                        {{ row.estadoCotizacion }}
+                      </span>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        } @else if (!loading) {
+          <p class="ayllu-empty">No hay cotizaciones recientes.</p>
+        } @else {
+          <div class="ayllu-skeleton ayllu-skeleton--table"></div>
+        }
+      </div>
+    </section>
+
+    <section class="ayllu-panel">
+      <div class="ayllu-panel__head">
+        <div>
+          <div class="ayllu-panel__title" role="heading" aria-level="2">Distribución por estado</div>
+          <p class="ayllu-panel__hint">Comparativo de cotizaciones activas, confirmadas y anuladas</p>
+        </div>
+      </div>
+      <div class="ayllu-panel__body">
+        @if (!loading) {
+          <apx-chart
+            [series]="distributionChart.series"
+            [chart]="distributionChart.chart"
+            [xaxis]="distributionChart.xaxis"
+            [yaxis]="distributionChart.yaxis"
+            [plotOptions]="distributionChart.plotOptions"
+            [dataLabels]="distributionChart.dataLabels"
+            [grid]="distributionChart.grid"
+            [colors]="distributionChart.colors"
+            [tooltip]="distributionChart.tooltip">
+          </apx-chart>
+        } @else {
+          <div class="ayllu-skeleton ayllu-skeleton--bars"></div>
+        }
+      </div>
+    </section>
+  </div>
+</div>

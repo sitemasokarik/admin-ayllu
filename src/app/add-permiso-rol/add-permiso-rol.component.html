@@ -1,0 +1,51 @@
+<div class="dashboard-main-body">
+  <app-breadcrumb [title]="title"></app-breadcrumb>
+
+  <div class="card h-100 p-0 radius-12">
+    <div class="card-body p-24">
+      <div class="row justify-content-center">
+        <div class="col-xxl-6 col-xl-8 col-lg-10">
+          <div class="card border">
+            <div class="card-body">
+              <form (ngSubmit)="savePermiso()">
+                <!-- Nombre -->
+                <div class="mb-20">
+                    <label class="form-label fw-semibold text-primary-light text-sm mb-8">
+                        Rol <span class="text-danger-600">*</span>
+                    </label>
+                    <select class="form-select radius-8" [(ngModel)]="product.rolID" name="rolID" required>
+                        <option [ngValue]="null" disabled>Seleccione un Rol</option>
+                        <option *ngFor="let cat of categories" [ngValue]="cat.rolID">
+                        {{ cat.nombre }}
+                        </option>
+                    </select>
+                </div>
+                <!-- Descripción -->
+                <div class="mb-20">
+                    <label class="form-label fw-semibold text-primary-light text-sm mb-8">
+                        Paginas <span class="text-danger-600">*</span>
+                    </label>
+                    <select class="form-select radius-8" [(ngModel)]="pagina.paginaID" name="paginaID" required>
+                        <option [ngValue]="null" disabled>Seleccione una Pagina</option>
+                        <option *ngFor="let pag of pages" [ngValue]="pag.paginaID">
+                        {{ paginaLabel(pag) }}
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Botones -->
+                <div class="d-flex align-items-center justify-content-center gap-3">
+                  <button type="button" class="border border-danger-600 bg-hover-danger-200 text-danger-600 text-md px-56 py-11 radius-8"
+                          (click)="cancel()">Cancelar</button>
+                  <button type="submit" class="btn btn-primary border border-primary-600 text-md px-56 py-12 radius-8">
+                    Guardar
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

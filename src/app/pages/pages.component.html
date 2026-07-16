@@ -1,0 +1,139 @@
+<div class="dashboard-main-body">
+  <app-breadcrumb [title]="title"></app-breadcrumb>
+
+  <div class="card basic-data-table">
+    <div class="card-body">
+      <app-admin-table-shell
+        [data]="pages"
+        [loading]="loading"
+        [filterFields]="tableFilterFields"
+        emptyMessage="No hay páginas registradas">
+
+        <ng-template appAdminTableBody let-rows="rows">
+          <table class="table bordered-table sm-table mb-0">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Grupo menú</th>
+                <th class="text-center">Estado</th>
+                <th class="text-center">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let rol of rows; trackBy: trackByPaginaId">
+                <td>{{ rol.paginaID }}</td>
+                <td>{{ rol.nombre }}</td>
+                <td>{{ rol.grupoMenu || '—' }}</td>
+                <td class="text-center">
+                  <span
+                    [ngClass]="{
+                      'bg-success-focus text-success-600 border border-success-main': rol.estado === true,
+                      'bg-danger-200 text-danger-600 border border-danger-main': rol.estado !== true
+                    }"
+                    class="px-24 py-4 radius-4 fw-medium text-sm">
+                    {{ rol.estado === true ? "Activo" : "Inactivo" }}
+                  </span>
+                </td>
+                <td class="text-center">
+                  <div class="d-flex align-items-center gap-10 justify-content-center">
+                    <button type="button"
+                      class="bg-info-focus bg-hover-info-200 text-info-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
+                      title="Ver Servicio" (click)="openRolModal(rol)">
+                      <iconify-icon icon="iconamoon:eye-light"></iconify-icon>
+                    </button>
+                    <button type="button"
+                      class="bg-success-focus text-success-600 bg-hover-success-200 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
+                      title="Editar Servicio" (click)="editPage(rol)">
+                      <iconify-icon icon="lucide:edit"></iconify-icon>
+                    </button>
+                    <button type="button"
+                      class="remove-item-btn bg-danger-focus bg-hover-danger-200 text-danger-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
+                      title="Eliminar Servicio" (click)="deletePage(rol.paginaID)">
+                      <iconify-icon icon="mingcute:delete-2-line"></iconify-icon>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </ng-template>
+      </app-admin-table-shell>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Bootstrap para Servicio -->
+<div class="modal fade" id="servicioModal" tabindex="-1" aria-labelledby="servicioModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header text-white">
+        <h5 class="modal-title" id="servicioModalLabel">Detalles de Página</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body" *ngIf="selectedPages">
+        <div class="p-4">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <h6 class="fw-semibold text-secondary mb-1">Nombre</h6>
+              <p class="mb-0">{{ selectedPages.nombre }}</p>
+            </div>
+
+            <div class="col-md-6">
+              <h6 class="fw-semibold text-secondary mb-1">Estado</h6>
+              <p class="mb-0">{{ selectedPages.estado ? 'Activo' : 'Inactivo' }}</p>
+            </div>
+            <div class="col-md-6">
+              <h6 class="fw-semibold text-secondary mb-1">Grupo menú</h6>
+              <p class="mb-0">{{ selectedPages.grupoMenu || 'Sin grupo (ítem suelto)' }}</p>
+            </div>
+            <div class="col-md-6">
+              <h6 class="fw-semibold text-secondary mb-1">Orden</h6>
+              <p class="mb-0">{{ selectedPages.ordenMenu ?? '—' }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Editar Servicio -->
+<div class="modal fade" id="editServicioModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Editar</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" *ngIf="selectedPages">
+        <form #editServicioForm="ngForm" (ngSubmit)="submitEditPage()">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Nombre</label>
+              <input type="text" class="form-control" [(ngModel)]="selectedPages.nombre" name="nombre" required [ngModelOptions]="{standalone: true}">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Descripción</label>
+              <input type="text" class="form-control" [(ngModel)]="selectedPages.descripcion" name="descripcion" [ngModelOptions]="{standalone: true}">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Grupo menú</label>
+              <input type="text" class="form-control" [(ngModel)]="selectedPages.grupoMenu" name="grupoMenu" placeholder="Ej: Catálogo, Facturación" [ngModelOptions]="{standalone: true}">
+              <small class="text-secondary-light">Deja vacío para mostrar como ítem suelto en el menú.</small>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Orden en menú</label>
+              <input type="number" class="form-control" [(ngModel)]="selectedPages.ordenMenu" name="ordenMenu" min="1" [ngModelOptions]="{standalone: true}">
+            </div>
+          </div>
+          <div class="modal-footer mt-3">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            <button type="submit" class="btn btn-primary" [disabled]="editServicioForm.invalid">Guardar Cambios</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,294 @@
+<div *ngIf="loading" class="d-flex flex-column align-items-center justify-content-center py-80">
+  <div class="spinner-grow text-primary mb-3" style="width: 3rem; height: 3rem;"></div>
+  <p class="text-primary-light">Cargando cotizaciones...</p>
+</div>
+
+<div *ngIf="!loading" class="dashboard-main-body facturacion-page">
+  <header class="fact-page-header">
+    <h6 class="fact-page-title fw-semibold mb-8">{{ title }}</h6>
+    <p class="fact-page-intro" *ngIf="tipo === 'boleta'">
+      Los comprobantes se guardan en base de datos y aparecen en Comprobantes electrónicos.
+      La integración con SUNAT (envío XML/CDR) se conectará después.
+    </p>
+  </header>
+
+  <fieldset class="fact-modo-emision-row">
+    <legend class="visually-hidden">Modo de emisión</legend>
+    <div class="form-check form-check-inline fact-modo-option">
+      <input
+        class="form-check-input"
+        type="radio"
+        name="modoEmision"
+        id="modoEmisionSunat"
+        value="sunat"
+        [(ngModel)]="modoEmision"
+      />
+      <label class="form-check-label" for="modoEmisionSunat">
+        Generar Venta y Enviar Comprobante Electrónico (SUNAT)
+      </label>
+    </div>
+    <div class="form-check form-check-inline fact-modo-option">
+      <input
+        class="form-check-input"
+        type="radio"
+        name="modoEmision"
+        id="modoEmisionSoloVenta"
+        value="solo_venta"
+        [(ngModel)]="modoEmision"
+      />
+      <label class="form-check-label" for="modoEmisionSoloVenta">
+        Solo Generar Venta
+      </label>
+    </div>
+  </fieldset>
+
+  <div class="alert alert-warning border-0 radius-12 mb-20" *ngIf="selectedCotizacion && montoAdelantoFacturado > 0">
+    Se factura el <strong>adelanto: S/ {{ montoAdelantoFacturado | number:'1.2-2' }}</strong> (no el total del evento).
+    <span *ngIf="metodoPagoAdelanto"> Pago verificado vía {{ metodoPagoAdelanto }}.</span>
+  </div>
+
+  <div class="row g-3 fact-main-cards">
+    <div class="col-lg-6">
+      <div class="card fact-section-card h-100">
+        <div class="fact-section-card__head">COMPROBANTE DE PAGO</div>
+        <div class="card-body p-20">
+          <div class="mb-16">
+            <label class="form-label fact-field-label">Empresa Emisora</label>
+            <select class="form-select fact-field-control" disabled>
+              <option>{{ empresaEmisoraNombre }}</option>
+            </select>
+          </div>
+          <div class="mb-16">
+            <label class="form-label fact-field-label">Fecha Emisión</label>
+            <input type="date" class="form-control fact-field-control" [(ngModel)]="fechaEmision" />
+          </div>
+          <div class="row g-2 mb-4">
+            <div class="col-md-6">
+              <label class="form-label fact-field-label">Tipo de Comprobante</label>
+              <select class="form-select fact-field-control" disabled>
+                <option>{{ tipoComprobanteLabel }}</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label fact-field-label">Serie</label>
+              <select class="form-select fact-field-control" disabled>
+                <option>{{ serie }}</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label fact-field-label">Correlativo</label>
+              <input type="text" class="form-control fact-field-control fact-field-control--readonly" [value]="correlativoPreview" readonly />
+            </div>
+          </div>
+          <small class="text-secondary-light d-block mb-16">Asignado al guardar según serie</small>
+          <div>
+            <label class="form-label fact-field-label">Moneda</label>
+            <select class="form-select fact-field-control" disabled>
+              <option>{{ moneda }}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="card fact-section-card h-100">
+        <div class="fact-section-card__head">DATOS DEL CLIENTE</div>
+        <div class="card-body p-20">
+          <div class="mb-16">
+            <label class="form-label fact-field-label">Tipo de Documento</label>
+            <select class="form-select fact-field-control" disabled>
+              <option>{{ tipoDocumento }}</option>
+            </select>
+          </div>
+          <div class="mb-16">
+            <label class="form-label fact-field-label">Nro Documento</label>
+            <div class="input-group fact-doc-search">
+              <button
+                type="button"
+                class="btn btn-outline-secondary"
+                (click)="consultarDocumento()"
+                [disabled]="consultandoDocumento"
+              >
+                {{ consultandoDocumento ? '...' : 'BUSCAR' }}
+              </button>
+              <input
+                type="text"
+                class="form-control fact-field-control"
+                [(ngModel)]="nroDocumento"
+                (ngModelChange)="onDocumentoChange($event)"
+                (keydown.enter)="onDocumentoEnter($event)"
+                [attr.maxlength]="tipo === 'boleta' ? 8 : 11"
+                inputmode="numeric"
+                autocomplete="off"
+                [placeholder]="documentoPlaceholder"
+              />
+            </div>
+          </div>
+          <div class="mb-16">
+            <label class="form-label fact-field-label">Nombre del Cliente / Razón Social</label>
+            <input
+              type="text"
+              class="form-control fact-field-control"
+              [(ngModel)]="clienteNombre"
+              [placeholder]="clienteCampoPlaceholder"
+            />
+          </div>
+          <div class="mb-16">
+            <label class="form-label fact-field-label">Dirección</label>
+            <input
+              type="text"
+              class="form-control fact-field-control"
+              [(ngModel)]="clienteDireccion"
+              [placeholder]="tipo === 'boleta' ? 'Obligatorio si el tipo es DNI' : 'Ingrese la dirección'"
+            />
+          </div>
+          <div>
+            <label class="form-label fact-field-label">Teléfono</label>
+            <input
+              type="text"
+              class="form-control fact-field-control"
+              [(ngModel)]="clienteTelefono"
+              [placeholder]="tipo === 'boleta' ? 'Obligatorio si el tipo es DNI' : 'Teléfono'"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card radius-12 mt-20">
+    <div class="card-body p-20">
+      <div class="fact-search-box">
+        <label class="form-label fw-semibold fact-field-label">Buscar cotización (solo estado Evento)</label>
+        <div class="d-flex gap-2 flex-wrap">
+          <input
+            type="text"
+            class="form-control fact-field-control"
+            placeholder="Código, nombre del cliente o documento"
+            [(ngModel)]="searchQuery"
+            (keyup.enter)="buscarCotizacion()"
+          />
+          <button type="button" class="btn btn-primary" (click)="buscarCotizacion()">Buscar</button>
+        </div>
+
+        <div class="fact-search-results" *ngIf="searchResults.length > 0">
+          <button
+            type="button"
+            class="fact-search-item"
+            *ngFor="let c of searchResults"
+            (click)="seleccionarCotizacion(c)"
+          >
+            <strong>#{{ c.cotizacionID }}</strong> · {{ c.clienteNombre }} · {{ c.clienteDocumento }} · S/ {{ c.totalCotizacion || c.totalEvento }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-3 mt-20">
+    <div class="col-xl-8">
+      <div class="card radius-12 fact-section-card">
+        <div class="fact-section-card__head">LISTADO DE PRODUCTOS / SERVICIOS</div>
+        <div class="card-body p-20">
+          <div class="row g-2 mb-16">
+            <div class="col-md-4">
+              <label class="form-label fact-field-label">Tipo venta</label>
+              <input type="text" class="form-control fact-field-control" [(ngModel)]="tipoVenta" readonly />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fact-field-label">Tipo IGV</label>
+              <select class="form-select fact-field-control" [(ngModel)]="itemTipoIgv" (ngModelChange)="onTipoIgvChange()" [disabled]="!selectedCotizacion">
+                <option *ngFor="let t of config.tiposIgv" [value]="t.id">{{ t.id }} — {{ t.label }}</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fact-field-label">Tipo operación</label>
+              <input type="text" class="form-control fact-field-control" [(ngModel)]="tipoOperacion" readonly />
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table bordered-table sm-table mb-0">
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Código</th>
+                  <th>Descripción</th>
+                  <th>Tipo IGV</th>
+                  <th>Und.</th>
+                  <th>Valor</th>
+                  <th>Cant.</th>
+                  <th>Subtotal</th>
+                  <th>IGV</th>
+                  <th>Importe</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of items">
+                  <td>{{ item.item }}</td>
+                  <td>{{ item.codigo }}</td>
+                  <td>{{ item.descripcion }}</td>
+                  <td>{{ item.idTipoIgv }} — {{ item.tipoIgv }}</td>
+                  <td>{{ item.unidadMedida }}</td>
+                  <td>S/ {{ item.valor | number:'1.2-2' }}</td>
+                  <td>{{ item.cantidad }}</td>
+                  <td>S/ {{ item.subtotal | number:'1.2-2' }}</td>
+                  <td>S/ {{ item.igv | number:'1.2-2' }}</td>
+                  <td>S/ {{ item.importe | number:'1.2-2' }}</td>
+                </tr>
+                <tr *ngIf="items.length === 0">
+                  <td colspan="10" class="text-center text-secondary-light py-24">
+                    Selecciona una cotización en estado Evento para cargar los ítems
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="row g-2 mt-16">
+            <div class="col-md-3">
+              <label class="form-label fact-field-label">Forma pago</label>
+              <input type="text" class="form-control fact-field-control fact-field-control--readonly" value="Contado" readonly />
+            </div>
+            <div class="col-md-3">
+              <label class="form-label fact-field-label">Recibido</label>
+              <input type="number" class="form-control fact-field-control" [(ngModel)]="recibido" (input)="calcularVuelto()" min="0" step="0.01" />
+            </div>
+            <div class="col-md-3">
+              <label class="form-label fact-field-label">Vuelto</label>
+              <input type="text" class="form-control fact-field-control fact-field-control--readonly" [value]="vuelto | number:'1.2-2'" readonly />
+            </div>
+            <div class="col-md-3">
+              <label class="form-label fact-field-label">Medio pago</label>
+              <select class="form-select fact-field-control" [(ngModel)]="medioPago">
+                <option *ngFor="let mp of config.mediosPago" [value]="mp">{{ mp }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-4">
+      <div class="card radius-12 fact-section-card fact-totals-card">
+        <div class="fact-section-card__head">DETALLES DE VENTA</div>
+        <div class="card-body p-20">
+          <div class="fact-total-row"><span>OP. GRAVADAS</span><strong>S/ {{ totals.opGravadas | number:'1.2-2' }}</strong></div>
+          <div class="fact-total-row"><span>OP. INAFECTAS</span><strong>S/ {{ totals.opInafectas | number:'1.2-2' }}</strong></div>
+          <div class="fact-total-row"><span>OP. EXONERADAS</span><strong>S/ {{ totals.opExoneradas | number:'1.2-2' }}</strong></div>
+          <div class="fact-total-row"><span>SUBTOTAL</span><strong>S/ {{ totals.subtotal | number:'1.2-2' }}</strong></div>
+          <div class="fact-total-row"><span>IGV</span><strong>S/ {{ totals.igv | number:'1.2-2' }}</strong></div>
+          <div class="fact-total-row fact-total-row--main"><span>TOTAL</span><strong>S/ {{ totals.total | number:'1.2-2' }}</strong></div>
+
+          <div class="d-grid gap-2 mt-20">
+            <button type="button" class="btn btn-outline-danger" (click)="cancelar()">Cancelar</button>
+            <button type="button" class="btn btn-success" [disabled]="saving" (click)="vender()">
+              {{ saving ? 'Guardando...' : 'Vender' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

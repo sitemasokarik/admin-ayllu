@@ -1,0 +1,511 @@
+<div class="dashboard-main-body">
+
+  <app-breadcrumb [title]="title"></app-breadcrumb>
+
+
+
+  <div class="card radius-12 landing-page-card">
+
+    <div class="card-body">
+
+      <div class="landing-page-head">
+
+        <div>
+
+          <h5 class="landing-page-head__title">Configuración de la landing pública</h5>
+
+          <p class="text-secondary-light text-sm mb-0">
+
+            Administra la sección <strong>Nosotros</strong> (resumen en home, texto completo en la página), misión, visión, imágenes y valores.
+
+          </p>
+
+        </div>
+
+        <button type="button" class="btn btn-outline-secondary btn-sm" (click)="loadBlog()" [disabled]="loading">
+
+          Recargar
+
+        </button>
+
+      </div>
+
+
+
+      <div class="alert alert-warning landing-page-alert" *ngIf="configWarning && !loading">
+
+        <iconify-icon icon="solar:danger-triangle-bold"></iconify-icon>
+
+        <span>{{ configWarning }}</span>
+
+      </div>
+
+
+
+      <div *ngIf="loading" class="landing-page-loading">
+
+        <div class="spinner-border text-primary" role="status"></div>
+
+        <span>Cargando configuración...</span>
+
+      </div>
+
+
+
+      <ng-container *ngIf="!loading">
+
+        <ul class="nav nav-tabs landing-page-tabs" role="tablist">
+
+          <li class="nav-item" *ngFor="let tab of tabs">
+
+            <button type="button" class="nav-link" [class.active]="activeTab === tab.id" (click)="setTab(tab.id)">
+
+              <iconify-icon [icon]="tab.icon"></iconify-icon>
+
+              {{ tab.label }}
+
+            </button>
+
+          </li>
+
+        </ul>
+
+
+
+        <form (ngSubmit)="save()" class="landing-page-form">
+
+          <div class="tab-content landing-page-tab-content">
+
+            <div class="tab-pane" [class.show]="activeTab === 'general'" [class.active]="activeTab === 'general'">
+
+              <div class="row g-3">
+
+                <div class="col-md-8">
+
+                  <label class="form-label">Título principal</label>
+
+                  <input type="text" class="form-control" [(ngModel)]="blog.titulo" name="titulo" required>
+
+                </div>
+
+                <div class="col-12">
+
+                  <label class="form-label">Resumen (sección Nosotros en la home)</label>
+
+                  <textarea class="form-control" rows="3" [(ngModel)]="blog.resumen" name="resumen"
+
+                    placeholder="Texto breve que aparece en la home. Máximo recomendado: 2-3 párrafos cortos."></textarea>
+
+                  <p class="text-secondary-light text-sm mt-2 mb-0">Este resumen se muestra en la página de inicio. Usa un texto conciso que invite a conocer más.</p>
+
+                </div>
+
+                <div class="col-12">
+
+                  <label class="form-label">Historia completa (página Nosotros)</label>
+
+                  <textarea class="form-control" rows="8" [(ngModel)]="blog.descripcion" name="descripcion"
+
+                    placeholder="Texto completo que aparece en la página Nosotros"></textarea>
+
+                  <p class="text-secondary-light text-sm mt-2 mb-0">Este contenido se muestra íntegro en la vista /nosotros.</p>
+
+                </div>
+
+              </div>
+
+            </div>
+
+
+
+            <div class="tab-pane" [class.show]="activeTab === 'mision-vision'" [class.active]="activeTab === 'mision-vision'">
+
+              <div class="row g-3">
+
+                <div class="col-md-6">
+
+                  <label class="form-label">Título misión</label>
+
+                  <input type="text" class="form-control" [(ngModel)]="blog.misionTitulo" name="misionTitulo"
+
+                    placeholder="Ej. Misión">
+
+                </div>
+
+                <div class="col-md-6">
+
+                  <label class="form-label">Título visión</label>
+
+                  <input type="text" class="form-control" [(ngModel)]="blog.visionTitulo" name="visionTitulo"
+
+                    placeholder="Ej. Visión">
+
+                </div>
+
+                <div class="col-md-6">
+
+                  <label class="form-label">Texto misión</label>
+
+                  <textarea class="form-control" rows="6" [(ngModel)]="blog.misionTexto" name="misionTexto"
+
+                    placeholder="Describe la misión de Ayllu Eventos"></textarea>
+
+                </div>
+
+                <div class="col-md-6">
+
+                  <label class="form-label">Texto visión</label>
+
+                  <textarea class="form-control" rows="6" [(ngModel)]="blog.visionTexto" name="visionTexto"
+
+                    placeholder="Describe la visión de Ayllu Eventos"></textarea>
+
+                </div>
+
+              </div>
+
+            </div>
+
+
+
+            <div class="tab-pane" [class.show]="activeTab === 'imagenes'" [class.active]="activeTab === 'imagenes'">
+
+              <div class="row g-3">
+
+                <div class="col-12">
+
+                  <label class="form-label">Subir imagen</label>
+
+                  <input type="file" class="form-control" accept="image/*"
+
+                    (change)="onImageSelected($event)" [disabled]="fotoUploading">
+
+                  <div class="text-secondary-light text-sm mt-2" *ngIf="fotoUploading">Subiendo imagen...</div>
+
+                  <p class="text-secondary-light text-sm mt-2 mb-0">
+
+                    Todas las imágenes forman un collage en la página Nosotros y en la sección Nosotros de la home. Puedes subir varias fotos.
+
+                  </p>
+
+                </div>
+
+                <div class="col-12">
+
+                  <div class="landing-images-grid" *ngIf="blog.imagenesUrls.length; else noImages">
+
+                    <div class="landing-image-item" *ngFor="let foto of blog.imagenesUrls; let i = index">
+
+                      <img [src]="userService.resolveMediaUrl(foto)" alt="Landing">
+
+                      <button type="button" class="btn btn-sm btn-danger landing-image-item__remove"
+
+                        (click)="removeImage(i)">×</button>
+
+                    </div>
+
+                  </div>
+
+                  <ng-template #noImages>
+
+                    <div class="landing-page-empty-block">Aún no hay imágenes. Sube al menos una para la sección Nosotros.</div>
+
+                  </ng-template>
+
+                </div>
+
+              </div>
+
+            </div>
+
+
+
+            <div class="tab-pane" [class.show]="activeTab === 'banners-stats'" [class.active]="activeTab === 'banners-stats'">
+
+              <div class="landing-banners-section">
+
+                <h6 class="landing-banners-section__title">Hero principal (home)</h6>
+
+                <p class="text-secondary-light text-sm mb-3">Slides del carrusel de la página de inicio.</p>
+
+                <div class="landing-hero-editor" *ngFor="let slide of landingConfig.heroSlides; let i = index">
+
+                  <div class="landing-hero-editor__head">
+
+                    <strong>Slide {{ i + 1 }}</strong>
+
+                    <button type="button" class="btn btn-sm btn-outline-danger" (click)="removeHeroSlide(i)">Eliminar</button>
+
+                  </div>
+
+                  <div class="row g-2">
+
+                    <div class="col-md-3">
+
+                      <label class="form-label">Etiqueta</label>
+
+                      <input type="text" class="form-control" [(ngModel)]="slide.tag" [name]="'hero_tag_' + i">
+
+                    </div>
+
+                    <div class="col-md-5">
+
+                      <label class="form-label">Título</label>
+
+                      <input type="text" class="form-control" [(ngModel)]="slide.title" [name]="'hero_title_' + i">
+
+                    </div>
+
+                    <div class="col-md-2">
+
+                      <label class="form-label">Orden</label>
+
+                      <input type="number" class="form-control" [(ngModel)]="slide.orden" [name]="'hero_orden_' + i">
+
+                    </div>
+
+                    <div class="col-md-2 d-flex align-items-end">
+
+                      <div class="form-check mb-2">
+
+                        <input class="form-check-input" type="checkbox" [(ngModel)]="slide.activo" [name]="'hero_activo_' + i">
+
+                        <label class="form-check-label">Activo</label>
+
+                      </div>
+
+                    </div>
+
+                    <div class="col-12">
+
+                      <label class="form-label">Subtítulo</label>
+
+                      <textarea class="form-control" rows="2" [(ngModel)]="slide.subtitle" [name]="'hero_sub_' + i"></textarea>
+
+                    </div>
+
+                    <div class="col-md-8">
+
+                      <label class="form-label">Imagen</label>
+
+                      <input type="file" class="form-control" accept="image/*"
+
+                        (change)="onHeroImageSelected($event, i)" [disabled]="bannerUploading">
+
+                    </div>
+
+                    <div class="col-md-4" *ngIf="slide.imageUrl">
+
+                      <img [src]="resolveBannerPreview(slide.imageUrl)" alt="Hero" class="landing-banner-preview">
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+                <button type="button" class="btn btn-outline-primary btn-sm mb-4" (click)="addHeroSlide()">Agregar slide</button>
+
+              </div>
+
+
+
+              <div class="landing-banners-section">
+
+                <h6 class="landing-banners-section__title">Banners de páginas</h6>
+
+                <p class="text-secondary-light text-sm mb-3">Imagen superior de cada sección pública.</p>
+
+                <div class="row g-3">
+
+                  <div class="col-md-6" *ngFor="let item of pageBannerLabels">
+
+                    <label class="form-label">{{ item.label }}</label>
+
+                    <input type="file" class="form-control mb-2" accept="image/*"
+
+                      (change)="onPageBannerSelected($event, item.key)" [disabled]="bannerUploading">
+
+                    <div class="landing-banner-item" *ngIf="landingConfig.pageBanners[item.key]">
+
+                      <img [src]="resolveBannerPreview(landingConfig.pageBanners[item.key])" alt="Banner">
+
+                      <button type="button" class="btn btn-sm btn-outline-secondary" (click)="clearPageBanner(item.key)">Quitar</button>
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+
+
+              <div class="landing-banners-section">
+
+                <h6 class="landing-banners-section__title">Estadísticas (home)</h6>
+
+                <p class="text-secondary-light text-sm mb-3">Los números con animación suben al hacer scroll. Ej: +500 eventos.</p>
+
+                <div class="landing-stat-editor" *ngFor="let stat of landingConfig.stats; let i = index">
+
+                  <div class="row g-2 align-items-end">
+
+                    <div class="col-md-2">
+
+                      <label class="form-label">Texto</label>
+
+                      <input type="text" class="form-control" [(ngModel)]="stat.value" [name]="'stat_val_' + i" [readonly]="stat.animate">
+
+                    </div>
+
+                    <div class="col-md-2" *ngIf="stat.animate">
+
+                      <label class="form-label">Número</label>
+
+                      <input type="number" class="form-control" [(ngModel)]="stat.numericValue" [name]="'stat_num_' + i">
+
+                    </div>
+
+                    <div class="col-md-1" *ngIf="stat.animate">
+
+                      <label class="form-label">Prefijo</label>
+
+                      <input type="text" class="form-control" [(ngModel)]="stat.prefix" [name]="'stat_pre_' + i" placeholder="+">
+
+                    </div>
+
+                    <div class="col-md-1" *ngIf="stat.animate">
+
+                      <label class="form-label">Sufijo</label>
+
+                      <input type="text" class="form-control" [(ngModel)]="stat.suffix" [name]="'stat_suf_' + i">
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                      <label class="form-label">Etiqueta</label>
+
+                      <input type="text" class="form-control" [(ngModel)]="stat.label" [name]="'stat_lbl_' + i">
+
+                    </div>
+
+                    <div class="col-md-1">
+
+                      <div class="form-check mb-2">
+
+                        <input class="form-check-input" type="checkbox" [(ngModel)]="stat.animate" [name]="'stat_anim_' + i" (ngModelChange)="onStatAnimateChange(stat)">
+
+                        <label class="form-check-label">Animar</label>
+
+                      </div>
+
+                    </div>
+
+                    <div class="col-md-1">
+
+                      <button type="button" class="btn btn-sm btn-outline-danger w-100" (click)="removeStat(i)">×</button>
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+                <button type="button" class="btn btn-outline-primary btn-sm" (click)="addStat()">Agregar estadística</button>
+
+              </div>
+
+            </div>
+
+
+
+            <div class="tab-pane" [class.show]="activeTab === 'valores'" [class.active]="activeTab === 'valores'">
+
+              <div class="row g-2 mb-3">
+
+                <div class="col-md-4">
+
+                  <label class="form-label">Nombre del valor</label>
+
+                  <input type="text" class="form-control" placeholder="Ej. Compromiso"
+
+                    [(ngModel)]="nuevoValor.nombre" name="val_nombre">
+
+                </div>
+
+                <div class="col-md-6">
+
+                  <label class="form-label">Descripción</label>
+
+                  <input type="text" class="form-control" placeholder="Breve descripción del valor"
+
+                    [(ngModel)]="nuevoValor.descripcion" name="val_desc">
+
+                </div>
+
+                <div class="col-md-2 d-flex align-items-end">
+
+                  <button type="button" class="btn btn-outline-primary w-100" (click)="addValor()">Agregar</button>
+
+                </div>
+
+              </div>
+
+
+
+              <div class="landing-valores-list" *ngIf="blog.valores.length; else noValores">
+
+                <div class="landing-valor-item" *ngFor="let v of blog.valores; let i = index">
+
+                  <div>
+
+                    <strong>{{ v.nombre }}</strong>
+
+                    <p class="mb-0 text-secondary-light">{{ v.descripcion }}</p>
+
+                  </div>
+
+                  <button type="button" class="btn btn-sm btn-outline-danger" (click)="removeValor(i)">×</button>
+
+                </div>
+
+              </div>
+
+              <ng-template #noValores>
+
+                <div class="landing-page-empty-block">Agrega los pilares o valores que quieres mostrar en la landing.</div>
+
+              </ng-template>
+
+            </div>
+
+          </div>
+
+
+
+          <div class="landing-page-footer">
+
+            <span class="text-secondary-light text-sm">ID landing: {{ blogID || '—' }}</span>
+
+            <button type="submit" class="btn btn-primary" [disabled]="saving">
+
+              {{ saving ? 'Guardando...' : 'Guardar cambios' }}
+
+            </button>
+
+          </div>
+
+        </form>
+
+      </ng-container>
+
+    </div>
+
+  </div>
+
+</div>
+
+

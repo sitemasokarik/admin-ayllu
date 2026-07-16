@@ -1,0 +1,335 @@
+<div class="dashboard-main-body">
+
+  <app-breadcrumb [title]="title"></app-breadcrumb>
+
+  <div class="card basic-data-table">
+
+    <div class="card-body">
+
+      <app-admin-table-shell
+
+        [data]="categorys"
+
+        [loading]="loading"
+
+        [filterFields]="tableFilterFields"
+
+        emptyMessage="No hay categorías registradas">
+
+
+
+        <div adminTableActions class="justify-content-start d-flex">
+
+          <a routerLink="/add-categorys"
+
+            class="btn btn-primary text-sm btn-sm px-12 py-12 radius-8 d-flex align-items-center gap-2">
+
+            <iconify-icon icon="ic:baseline-plus" class="icon text-xl line-height-1"></iconify-icon>
+
+            Agregar Categoria
+
+          </a>
+
+        </div>
+
+
+
+        <ng-template appAdminTableBody let-rows="rows">
+
+          <table class="table bordered-table sm-table mb-0">
+
+            <thead>
+
+              <tr>
+
+                <th scope="col">
+
+                  <div class="d-flex align-items-center gap-10">
+
+                    ID
+
+                  </div>
+
+                </th>
+
+                <th scope="col">Nombre</th>
+
+                <th scope="col">Tipo</th>
+
+                <th scope="col" class="text-center">Estado</th>
+
+                <th scope="col" class="text-center">Acciones</th>
+
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              <tr *ngFor="let category of rows; trackBy: trackByCategoriaId">
+
+                <td>
+
+                  <div class="d-flex align-items-center gap-10">
+
+                    {{ category.categoriaID }}
+
+                  </div>
+
+                </td>
+
+                <td>
+
+                  <div class="d-flex align-items-center">
+
+                    <div class="flex-grow-1">
+
+                      <span class="text-md mb-0 fw-normal text-secondary-light">{{ category.nombre }}</span>
+
+                    </div>
+
+                  </div>
+
+                </td>
+
+                <td>
+
+                  <span class="fw-medium text-sm">
+
+                    {{ category.categoriaPadreID ? "Subcategoría" : "Categoría" }}
+
+                  </span>
+
+                </td>
+
+                <td class="text-center">
+
+                  <span [ngClass]="{
+
+                      'bg-success-focus text-success-600 border border-success-main': category.estado,
+
+                      'bg-danger-200 text-danger-600 border border-danger-main': !category.estado
+
+                    }" class="px-24 py-4 radius-4 fw-medium text-sm">
+
+                    {{ category.estado ? "Activo" : "Inactivo" }}
+
+                  </span>
+
+                </td>
+
+                <td class="text-center">
+
+                  <div class="d-flex align-items-center gap-10 justify-content-center">
+
+                    <button type="button"
+
+                      class="bg-info-focus bg-hover-info-200 text-info-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
+
+                      title="Ver usuario" (click)="openCategoryModal(category)">
+
+                      <iconify-icon icon="iconamoon:eye-light"></iconify-icon>
+
+                    </button>
+
+
+
+                    <button type="button" (click)="editCategory(category)"
+
+                      class="bg-success-focus text-success-600 bg-hover-success-200 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
+
+                      title="Editar Categoria">
+
+                      <iconify-icon icon="lucide:edit"></iconify-icon>
+
+                    </button>
+
+                    <button *ngIf="category.estado" type="button" (click)="deleteCategory(category.categoriaID)"
+
+                      class="remove-item-btn bg-danger-focus bg-hover-danger-200 text-danger-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
+
+                      title="Desactivar categoría">
+
+                      <iconify-icon icon="solar:lock-keyhole-linear"></iconify-icon>
+
+                    </button>
+
+                  </div>
+
+                </td>
+
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </ng-template>
+
+      </app-admin-table-shell>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<!-- Modal Clásico Bootstrap para categoría -->
+
+<div class="modal fade" id="categoryModal" tabindex="-1" aria-labelledby="categoryModalLabel" aria-hidden="true">
+
+  <div class="modal-dialog modal-dialog-centered modal-md">
+
+    <div class="modal-content">
+
+      <!-- Header -->
+
+      <div class="modal-header text-white">
+
+        <h5 class="modal-title" id="categoryModalLabel">Detalles de la categoría</h5>
+
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+      </div>
+
+
+
+      <!-- Body -->
+
+      <div class="modal-body" *ngIf="selectedCategory">
+
+        <div class="p-4">
+
+          <div class="row g-3">
+
+            <!-- Nombre -->
+
+            <div class="col-md-6">
+
+              <h6 class="fw-semibold text-secondary mb-1">Nombre</h6>
+
+              <p class="mb-0">{{ selectedCategory.nombre }}</p>
+
+            </div>
+
+
+
+            <!-- Descripción -->
+
+            <div class="col-md-6">
+
+              <h6 class="fw-semibold text-secondary mb-1">Descripción</h6>
+
+              <p class="mb-0">{{ selectedCategory.descripcion }}</p>
+
+            </div>
+
+
+
+            <!-- Creado por -->
+
+            <div class="col-md-6">
+
+              <h6 class="fw-semibold text-secondary mb-1">Creado por</h6>
+
+              <p class="mb-0">{{ selectedCategory.usuarioCreacion }}</p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<!-- Modal para editar categoría -->
+
+<div class="modal fade" id="editCategoryModal" tabindex="-1" aria-hidden="true">
+
+  <div class="modal-dialog modal-dialog-centered modal-md">
+
+    <div class="modal-content">
+
+      <div class="modal-header">
+
+        <h5 class="modal-title">Editar Categoría</h5>
+
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+      </div>
+
+      <div class="modal-body">
+
+        <form #editCategoryForm="ngForm" (ngSubmit)="submitEditCategory()" *ngIf="selectedCategory">
+
+          <div class="row g-3">
+
+            <!-- Nombre -->
+
+            <div class="col-md-6">
+
+              <label class="form-label">Nombre</label>
+
+              <input type="text" class="form-control" [(ngModel)]="selectedCategory.nombre" name="nombre" required
+
+                [ngModelOptions]="{ standalone: true }" />
+
+            </div>
+
+
+
+            <!-- Descripción -->
+
+            <div class="col-md-6">
+
+              <label class="form-label">Descripción</label>
+
+              <input type="text" class="form-control" [(ngModel)]="selectedCategory.descripcion" name="descripcion"
+
+                [ngModelOptions]="{ standalone: true }" />
+
+            </div>
+
+            <div class="col-md-6">
+
+              <label class="form-label">Limite Elección</label>
+
+              <input type="text" class="form-control" [(ngModel)]="selectedCategory.limite" name="limite"
+
+                [ngModelOptions]="{ standalone: true }" />
+
+            </div>
+
+          </div>
+
+
+
+          <div class="modal-footer mt-3">
+
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+
+            <button type="submit" class="btn btn-primary" [disabled]="editCategoryForm.invalid">Guardar Cambios</button>
+
+          </div>
+
+        </form>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+

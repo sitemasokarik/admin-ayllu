@@ -1,0 +1,383 @@
+<div *ngIf="loading" class="d-flex flex-column align-items-center justify-content-center py-80">
+
+  <div class="spinner-grow text-primary mb-3" style="width: 3rem; height: 3rem;"></div>
+
+  <p class="text-primary-light">Cargando tickets...</p>
+
+</div>
+
+
+
+<div *ngIf="!loading" class="dashboard-main-body">
+
+  <app-breadcrumb [title]="title"></app-breadcrumb>
+
+
+
+  <div class="card radius-12">
+
+    <div class="card-body p-20">
+
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-16">
+
+        <input
+
+          type="text"
+
+          class="form-control"
+
+          style="max-width: 320px"
+
+          placeholder="Buscar por ID, título, cliente o estado"
+
+          [(ngModel)]="search"
+
+        />
+
+        <button type="button" class="btn btn-primary" (click)="openCreateModal()">
+
+          Nuevo ticket
+
+        </button>
+
+      </div>
+
+
+
+      <div class="table-responsive">
+
+        <table class="table bordered-table mb-0">
+
+          <thead>
+
+            <tr>
+
+              <th>#</th>
+
+              <th>Título</th>
+
+              <th>Cliente / Origen</th>
+
+              <th>Asignado a</th>
+
+              <th>Prioridad</th>
+
+              <th>Estado</th>
+
+              <th>Cotización</th>
+
+              <th>Mensajes</th>
+
+              <th>Fecha</th>
+
+              <th></th>
+
+            </tr>
+
+          </thead>
+
+          <tbody>
+
+            <tr *ngFor="let t of filteredTickets">
+
+              <td>{{ t.ticketID }}</td>
+
+              <td>{{ t.titulo }}</td>
+
+              <td>
+
+                <strong *ngIf="t.clienteNombre">{{ t.clienteNombre }}</strong>
+
+                <span *ngIf="!t.clienteNombre" class="text-secondary-light">{{ t.origen || 'Interno' }}</span>
+
+                <div *ngIf="t.clienteEmail" class="text-xs text-secondary-light">{{ t.clienteEmail }}</div>
+
+              </td>
+
+              <td>
+                <span *ngIf="t.asignadoUsuarioNombre">{{ t.asignadoUsuarioNombre }}</span>
+                <span *ngIf="!t.asignadoUsuarioNombre" class="text-secondary-light">—</span>
+              </td>
+
+              <td>{{ t.prioridad }}</td>
+
+              <td>
+
+                <span class="badge px-12 py-6 radius-4" [ngClass]="estadoClass(t.estadoTicket)">
+
+                  {{ t.estadoTicket }}
+
+                </span>
+
+              </td>
+
+              <td>{{ t.cotizacionID || '—' }}</td>
+
+              <td>{{ t.totalMensajes || 0 }}</td>
+
+              <td>{{ t.fechaCreacion | date: 'dd/MM/yyyy HH:mm' }}</td>
+
+              <td>
+
+                <button type="button" class="btn btn-sm btn-outline-primary" (click)="openDetailModal(t)">
+
+                  Ver
+
+                </button>
+
+              </td>
+
+            </tr>
+
+            <tr *ngIf="filteredTickets.length === 0">
+
+              <td colspan="11" class="text-center text-secondary-light py-24">No hay tickets registrados</td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<div class="modal fade" id="ticketCreateModal" tabindex="-1" aria-hidden="true">
+
+  <div class="modal-dialog modal-dialog-centered">
+
+    <div class="modal-content radius-12">
+
+      <div class="modal-header">
+
+        <h6 class="modal-title">Nuevo ticket interno</h6>
+
+        <button type="button" class="btn-close" data-bs-dismiss="modal" id="ticketCreateModalClose"></button>
+
+      </div>
+
+      <div class="modal-body">
+
+        <div class="mb-12">
+
+          <label class="form-label">Título</label>
+
+          <input type="text" class="form-control" [(ngModel)]="nuevoTitulo" />
+
+        </div>
+
+        <div class="mb-12">
+
+          <label class="form-label">Descripción</label>
+
+          <textarea class="form-control" rows="4" [(ngModel)]="nuevoDescripcion"></textarea>
+
+        </div>
+
+        <div class="mb-12">
+
+          <label class="form-label">Enviar a administrador <span class="text-danger">*</span></label>
+
+          <select class="form-select" [(ngModel)]="asignadoUsuarioID" required>
+
+            <option [ngValue]="null">Seleccione destinatario</option>
+
+            <option *ngFor="let u of administradores" [ngValue]="u.usuarioID">
+              {{ adminDisplayName(u) }}
+            </option>
+
+          </select>
+
+          <small class="text-secondary-light d-block mt-1">El ticket llegará como notificación al administrador elegido.</small>
+
+        </div>
+
+        <div class="mb-12">
+
+          <label class="form-label">Prioridad</label>
+
+          <select class="form-select" [(ngModel)]="nuevaPrioridad">
+
+            <option value="Baja">Baja</option>
+
+            <option value="Media">Media</option>
+
+            <option value="Alta">Alta</option>
+
+          </select>
+
+        </div>
+
+        <div class="mb-12">
+
+          <label class="form-label">Cotización (opcional)</label>
+
+          <input type="number" class="form-control" [(ngModel)]="nuevoCotizacionID" />
+
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+
+        <button type="button" class="btn btn-primary" [disabled]="saving" (click)="crearTicket()">
+
+          {{ saving ? 'Guardando...' : 'Crear' }}
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<div class="modal fade" id="ticketDetailModal" tabindex="-1" aria-hidden="true">
+
+  <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+
+    <div class="modal-content radius-12">
+
+      <div class="modal-header">
+
+        <h6 class="modal-title">Ticket #{{ selectedTicket?.ticketID }} · {{ selectedTicket?.titulo }}</h6>
+
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+
+      </div>
+
+      <div class="modal-body" *ngIf="selectedTicket">
+
+        <div class="ticket-meta mb-16" *ngIf="ticketDetalle">
+
+          <div><strong>Origen:</strong> {{ ticketDetalle.origen }}</div>
+
+          <div *ngIf="ticketDetalle.clienteNombre"><strong>Cliente:</strong> {{ ticketDetalle.clienteNombre }}</div>
+
+          <div *ngIf="ticketDetalle.clienteEmail"><strong>Correo:</strong> {{ ticketDetalle.clienteEmail }}</div>
+
+          <div *ngIf="ticketDetalle.creadoPorUsuarioNombre"><strong>Usuario interno:</strong> {{ ticketDetalle.creadoPorUsuarioNombre }}</div>
+          <div *ngIf="ticketDetalle.asignadoUsuarioNombre"><strong>Asignado a:</strong> {{ ticketDetalle.asignadoUsuarioNombre }}</div>
+
+        </div>
+
+
+
+        <p class="text-secondary-light mb-16">{{ ticketDetalle?.descripcion || selectedTicket.descripcion }}</p>
+
+
+
+        <div class="ticket-thread mb-16">
+
+          <h6 class="mb-12">Conversación</h6>
+
+          <div *ngIf="detalleLoading" class="text-secondary-light py-3">Cargando mensajes...</div>
+
+          <div *ngIf="!detalleLoading && (!ticketDetalle?.mensajes?.length)" class="text-secondary-light py-3">
+
+            Aún no hay mensajes en este ticket.
+
+          </div>
+
+          <div
+
+            *ngFor="let m of ticketDetalle?.mensajes"
+
+            class="ticket-msg"
+
+            [class.ticket-msg--client]="m.esCliente"
+
+            [class.ticket-msg--internal]="m.esInterno">
+
+            <div class="ticket-msg__head">
+
+              <strong>{{ m.autorNombre }}</strong>
+
+              <span class="ticket-msg__badge" *ngIf="m.esCliente">Cliente</span>
+
+              <span class="ticket-msg__badge ticket-msg__badge--internal" *ngIf="m.esInterno">Interno</span>
+
+              <span class="ticket-msg__date">{{ m.fechaCreacion | date:'dd/MM/yyyy HH:mm' }}</span>
+
+            </div>
+
+            <p class="mb-0">{{ m.mensaje }}</p>
+
+          </div>
+
+        </div>
+
+
+
+        <div class="row g-3 mb-16">
+
+          <div class="col-md-6">
+
+            <label class="form-label">Estado</label>
+
+            <select class="form-select" [(ngModel)]="nuevoEstado">
+
+              <option value="Abierto">Abierto</option>
+
+              <option value="En progreso">En progreso</option>
+
+              <option value="Cerrado">Cerrado</option>
+
+            </select>
+
+          </div>
+
+          <div class="col-md-6 d-flex align-items-end">
+
+            <button type="button" class="btn btn-outline-primary" (click)="actualizarEstado()">
+
+              Actualizar estado
+
+            </button>
+
+          </div>
+
+        </div>
+
+
+
+        <div class="mb-12">
+
+          <label class="form-label">Responder</label>
+
+          <textarea class="form-control mb-8" rows="3" [(ngModel)]="nuevoMensaje"></textarea>
+
+          <label class="d-flex align-items-center gap-2 mb-8">
+
+            <input type="checkbox" [(ngModel)]="esInterno" />
+
+            <span>Mensaje interno (solo staff)</span>
+
+          </label>
+
+          <button type="button" class="btn btn-primary" (click)="enviarMensaje()">Enviar mensaje</button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+

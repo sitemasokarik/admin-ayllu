@@ -1,0 +1,428 @@
+<div class="dashboard-main-body">
+
+  <app-breadcrumb [title]="title"></app-breadcrumb>
+
+
+
+  <div class="card basic-data-table">
+
+    <div class="card-body">
+
+      <app-admin-table-shell
+
+        [data]="eventos"
+
+        [loading]="loading"
+
+        [filterFields]="tableFilterFields"
+
+        emptyMessage="No hay eventos registrados">
+
+
+
+        <div adminTableActions class="justify-content-start d-flex">
+
+          <a routerLink="/add-events"
+
+            class="btn btn-primary text-sm btn-sm px-12 py-12 radius-8 d-flex align-items-center gap-2">
+
+            <iconify-icon icon="ic:baseline-plus" class="icon text-xl line-height-1"></iconify-icon>
+
+            Agregar Evento
+
+          </a>
+
+        </div>
+
+
+
+        <ng-template appAdminTableBody let-rows="rows">
+
+          <table class="table bordered-table sm-table mb-0">
+
+            <thead>
+
+              <tr>
+
+                <th>ID</th>
+
+                <th>Nombre</th>
+
+                <th>Descripción</th>
+
+                <th class="text-center">Estado</th>
+
+                <th class="text-center">Acciones</th>
+
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              <tr *ngFor="let evento of rows; trackBy: trackByEventoId">
+
+                <td>{{ evento.eventoID }}</td>
+
+                <td>{{ evento.nombre }}</td>
+
+                <td>{{ evento.descripcion }}</td>
+
+                <td class="text-center">
+
+                  <span
+
+                    [ngClass]="{
+
+                      'bg-success-focus text-success-600 border border-success-main': evento.estado === true,
+
+                      'bg-danger-200 text-danger-600 border border-danger-main': evento.estado !== true
+
+                    }"
+
+                    class="px-24 py-4 radius-4 fw-medium text-sm">
+
+                    {{ evento.estado === true ? "Activo" : "Inactivo" }}
+
+                  </span>
+
+                </td>
+
+                <td class="text-center">
+
+                  <div class="d-flex align-items-center gap-10 justify-content-center">
+
+                    <button type="button"
+
+                      class="bg-success-focus text-success-600 bg-hover-success-200 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
+
+                      title="Editar Evento" (click)="editServicio(evento)">
+
+                      <iconify-icon icon="lucide:edit"></iconify-icon>
+
+                    </button>
+
+                    <button type="button"
+
+                      class="remove-item-btn bg-danger-focus bg-hover-danger-200 text-danger-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
+
+                      title="Eliminar Servicio" (click)="deleteEvento(evento.eventoID)">
+
+                      <iconify-icon icon="mingcute:delete-2-line"></iconify-icon>
+
+                    </button>
+
+                  </div>
+
+                </td>
+
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </ng-template>
+
+      </app-admin-table-shell>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<!-- Modal Bootstrap para Servicio -->
+
+<div class="modal fade" id="servicioModal" tabindex="-1" aria-labelledby="servicioModalLabel" aria-hidden="true">
+
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+
+    <div class="modal-content">
+
+      <div class="modal-header text-white">
+
+        <h5 class="modal-title" id="servicioModalLabel">Detalles del Servicio</h5>
+
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+      </div>
+
+
+
+      <div class="modal-body" *ngIf="selectedEvento">
+
+        <div class="p-4">
+
+          <div class="row g-3">
+
+            <div class="col-md-6">
+
+              <h6 class="fw-semibold text-secondary mb-1">Nombre</h6>
+
+              <p class="mb-0">{{ selectedEvento.nombre }}</p>
+
+            </div>
+
+
+
+            <div class="col-md-6">
+
+              <h6 class="fw-semibold text-secondary mb-1">Descripción</h6>
+
+              <p class="mb-0">{{ selectedEvento.descripcion }}</p>
+
+            </div>
+
+
+
+            <div class="col-md-6">
+
+              <h6 class="fw-semibold text-secondary mb-1">Precio</h6>
+
+              <p class="mb-0">{{ selectedEvento.precio }}</p>
+
+            </div>
+
+
+
+            <div class="col-md-6">
+
+              <h6 class="fw-semibold text-secondary mb-1">Estado</h6>
+
+              <p class="mb-0">{{ selectedEvento.estado ? 'Activo' : 'Inactivo' }}</p>
+
+            </div>
+
+
+
+            <div class="col-md-6">
+
+              <h6 class="fw-semibold text-secondary mb-1">Creado por</h6>
+
+              <p class="mb-0">{{ selectedEvento.usuarioCreacion || 'N/A' }}</p>
+
+            </div>
+
+
+
+            <div class="col-md-6">
+
+              <h6 class="fw-semibold text-secondary mb-1">Fecha de Creación</h6>
+
+              <p class="mb-0">{{ selectedEvento.fechaCreacion | date:'medium' }}</p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<!-- Modal Editar Servicio -->
+
+<div class="modal fade" id="editServicioModal" tabindex="-1" aria-hidden="true">
+
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+
+    <div class="modal-content">
+
+      <div class="modal-header">
+
+        <h5 class="modal-title">Editar Evento</h5>
+
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+
+      </div>
+
+      <div class="modal-body" *ngIf="selectedEvento">
+
+        <form #editServicioForm="ngForm" (ngSubmit)="submitEditServicio()">
+
+          <div class="row g-3">
+
+            <div class="col-md-6">
+
+              <label class="form-label">Nombre</label>
+
+              <input type="text" class="form-control" [(ngModel)]="selectedEvento.nombre" name="nombre" required [ngModelOptions]="{standalone: true}">
+
+            </div>
+
+            <div class="col-md-6">
+
+              <label class="form-label">Descripción</label>
+
+              <input type="text" class="form-control" [(ngModel)]="selectedEvento.descripcion" name="descripcion" [ngModelOptions]="{standalone: true}">
+
+            </div>
+
+            <div class="col-12">
+
+              <label class="form-label">Fotos del evento</label>
+
+              <input type="file" class="form-control mb-2" accept="image/*"
+
+                (change)="onFotoSelected($event)" [disabled]="fotoUploading" />
+
+              <div class="text-secondary-light text-sm mb-2" *ngIf="fotoUploading">Subiendo imagen...</div>
+
+              <div class="d-flex flex-wrap gap-2 pt-2">
+
+                <div class="position-relative" *ngFor="let foto of selectedEvento.fotosUrls; let i = index">
+
+                  <img [src]="userService.resolveMediaUrl(foto)" alt="Evento" class="radius-8"
+
+                    style="width: 96px; height: 72px; object-fit: cover;" />
+
+                  <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0"
+
+                    (click)="removeFotoUrl(i)">×</button>
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <div class="col-12">
+
+              <hr class="my-3">
+
+              <div class="d-flex align-items-center justify-content-between mb-2">
+
+                <h6 class="mb-0 fw-semibold">Tarifas por invitados (presupuestador)</h6>
+
+                <button type="button" class="btn btn-sm btn-outline-secondary" (click)="resetTarifasDefault()">
+
+                  Restaurar valores por defecto
+
+                </button>
+
+              </div>
+
+              <div class="row g-3 mb-3">
+
+                <div class="col-md-4">
+
+                  <label class="form-label">Mínimo de invitados</label>
+
+                  <input type="number" min="1" class="form-control"
+
+                    [(ngModel)]="selectedEvento.tarifasConfig.minInvitados" name="minInvitados">
+
+                </div>
+
+                <div class="col-md-4">
+
+                  <label class="form-label">Garantía (S/)</label>
+
+                  <input type="number" min="0" step="0.01" class="form-control"
+
+                    [(ngModel)]="selectedEvento.tarifasConfig.garantia" name="garantia">
+
+                </div>
+
+              </div>
+
+              <div class="table-responsive">
+
+                <table class="table table-sm bordered-table mb-2">
+
+                  <thead>
+
+                    <tr>
+
+                      <th>Desde (invitados)</th>
+
+                      <th>Precio por invitado (S/)</th>
+
+                      <th class="text-center" style="width: 80px;">Quitar</th>
+
+                    </tr>
+
+                  </thead>
+
+                  <tbody>
+
+                    <tr *ngFor="let tier of selectedEvento.tarifasConfig.tarifas; let i = index; trackBy: trackByTarifaIndex">
+
+                      <td>
+
+                        <input type="number" min="1" class="form-control form-control-sm"
+
+                          [(ngModel)]="tier.minInvitados" [name]="'minInv_' + i">
+
+                      </td>
+
+                      <td>
+
+                        <input type="number" min="0" step="0.01" class="form-control form-control-sm"
+
+                          [(ngModel)]="tier.precioPorInvitado" [name]="'precioInv_' + i">
+
+                      </td>
+
+                      <td class="text-center">
+
+                        <button type="button" class="btn btn-sm btn-outline-danger"
+
+                          (click)="removeTarifaTier(i)"
+
+                          [disabled]="selectedEvento.tarifasConfig.tarifas.length <= 1">×</button>
+
+                      </td>
+
+                    </tr>
+
+                  </tbody>
+
+                </table>
+
+              </div>
+
+              <button type="button" class="btn btn-sm btn-outline-primary" (click)="addTarifaTier()">
+
+                + Agregar rango
+
+              </button>
+
+              <p class="text-secondary-light text-sm mt-2 mb-0">
+
+                El precio aplicado es el del rango cuyo mínimo de invitados sea el más alto que no supere la cantidad ingresada.
+
+              </p>
+
+            </div>
+
+          </div>
+
+          <div class="modal-footer mt-3">
+
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+
+            <button type="submit" class="btn btn-primary" [disabled]="editServicioForm.invalid">Guardar Cambios</button>
+
+          </div>
+
+        </form>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+

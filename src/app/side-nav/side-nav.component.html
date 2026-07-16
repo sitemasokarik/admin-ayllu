@@ -1,0 +1,120 @@
+<!-- meta tags and other links -->
+
+<aside class="sidebar" [class.sidebar-open]="isSidebarOpen">
+  <button type="button" class="sidebar-close-btn" (click)="closeSidebar()">
+    <iconify-icon icon="radix-icons:cross-2"></iconify-icon>
+  </button>
+  <div>
+    <a routerLink="/home" class="sidebar-logo d-flex align-items-center gap-2">
+      <img src="assets/images/logo-ayllu.png" alt="site logo" class="light-logo">
+      <h6 class="mb-0" style="color:#f47820;font-weight:700">Ayllu</h6>
+    </a>
+  </div>
+    <div class="sidebar-menu-area">
+    <ul id="sidebar-menu" class="sidebar-menu">
+      <ng-container *ngFor="let section of menuSections">
+        <li *ngIf="section.kind === 'item'">
+          <a [routerLink]="section.item.ruta" routerLinkActive="active-page">
+            <i class="ri-{{ section.item.icono }} text-xl me-6 d-flex w-auto"></i>
+            <span>{{ section.item.nombre }}</span>
+          </a>
+        </li>
+
+        <li class="dropdown" *ngIf="section.kind === 'group'" [class.open]="section.group.open">
+          <a href="javascript:void(0)" (click)="toggleGroupMenu(section.group, $event)">
+            <i class="ri-{{ section.group.icon }} text-xl me-6 d-flex w-auto"></i>
+            <span>{{ section.group.name }}</span>
+          </a>
+          <ul class="sidebar-submenu" [style.display]="section.group.open ? 'block' : 'none'">
+            <li *ngFor="let sub of section.group.items">
+              <a [routerLink]="sub.ruta" routerLinkActive="active-page">{{ sub.nombre }}</a>
+            </li>
+          </ul>
+        </li>
+      </ng-container>
+    </ul>
+  </div>
+</aside>
+
+<main class="dashboard-main">
+  <div class="navbar-header">
+    <div class="row align-items-center justify-content-between">
+      <div class="col-auto">
+        <div class="d-flex flex-wrap align-items-center gap-4">
+          <button type="button" class="sidebar-toggle" (click)="toggleSidebar($event)">
+            <iconify-icon icon="heroicons:bars-3-solid" class="icon text-2xl non-active"></iconify-icon>
+            <iconify-icon icon="iconoir:arrow-right" class="icon text-2xl active"></iconify-icon>
+          </button>
+          <button type="button" class="sidebar-mobile-toggle" (click)="openSidebar()">
+            <iconify-icon icon="heroicons:bars-3-solid" class="icon"></iconify-icon>
+          </button>
+          <!-- <form class="navbar-search">
+            <input type="text" name="search" placeholder="Search">
+            <iconify-icon icon="ion:search-outline" class="icon"></iconify-icon>
+          </form> -->
+        </div>
+      </div>
+      <div class="col-auto">
+        <div class="d-flex flex-wrap align-items-center gap-3">
+          <div class="ayllu-header-alerts d-flex align-items-center gap-2" *ngIf="showHeaderAlerts">
+            <a routerLink="/pagos-vouchers" class="ayllu-header-alert" [class.has-count]="alertVouchers > 0" title="Vouchers pendientes">
+              <iconify-icon icon="solar:wallet-money-bold"></iconify-icon>
+              <span *ngIf="alertVouchers > 0">{{ alertVouchers }}</span>
+            </a>
+            <a routerLink="/tickets" class="ayllu-header-alert" [class.has-count]="alertTickets > 0" title="Tickets de clientes abiertos">
+              <iconify-icon icon="solar:chat-round-dots-bold"></iconify-icon>
+              <span *ngIf="alertTickets > 0">{{ alertTickets }}</span>
+            </a>
+            <a routerLink="/table-cotizaciones" class="ayllu-header-alert" [class.has-count]="alertCotizaciones > 0" title="Cotizaciones nuevas desde tu última visita">
+              <iconify-icon icon="solar:document-text-bold"></iconify-icon>
+              <span *ngIf="alertCotizaciones > 0">{{ alertCotizaciones }}</span>
+            </a>
+          </div>
+          <div class="dropdown d-flex align-items-center">
+              <div
+                class="py-12 px-16 radius-8  d-flex align-items-center justify-content-between gap-2">
+                <div class="d-flex align-items-center">
+                  <h6 class="text-lg text-primary-light fw-semibold mb-2">Bienvenido {{ userName }} </h6>
+                  <span class="text-secondary-light fw-medium text-sm"> | {{ userRole }}</span>
+                </div>
+              </div>            
+            <button class="d-flex justify-content-center align-items-center rounded-circle" type="button"
+              data-bs-toggle="dropdown">
+              <img src="https://cdn0.bioenciclopedia.com/es/posts/2/3/0/leon_32_600_square.jpg" alt="image" class="w-40-px h-40-px object-fit-cover rounded-circle">
+            </button>
+            <div class="dropdown-menu to-top dropdown-menu-sm">
+
+              <ul class="to-top-list">
+                <li>
+                  <a routerLink="/company"
+                    class="dropdown-item text-black px-0 py-8 hover-bg-transparent hover-text-primary d-flex align-items-center gap-3">
+                    <iconify-icon icon="icon-park-outline:setting-two" class="icon text-xl"></iconify-icon> Configuración</a>
+                </li>
+                <li>
+                  <a routerLink="/sign-in"
+                    class="dropdown-item text-black px-0 py-8 hover-bg-transparent hover-text-danger d-flex align-items-center gap-3">
+                    <iconify-icon icon="lucide:power" class="icon text-xl"></iconify-icon> Cerrar Sesión</a>
+                </li>
+              </ul>
+            </div>
+          </div><!-- Profile dropdown end -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <router-outlet />
+
+  <footer class="d-footer">
+    <div class="row align-items-center justify-content-between">
+      <div class="col-auto">
+        <p class="mb-0">©
+          {{ currentYear }} Ayllu Eventos. Todos los derechos reservados.
+        </p>
+      </div>
+      <div class="col-auto">
+        <p class="mb-0"><span class="text-primary-600">AYLLU</span></p>
+      </div>
+    </div>
+  </footer>
+</main>

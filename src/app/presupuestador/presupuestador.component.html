@@ -1,0 +1,596 @@
+<div *ngIf="loading" class="ayllu-budget-loader">
+  <div class="ayllu-budget-loader__spinner"></div>
+  <p>Cargando borrador...</p>
+</div>
+
+<div *ngIf="!loading" class="dashboard-main-body ayllu-budget">
+  <header class="ayllu-budget__header">
+    <div>
+      <span class="ayllu-budget__eyebrow">Cotizador interno</span>
+      <div class="ayllu-budget__title" role="heading" aria-level="1">Cotizador de eventos</div>
+      <p class="ayllu-budget__subtitle">Arma la proforma del cliente y descarga el PDF cuando esté completo. Los campos con <span class="text-danger">*</span> son obligatorios.</p>
+      <div class="ayllu-budget__draft-banner" *ngIf="presupuesto.modoBorrador && presupuesto.cotizacionID">
+        <iconify-icon icon="solar:document-text-bold"></iconify-icon>
+        <span>Editando borrador #{{ presupuesto.cotizacionID }}. Guarda los cambios o descarga la proforma para activar la cotización.</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="ayllu-budget__shell">
+    <form class="ayllu-budget__form" (ngSubmit)="onSubmit($event)">
+      <section class="ayllu-budget__section">
+        <div class="ayllu-budget__section-head">
+          <iconify-icon icon="solar:user-rounded-bold"></iconify-icon>
+          <div class="ayllu-budget__section-title" role="heading" aria-level="2">Datos del cliente</div>
+        </div>
+        <div class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label">Nombre Cliente <span class="text-danger">*</span></label>
+                    <div class="icon-field has-validation">
+                        <span class="icon">
+                            <iconify-icon icon="f7:person"></iconify-icon>
+                        </span>
+                        <input 
+                        type="text" 
+                        [(ngModel)]="presupuesto.cliente.nombre" 
+                        name="cli_nombre"
+                        (input)="save()" 
+                        class="form-control" 
+                        placeholder="Nombres" 
+                        required>                        
+                        <div class="invalid-feedback">
+                            Please provide first name
+                        </div>
+                    </div>
+                </div>  
+                <div class="col-md-3">
+                    <label class="form-label">Apellido Cliente <span class="text-danger">*</span></label>
+                    <div class="icon-field has-validation">
+                        <span class="icon">
+                            <iconify-icon icon="f7:person"></iconify-icon>
+                        </span>
+                        <input 
+                        type="text" 
+                        [(ngModel)]="presupuesto.cliente.apellido" 
+                        name="cli_apellido"
+                        (input)="save()" 
+                        class="form-control" 
+                        placeholder="Apellidos" 
+                        required>
+                        <div class="invalid-feedback">
+                            Please provide first name
+                        </div>
+                    </div>
+                </div>     
+                <div class="col-md-3">
+                    <label class="form-label">Celular 1 <span class="text-danger">*</span></label>
+                    <input 
+                    type="text" 
+                    [(ngModel)]="presupuesto.cliente.telefono1"
+                    name="cli_tel1"
+                    (input)="save()" 
+                    class="form-control" 
+                    placeholder="(+51) 987 654 321">
+                </div>     
+                <div class="col-md-3">
+                    <label class="form-label">Celular 2 <span class="text-secondary-light fw-normal">(opcional)</span></label>
+                    <input 
+                    type="text" 
+                    [(ngModel)]="presupuesto.cliente.telefono2"
+                    name="cli_tel2"
+                    (input)="save()" 
+                    class="form-control" 
+                    placeholder="(+51) 987 654 321">
+                </div>                                       
+                <div class="col-md-4">
+                    <label class="form-label">Correo <span class="text-danger">*</span></label>
+                    <div class="icon-field has-validation">
+                        <span class="icon">
+                            <iconify-icon icon="mage:email"></iconify-icon>
+                        </span>
+                        <input 
+                        type="email" 
+                        [(ngModel)]="presupuesto.cliente.correo"
+                        name="cli_correo"
+                        (input)="save()" 
+                        class="form-control" 
+                        placeholder="Correo" 
+                        required>
+                        <div class="invalid-feedback">
+                            Please provide email address
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Tipo Documento</label>
+                    <select class="form-select" [(ngModel)]="presupuesto.cliente.tipoDocumento"
+                    name="cli_tipo_doc" (change)="save()">
+                        <option value="">Seleccionar</option>
+                        <option value="DNI">DNI</option>
+                        <option value="Pasaporte">Pasaporte</option>
+                    </select>
+                </div>                
+                <div class="col-md-4">
+                    <label class="form-label">Documento</label>
+                    <input 
+                    type="text" 
+                    [(ngModel)]="presupuesto.cliente.documento"
+                    name="cli_doc"
+                    (input)="save()" 
+                    class="form-control" 
+                    placeholder="Opcional">
+                </div> 
+        </div>
+      </section>
+
+      <section class="ayllu-budget__section">
+        <div class="ayllu-budget__section-head">
+          <iconify-icon icon="solar:calendar-mark-bold"></iconify-icon>
+          <div class="ayllu-budget__section-title" role="heading" aria-level="2">Sobre mi evento</div>
+        </div>
+        <div class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label">Tipo de Evento <span class="text-danger">*</span></label>
+                    <select class="form-select radius-8"
+                            [(ngModel)]="presupuesto.eventoID"
+                            name="eventoID"
+                            (change)="onEventoChange()"
+                            required>
+                        <option [ngValue]="null">Seleccionar</option>
+                        <option *ngFor="let cat of eventos; trackBy: trackByEventoId" [ngValue]="cat.eventoID">
+                            {{ cat.nombre }}
+                        </option>
+                    </select>
+                  
+                    <!-- <select 
+                        class="form-select"
+                        [(ngModel)]="presupuesto.evento.tipo"
+                        name="evento_tipo"
+                        (change)="save()"
+                    >
+                        <option value="">Seleccionar</option>
+                        <option>Boda</option>
+                        <option>Quinceañero</option>
+                        <option>Aniversario</option>
+                        <option>Corporativo</option>
+                    </select> -->
+                </div>
+
+                <div class="col-md-3">
+                <label class="form-label">N° de invitados <span class="text-danger">*</span></label>
+                    <input type="number"
+                    [(ngModel)]="presupuesto.evento.invitados"
+                    name="evento_invitados"
+                    min="0"
+                    step="1"
+                    inputmode="numeric"
+                    (keydown)="preventNegativeInvitados($event)"
+                    (input)="onInvitadosInput()"
+                    class="form-control ayllu-budget__input">
+                    <div class="text-danger text-sm mt-1" *ngIf="invitadosError">{{ invitadosError }}</div>
+                    <div class="text-secondary-light text-sm mt-1" *ngIf="presupuesto.eventoID && !invitadosError">
+                      Mínimo {{ getEventoTarifasConfig().minInvitados }} invitados para {{ presupuesto.evento.tipo || 'este evento' }}.
+                    </div>
+                </div>
+  
+                <div class="col-md-3">
+                <label class="form-label">Fecha tentativa 1 <span class="text-danger">*</span></label>
+                <input 
+                    type="date" 
+                    [(ngModel)]="presupuesto.evento.fecha1"
+                    name="evento_fecha1"
+                    [min]="minFechaHoy"
+                    (change)="onFechaChange('fecha1')" 
+                    class="form-control ayllu-budget__input">
+                </div>
+
+                <div class="col-md-3">
+                <label class="form-label">Fecha tentativa 2 <span class="text-secondary-light fw-normal">(opcional)</span></label>
+                <input type="date"
+                    [(ngModel)]="presupuesto.evento.fecha2"
+                    name="evento_fecha2"
+                    [min]="minFechaHoy"
+                    (change)="onFechaChange('fecha2')" 
+                    class="form-control ayllu-budget__input">
+                </div>
+        </div>
+      </section>
+
+                
+                <div class="col-xxl-12">
+                    <div class="card p-0 position-relative radius-12 h-100 ayllu-budget__panel">
+                        <div class="card-header py-16 px-24 bg-base border border-end-0 border-start-0 border-top-0 d-flex align-items-center justify-content-between">
+                            <div class="ayllu-budget__section-title" role="heading" aria-level="2">Configuración del evento</div>
+                        </div>
+
+                        <div class="card-body p-24 pt-10">
+                            <div class="row align-items-start">
+                                <ul class="nav button-tab nav-pills mb-16 col-md-3 d-block" role="tablist">
+                                    <li class="nav-item mb-3" role="presentation">
+                                        <button type="button"
+                                            class="nav-link d-flex gap-2 align-items-center fw-semibold text-primary-light radius-4 px-16 py-10"
+                                            [class.active]="isConfigTab('local')"
+                                            (click)="setConfigTab('local')">
+                                            <iconify-icon icon="solar:home-smile-angle-outline" class="text-xl"></iconify-icon>
+                                            <span class="line-height-1">Local <span class="text-danger">*</span></span>
+                                        </button>
+                                    </li>
+                                    <li class="nav-item mb-3"
+                                        role="presentation"
+                                        *ngFor="let cat of categories; trackBy: trackByCategoriaId">
+                                        <button type="button"
+                                            class="nav-link d-flex gap-2 fw-semibold text-primary-light radius-4 px-16 py-10"
+                                            [class.active]="isConfigTab(cat.categoriaID)"
+                                            (click)="setConfigTab(cat.categoriaID)">
+                                            <iconify-icon icon="solar:home-smile-angle-outline" class="text-xl"></iconify-icon>
+                                            <span>{{ cat.nombre }}</span>
+                                        </button>
+                                    </li>
+                                    <li class="nav-item mb-3" role="presentation">
+                                        <button type="button"
+                                            class="nav-link d-flex gap-2 align-items-center fw-semibold text-primary-light radius-4 px-16 py-10"
+                                            [class.active]="isConfigTab('servicios')"
+                                            (click)="setConfigTab('servicios')">
+                                            <iconify-icon icon="solar:home-smile-angle-outline" class="text-xl"></iconify-icon>
+                                            <span class="line-height-1">Servicios Adicionales</span>
+                                        </button>
+                                    </li>
+                                    <li class="nav-item mb-3" role="presentation">
+                                        <button type="button"
+                                            class="nav-link d-flex gap-2 align-items-center fw-semibold text-primary-light radius-4 px-16 py-10"
+                                            [class.active]="isConfigTab('personal')"
+                                            (click)="setConfigTab('personal')">
+                                            <iconify-icon icon="solar:home-smile-angle-outline" class="text-xl"></iconify-icon>
+                                            <span class="line-height-1">Personal del Evento</span>
+                                        </button>
+                                    </li>
+                                </ul>
+                                <div class="tab-content col-md-9 d-block">
+                                    <div *ngIf="isConfigTab('local')">
+                                        <div class="flex-grow-1">
+                                            <h6 class="text-lg mb-8">Locales <span class="text-danger">*</span></h6>
+
+                                            <div class="row">
+                                                <div class="col-md-6 mb-3" *ngFor="let local of localesFiltrados; trackBy: trackByLocalId">
+                                                    <div class="card radius-12 p-3"
+                                                        [ngClass]="{'border-primary border-3': presupuesto.local?.localID === local.localID}">
+
+                                                        <h6 class="fw-bold">{{ local.nombre }}</h6>
+                                                        <p class="mb-1"><strong>Dirección:</strong> {{ local.direccion }}</p>
+                                                        <p class="mb-1"><strong>Capacidad:</strong> {{ local.capacidad }}</p>
+                                                        <p class="mb-1"><strong>Horas Evento:</strong> {{ local.horasEvento }}</p>
+
+                                                        <div class="d-flex gap-2 mt-2 overflow-x-scroll">
+                                                        <img *ngFor="let foto of local.fotosUrls; trackBy: trackByFoto"
+                                                            [src]="foto"
+                                                            loading="lazy"
+                                                            decoding="async"
+                                                            (click)="openImageModal(foto)"
+                                                            style="width: 270px; height: 170px; object-fit: cover; border-radius: 10px; cursor: zoom-in;">
+                                                        </div>
+
+                                                        <button type="button"
+                                                        (click)="selectLocal(local)"
+                                                        class="btn mt-3 w-100"
+                                                        [ngClass]="presupuesto.local?.localID === local.localID ? 'btn-success' : 'btn-primary'">
+                                                        {{ presupuesto.local?.localID === local.localID ? 'Seleccionado' : 'Seleccionar Local' }}
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <ng-container *ngFor="let cat of categories; trackBy: trackByCategoriaId">
+                                        <div *ngIf="isConfigTab(cat.categoriaID)" class="category-container p-3">
+                                            <h5 class="mb-4 fw-bold text-dark">{{ cat.nombre }}</h5>
+
+                                            <div class="row g-3 my-4">
+                                                <div class="col" *ngFor="let sub of cat.subcategorias; trackBy: trackBySubcategoriaId">
+                                                    <div class="card subcategory-card p-3 h-100 cursor-pointer"
+                                                        [class.selected]="
+                                                            selectedSubcategory?.subcategoriaID === sub.subcategoriaID &&
+                                                            selectedSubcategory?.categoriaPadreID === cat.categoriaID
+                                                        "
+                                                        (click)="selectSubcategory(sub, cat)">
+                                                        <h6 class="fw-semibold my-2">{{ sub.nombre }}</h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div *ngIf="selectedSubcategory?.categoriaPadreID === cat.categoriaID">
+                                                <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 my-3">
+                                                    <div>
+                                                        <h6 class="mb-1 fw-semibold">Productos de {{ selectedSubcategory.nombre }}</h6>
+                                                        <p class="mb-0 text-secondary-light text-sm">{{ selectedSubcategory.descripcion }}</p>
+                                                    </div>
+                                                    <span class="badge ayllu-selection-limit px-16 py-8 radius-8">
+                                                        {{ getLimiteLabel(selectedSubcategory) }}
+                                                    </span>
+                                                </div>
+                                                <div class="row g-3">
+                                                    <div class="col-md-4" *ngFor="let p of getProductsByLeafCategory(selectedSubcategory); trackBy: trackByProductoId">
+                                                        <div class="card product-card h-100 p-3"
+                                                            [class.selected]="isProductoSeleccionado(p, selectedSubcategory)">
+
+                                                            <h6 class="fw-bold">{{ p.nombre }}</h6>
+                                                            <p class="mb-2 text-">{{ p.descripcion }}</p>
+
+                                                            <div class="product-images d-flex gap-3 py-3 overflow-auto">
+                                                                <img *ngFor="let foto of p.fotosUrls; trackBy: trackByFoto"
+                                                                    [src]="foto"
+                                                                    loading="lazy"
+                                                                    decoding="async"
+                                                                    (click)="openImageModal(foto)"
+                                                                    class="img-fluid rounded cursor-zoom">
+                                                            </div>
+
+                                                            <button type="button" class="btn"
+                                                                    [ngClass]="isProductoSeleccionado(p, selectedSubcategory) ? 'btn-success' : 'btn-primary'"
+                                                                    (click)="seleccionarProducto(selectedSubcategory, p)">
+                                                                {{ isProductoSeleccionado(p, selectedSubcategory) ? 'Seleccionado' : 'Agregar al evento' }}
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+
+                                    <div *ngIf="isConfigTab('servicios')">
+                                        <div class="flex-grow-1">
+                                            <h6 class="text-lg my-3">Servicios Adicionales</h6>
+
+                                            <div class="row" *ngIf="serviciosAdicionales?.length > 0">
+                                                <div class="col-md-4 mb-3" *ngFor="let servicio of serviciosAdicionales; trackBy: trackByServicioId">
+                                                    <div class="card radius-12 p-3">
+                                                        <h6 class="fw-bold">{{ servicio.nombre }}</h6>
+                                                        <p class="mb-1"><strong>Descripcion:</strong> {{ servicio.descripcion }}</p>
+                                                        <p class="mb-1"><strong>Precio por invitado:</strong> S/ {{ servicio.precio | number:'1.2-2' }}</p>
+                                                        <p class="mb-1 text-secondary-light" *ngIf="servicio.cantidadMinima > 1">
+                                                          Mínimo {{ servicio.cantidadMinima }} invitados
+                                                        </p>
+                                                        <p class="mb-1 text-danger-600 small" *ngIf="mensajeMinimoAdicional(servicio)">
+                                                          {{ mensajeMinimoAdicional(servicio) }}
+                                                        </p>
+
+                                                        <div class="d-flex gap-2 mt-2 overflow-x-scroll img_servicio_adicional">
+                                                            <img *ngFor="let foto of servicio.fotosUrls; trackBy: trackByFoto"
+                                                                 [src]="foto"
+                                                                 loading="lazy"
+                                                                 decoding="async"
+                                                                (click)="openImageModal(foto)"
+                                                                style="width: 100%; height: 200px; object-fit: cover; border-radius: 6px; cursor: zoom-in;">
+                                                        </div>
+
+                                                       <button type="button"
+                                                                class="btn mt-3 w-100"
+                                                                [ngClass]="isAdicionalSeleccionado(servicio) ? 'btn-success' : 'btn-primary'"
+                                                                [disabled]="!puedeSeleccionarAdicional(servicio)"
+                                                                (click)="addAdicional(servicio)">
+                                                            {{ isAdicionalSeleccionado(servicio) ? 'Seleccionado' : 'Añadir' }}
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div *ngIf="isConfigTab('personal')">
+                                        <div class="flex-grow-1">
+                                            <h6 class="text-lg my-3">Personal del Evento</h6>
+                                            <p class="text-secondary-light text-sm mb-3">Todo lo siguiente viene incluido en tu cotización Ayllu.</p>
+
+                                            <div class="card p-3 radius-12 ayllu-included-panel">
+                                                <h6 class="fw-bold d-flex align-items-center gap-2">
+                                                    <iconify-icon icon="solar:users-group-rounded-bold" class="text-primary-600"></iconify-icon>
+                                                    Equipo de Trabajo
+                                                </h6>
+                                                <ul class="ayllu-included-checklist mt-3">
+                                                    <li *ngFor="let item of personalEquipoIncluido" class="ayllu-included-checklist__item">
+                                                        <span class="ayllu-included-checklist__check" aria-hidden="true">✓</span>
+                                                        <span>{{ item }}</span>
+                                                    </li>
+                                                </ul>
+
+                                                <hr class="my-3">
+
+                                                <h6 class="fw-bold d-flex align-items-center gap-2">
+                                                    <iconify-icon icon="solar:music-note-bold" class="text-primary-600"></iconify-icon>
+                                                    DJ, Sonido e Iluminación Profesional
+                                                </h6>
+                                                <ul class="ayllu-included-checklist mt-3">
+                                                    <li *ngFor="let item of personalDjIncluido" class="ayllu-included-checklist__item">
+                                                        <span class="ayllu-included-checklist__check" aria-hidden="true">✓</span>
+                                                        <span>{{ item }}</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>  
+                    </div>
+                </div> 
+                
+                <div class="col-12 mt-2">
+                    <section class="ayllu-summary">
+                        <div class="ayllu-summary__top">
+                            <div>
+                                <div class="ayllu-summary__title" role="heading" aria-level="2">Resumen de la cotización</div>
+                                <p class="ayllu-summary__hint">Verifica cada bloque antes de generar la proforma PDF.</p>
+                            </div>
+                            <div class="ayllu-summary__top-actions">
+                                <div class="ayllu-summary__progress">
+                                    <div class="ayllu-summary__progress-ring" [style.--progress]="resumenProgreso + '%'">
+                                        <span>{{ resumenProgreso }}%</span>
+                                    </div>
+                                    <div>
+                                        <strong>Completitud</strong>
+                                        <span>{{ resumenCompletoFlag ? 'Listo para descargar' : 'Faltan selecciones' }}</span>
+                                    </div>
+                                </div>
+                                <button type="button"
+                                    class="btn btn-outline-secondary d-flex align-items-center gap-1"
+                                    [disabled]="savingDraft || loading || generatingPdf"
+                                    (click)="limpiarFormulario()">
+                                    <iconify-icon icon="solar:trash-bin-minimalistic-linear"></iconify-icon>
+                                    Limpiar formulario
+                                </button>
+                                <button type="button"
+                                    class="btn btn-outline-secondary d-flex align-items-center gap-1"
+                                    [disabled]="savingDraft || loading || generatingPdf"
+                                    (click)="guardarBorrador()">
+                                    <iconify-icon icon="solar:diskette-bold"></iconify-icon>
+                                    {{ savingDraft ? 'Guardando…' : 'Guardar borrador' }}
+                                </button>
+                                <button type="button"
+                                    class="btn ayllu-budget__download d-flex align-items-center gap-1"
+                                    [disabled]="!resumenCompletoFlag || loading || generatingPdf"
+                                    (click)="descargarPDF()">
+                                    <iconify-icon icon="solar:download-linear"></iconify-icon>
+                                    {{ generatingPdf ? 'Generando proforma...' : 'Descargar proforma' }}
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="ayllu-summary__alert" *ngIf="!resumenCompletoFlag">
+                            <iconify-icon icon="solar:info-circle-bold"></iconify-icon>
+                            <span>Completa local, coctel, entrada, fondo y al menos un entremés para habilitar la descarga.</span>
+                        </div>
+
+                        <div class="ayllu-summary__steps">
+                            <span class="ayllu-summary__step" *ngFor="let paso of resumenPasos; trackBy: trackByPasoLabel" [class.is-done]="paso.done">
+                                <iconify-icon [icon]="paso.done ? 'solar:check-circle-bold' : 'solar:close-circle-linear'"></iconify-icon>
+                                {{ paso.label }}
+                            </span>
+                        </div>
+
+                        <div class="ayllu-summary__grid">
+                            <article class="ayllu-summary__block">
+                                <header>
+                                    <iconify-icon icon="solar:home-smile-bold"></iconify-icon>
+                                    <span>Local seleccionado</span>
+                                </header>
+                                <ng-container *ngIf="resumen.local; else emptyLocal">
+                                    <strong>{{ resumen.local.nombre }}</strong>
+                                    <p>{{ resumen.local.direccion }}</p>
+                                    <span class="ayllu-summary__tag">Capacidad {{ resumen.local.capacidad }}</span>
+                                </ng-container>
+                                <ng-template #emptyLocal>
+                                    <p class="ayllu-summary__empty">Selecciona un local en la pestaña correspondiente.</p>
+                                </ng-template>
+                            </article>
+
+                            <article class="ayllu-summary__block">
+                                <header>
+                                    <iconify-icon icon="solar:cup-hot-bold"></iconify-icon>
+                                    <span>Coctel</span>
+                                </header>
+                                <ul class="ayllu-summary__list" *ngIf="asSummaryItems(resumen.coctel).length; else emptyCoctel">
+                                    <li *ngFor="let item of asSummaryItems(resumen.coctel)">{{ item.nombre }}</li>
+                                </ul>
+                                <ng-template #emptyCoctel>
+                                    <p class="ayllu-summary__empty">Sin selección</p>
+                                </ng-template>
+                            </article>
+
+                            <article class="ayllu-summary__block">
+                                <header>
+                                    <iconify-icon icon="solar:chef-hat-bold"></iconify-icon>
+                                    <span>Entrada</span>
+                                </header>
+                                <ul class="ayllu-summary__list" *ngIf="asSummaryItems(resumen.entrada).length; else emptyEntrada">
+                                    <li *ngFor="let item of asSummaryItems(resumen.entrada)">{{ item.nombre }}</li>
+                                </ul>
+                                <ng-template #emptyEntrada>
+                                    <p class="ayllu-summary__empty">Sin selección</p>
+                                </ng-template>
+                            </article>
+
+                            <article class="ayllu-summary__block">
+                                <header>
+                                    <iconify-icon icon="solar:bill-list-bold"></iconify-icon>
+                                    <span>Fondo</span>
+                                </header>
+                                <ul class="ayllu-summary__list" *ngIf="asSummaryItems(resumen.fondo).length; else emptyFondo">
+                                    <li *ngFor="let item of asSummaryItems(resumen.fondo)">{{ item.nombre }}</li>
+                                </ul>
+                                <ng-template #emptyFondo>
+                                    <p class="ayllu-summary__empty">Sin selección</p>
+                                </ng-template>
+                            </article>
+
+                            <article class="ayllu-summary__block ayllu-summary__block--wide">
+                                <header>
+                                    <iconify-icon icon="solar:plate-bold"></iconify-icon>
+                                    <span>Entremeses ({{ resumen.entremeses?.length || 0 }}/5)</span>
+                                </header>
+                                <ul class="ayllu-summary__chips" *ngIf="resumen.entremeses?.length; else emptyEntremeses">
+                                    <li *ngFor="let item of resumen.entremeses">{{ item.nombre }}</li>
+                                </ul>
+                                <ng-template #emptyEntremeses>
+                                    <p class="ayllu-summary__empty">Agrega al menos un entremés.</p>
+                                </ng-template>
+                            </article>
+
+                            <article class="ayllu-summary__block ayllu-summary__block--wide">
+                                <header>
+                                    <iconify-icon icon="solar:star-bold"></iconify-icon>
+                                    <span>Servicios adicionales ({{ resumen.adicionales?.length || 0 }})</span>
+                                </header>
+                                <ul class="ayllu-summary__chips" *ngIf="resumen.adicionales?.length; else emptyAdicionales">
+                                    <li *ngFor="let item of resumen.adicionales">{{ item.nombre }}</li>
+                                </ul>
+                                <ng-template #emptyAdicionales>
+                                    <p class="ayllu-summary__empty">Opcional · ninguno seleccionado</p>
+                                </ng-template>
+                            </article>
+                        </div>
+
+                        <div class="ayllu-summary__pricing">
+                            <header class="ayllu-summary__pricing-title">
+                                <iconify-icon icon="solar:calculator-bold"></iconify-icon>
+                                <span>Desglose de la cotización</span>
+                            </header>
+                            <div class="ayllu-summary__pricing-table" role="table">
+                                <div class="ayllu-summary__pricing-head" role="row">
+                                    <span role="columnheader">Concepto</span>
+                                    <span role="columnheader">Monto (S/)</span>
+                                </div>
+                                <div class="ayllu-summary__pricing-row"
+                                    *ngFor="let fila of tablaCotizacionFilas; trackBy: trackByLabel"
+                                    role="row">
+                                    <div class="ayllu-summary__pricing-concept" role="cell">
+                                        <strong>{{ fila.label }}</strong>
+                                        <small *ngIf="fila.sublabel">{{ fila.sublabel }}</small>
+                                    </div>
+                                    <div class="ayllu-summary__pricing-amount" role="cell">
+                                        {{ fila.value | number:'1.2-2' }}
+                                    </div>
+                                </div>
+                                <div class="ayllu-summary__pricing-row ayllu-summary__pricing-row--total" role="row">
+                                    <div class="ayllu-summary__pricing-concept" role="cell">
+                                        <strong>Total estimado</strong>
+                                        <small>
+                                            {{ presupuesto.evento.invitados || 0 }} invitados
+                                            · {{ presupuesto.evento.tipo || 'Sin tipo de evento' }}
+                                        </small>
+                                    </div>
+                                    <div class="ayllu-summary__pricing-amount" role="cell">
+                                        {{ totalEstimadoVisible | number:'1.2-2' }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </form>
+  </div>
+</div>
+
+<!-- MODAL GLOBAL PARA AMPLIAR IMÁGENES -->
+<div class="image-modal" [class.open]="modalImage" (click)="closeImageModal()">
+  <img [src]="modalImage" class="image-modal-content" (click)="$event.stopPropagation()">
+</div>

@@ -1,0 +1,54 @@
+<div class="dashboard-main-body">
+  <app-breadcrumb [title]="title"></app-breadcrumb>
+  <div class="card basic-data-table">
+    <div class="card-body">
+      <app-admin-table-shell
+        [data]="registrosClientes"
+        [loading]="loading"
+        [filterFields]="tableFilterFields"
+        emptyMessage="No hay registros de contacto">
+
+        <ng-template appAdminTableBody let-rows="rows">
+          <table class="table bordered-table sm-table mb-0">
+            <thead>
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Correo Contacto</th>
+                <th scope="col" class="text-center">Número Contacto</th>
+                <th scope="col" class="text-center">Servicio</th>
+                <th scope="col" class="text-center">Mensaje</th>
+                <th scope="col" class="text-center">Fecha Registro</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let cliente of rows; trackBy: trackByContactoId">
+                <td>{{ cliente.contactanosID }}</td>
+                <td>
+                  <span class="text-md mb-0 fw-normal text-secondary-light">{{ cliente.nombreCompleto }}</span>
+                </td>
+                <td>
+                  <span class="text-md mb-0 fw-normal text-secondary-light">{{ cliente.correo }}</span>
+                </td>
+                <td class="text-center">
+                  <span class="text-md mb-0 fw-normal text-secondary-light">{{ cliente.telefono }}</span>
+                </td>
+                <td class="text-center">
+                  <span class="text-md mb-0 fw-normal text-secondary-light">{{ cliente.servicio }}</span>
+                </td>
+                <td class="text-center">
+                  <span class="text-md mb-0 fw-normal text-secondary-light">{{ cliente.mensaje }}</span>
+                </td>
+                <td class="text-center">
+                  <span class="text-md mb-0 fw-normal text-secondary-light">
+                    {{ cliente.fechaCreacion | date:'short' }}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </ng-template>
+      </app-admin-table-shell>
+    </div>
+  </div>
+</div>

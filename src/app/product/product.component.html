@@ -1,0 +1,224 @@
+<div class="dashboard-main-body">
+  <app-breadcrumb [title]="title"></app-breadcrumb>
+  <div class="card basic-data-table">
+    <div class="card-body">
+      <app-admin-table-shell
+        [data]="productos"
+        [loading]="loading"
+        [filterFields]="tableFilterFields"
+        emptyMessage="No hay productos registrados">
+
+        <div adminTableActions class="justify-content-start d-flex">
+          <a routerLink="/add-product"
+            class="btn btn-primary text-sm btn-sm px-12 py-12 radius-8 d-flex align-items-center gap-2">
+            <iconify-icon icon="ic:baseline-plus" class="icon text-xl line-height-1"></iconify-icon>
+            Agregar Producto
+          </a>
+        </div>
+
+        <ng-template appAdminTableBody let-rows="rows">
+          <table class="table bordered-table sm-table mb-0">
+            <thead>
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Categoría</th>
+                <th scope="col" class="text-end">Precio venta</th>
+                <th scope="col" class="text-center">Estado</th>
+                <th scope="col" class="text-center">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let producto of rows; trackBy: trackByProductoId">
+                <td>{{ producto.productoID }}</td>
+                <td><span class="text-md mb-0 fw-normal text-secondary-light">{{ producto.nombre }}</span></td>
+                <td><span class="text-md mb-0 fw-normal text-secondary-light">{{ producto.categoria }}</span></td>
+                <td class="text-end"><span class="text-md mb-0 fw-normal text-secondary-light">S/ {{ producto.precio | number:'1.2-2' }}</span></td>
+                <td class="text-center">
+                  <span [ngClass]="{
+                          'bg-success-focus text-success-600 border border-success-main': producto.estado,
+                          'bg-danger-200 text-danger-600 border border-danger-main': !producto.estado
+                        }" class="px-24 py-4 radius-4 fw-medium text-sm">
+                    {{ producto.estado ? "Activo" : "Inactivo" }}
+                  </span>
+                </td>
+                <td class="text-center">
+                  <div class="d-flex align-items-center gap-10 justify-content-center">
+                    <button type="button"
+                      class="bg-info-focus bg-hover-info-200 text-info-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
+                      title="Ver producto" (click)="openProductModal(producto)">
+                      <iconify-icon icon="iconamoon:eye-light"></iconify-icon>
+                    </button>
+                    <button type="button"
+                      class="bg-success-focus text-success-600 bg-hover-success-200 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
+                      title="Editar producto" (click)="editProduct(producto)">
+                      <iconify-icon icon="lucide:edit"></iconify-icon>
+                    </button>
+                    <button *ngIf="producto.estado" type="button"
+                      class="remove-item-btn bg-danger-focus bg-hover-danger-200 text-danger-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
+                      title="Desactivar producto" (click)="deleteProduct(producto.productoID)">
+                      <iconify-icon icon="solar:lock-keyhole-linear"></iconify-icon>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </ng-template>
+      </app-admin-table-shell>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Clásico Bootstrap -->
+<div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <!-- Header -->
+      <div class="modal-header">
+        <h5 class="modal-title" id="productModalLabel">Detalles del Producto</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body" *ngIf="selectedProduct">
+        <div class="p-4">
+          <div class="row g-3">
+            <!-- Nombre -->
+            <div class="col-md-6">
+              <h6 class="fw-semibold text-secondary mb-1">Nombre</h6>
+              <p class="mb-0">{{ selectedProduct.nombre }}</p>
+            </div>
+
+            <!-- Descripción -->
+            <div class="col-md-6">
+              <h6 class="fw-semibold text-secondary mb-1">Descripción</h6>
+              <p class="mb-0">{{ selectedProduct.descripcion }}</p>
+            </div>
+
+            <!-- Precio -->
+            <div class="col-md-6">
+              <h6 class="fw-semibold text-secondary mb-1">Precio</h6>
+              <p class="mb-0">{{ selectedProduct.precio | currency }}</p>
+            </div>
+
+            <!-- Precio de Costo -->
+            <div class="col-md-6">
+              <h6 class="fw-semibold text-secondary mb-1">Precio Costo</h6>
+              <p class="mb-0">{{ selectedProduct.precioCosto | currency }}</p>
+            </div>
+
+
+            <!-- Categoría -->
+            <div class="col-md-6">
+              <h6 class="fw-semibold text-secondary mb-1">Categoría</h6>
+              <p class="mb-0">{{ selectedProduct.categoryName }}</p>
+            </div>
+
+
+            <!-- Creado por -->
+            <div class="col-md-6">
+              <h6 class="fw-semibold text-secondary mb-1">Creado por</h6>
+              <p class="mb-0">{{ selectedProduct.usuarioCreacion }}</p>
+            </div>
+
+            <!-- Imagen -->
+            <div class="col-md-6">
+              <h6 class="fw-semibold text-secondary mb-1">Imágenes</h6>
+              <div class="d-flex flex-wrap gap-2" *ngIf="selectedProduct.fotosUrls?.length; else noProductPhotos">
+                <img *ngFor="let foto of selectedProduct.fotosUrls" [src]="userService.resolveMediaUrl(foto)" alt="Producto"
+                  class="img-fluid rounded" style="width: 100px; height: 100px; object-fit: cover;" />
+              </div>
+              <ng-template #noProductPhotos><p class="mb-0">-</p></ng-template>
+            </div>
+
+
+            <!-- Estado -->
+            <div class="col-md-6">
+              <h6 class="fw-semibold text-secondary mb-1">Estado</h6>
+              <p class="mb-0" [ngClass]="selectedProduct.estado ? 'text-success' : 'text-danger'">
+                {{ selectedProduct.estado ? "Activo" : "Inactivo" }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="editProductModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Editar Producto</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <form #editProductForm="ngForm" (ngSubmit)="submitEditProduct()" *ngIf="selectedProduct">
+          <div class="row g-3">
+            <!-- Nombre -->
+            <div class="col-md-6">
+              <label class="form-label">Nombre</label>
+              <input type="text" class="form-control" [(ngModel)]="selectedProduct.nombre" name="nombre" required
+                [ngModelOptions]="{standalone:true}" />
+            </div>
+
+            <!-- Descripción -->
+            <div class="col-md-6">
+              <label class="form-label">Descripción</label>
+              <textarea class="form-control" [(ngModel)]="selectedProduct.descripcion" name="descripcion" required
+                [ngModelOptions]="{standalone:true}"></textarea>
+            </div>
+
+            <!-- Precio -->
+            <div class="col-md-6">
+              <label class="form-label">Precio Venta</label>
+              <input type="number" class="form-control" [(ngModel)]="selectedProduct.precio" name="precio" required
+                [ngModelOptions]="{standalone:true}" />
+            </div>
+
+            <!-- Precio Costo -->
+            <div class="col-md-6">
+              <label class="form-label">Precio Costo</label>
+              <input type="number" class="form-control" [(ngModel)]="selectedProduct.precioCosto" name="precioCosto"
+                required [ngModelOptions]="{standalone:true}" />
+            </div>
+
+            <!-- Imágenes -->
+            <div class="col-12">
+              <label class="form-label">Imágenes del producto</label>
+              <input type="file" class="form-control mb-2" accept="image/*"
+                (change)="onFotoSelected($event)" [disabled]="fotoUploading" />
+              <div class="text-secondary-light text-sm mb-2" *ngIf="fotoUploading">Subiendo imagen...</div>
+              <div class="d-flex flex-wrap gap-2 pt-2">
+                <div class="position-relative" *ngFor="let foto of selectedProduct.fotosUrls; let i = index">
+                  <img [src]="userService.resolveMediaUrl(foto)" alt="Producto" class="radius-8"
+                    style="width: 96px; height: 72px; object-fit: cover;" />
+                  <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0"
+                    (click)="removeFotoUrl(i)">×</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Categoría -->
+            <div class="col-md-6">
+              <label class="form-label">Categoría</label>
+              <select class="form-select" [(ngModel)]="selectedProduct.categoriaID" name="categoriaID" required>
+                <option value="" disabled selected>Seleccione una categoría</option>
+                <option *ngFor="let cat of categories" [value]="cat.categoriaID">{{ cat.nombre }}</option>
+              </select>
+            </div>
+
+          </div>
+
+          <div class="modal-footer mt-3">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            <button type="submit" class="btn btn-primary" [disabled]="editProductForm.invalid">Guardar Cambios</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

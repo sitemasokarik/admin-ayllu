@@ -1,0 +1,86 @@
+.cotizacion-row-borrador {
+  cursor: pointer;
+}
+
+.cotizacion-row-borrador:hover {
+  background: rgba(255, 193, 7, 0.08);
+}
+
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.sortable-th iconify-icon {
+  font-size: 0.85rem;
+  vertical-align: middle;
+  margin-left: 4px;
+  opacity: 0.55;
+}
+
+.sortable-th:hover {
+  color: var(--primary-600, #e85d04);
+}
+
+.cotizacion-table-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.cotizacion-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 14px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 10px;
+  background: rgba(248, 249, 250, 0.85);
+}
+
+.cotizacion-filters__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.cotizacion-filters__row--dates {
+  padding-top: 4px;
+  border-top: 1px dashed rgba(0, 0, 0, 0.08);
+}
+
+.cotizacion-filters__select {
+  width: auto;
+  min-width: 150px;
+  max-width: 100%;
+}
+
+.cotizacion-filters__date-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--text-secondary-light, #6b7280);
+}
+
+.cotizacion-filters__date-label input {
+  width: 145px;
+}
+
+.cotizacion-filter-count {
+  white-space: nowrap;
+}
+
+@media (max-width: 767px) {
+  .cotizacion-filters__date-label {
+    width: 100%;
+  }
+
+  .cotizacion-filters__date-label input {
+    flex: 1;
+    width: auto;
+  }
+}

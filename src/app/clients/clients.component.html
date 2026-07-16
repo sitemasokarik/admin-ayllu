@@ -1,0 +1,189 @@
+<div class="dashboard-main-body">
+
+  <app-breadcrumb [title]="title"></app-breadcrumb>
+
+  <div class="card basic-data-table">
+
+    <div class="card-body">
+
+      <app-admin-table-shell
+
+        [data]="clients"
+
+        [loading]="loading"
+
+        [filterFields]="tableFilterFields"
+
+        emptyMessage="No hay clientes registrados">
+
+
+
+        <ng-template appAdminTableBody let-rows="rows">
+
+          <table class="table bordered-table sm-table mb-0">
+
+            <thead>
+
+              <tr>
+
+                <th scope="col">ID</th>
+
+                <th scope="col">Nombre</th>
+
+                <th scope="col">DNI</th>
+
+                <th scope="col">Correo</th>
+
+                <th scope="col">Teléfono</th>
+
+                <th scope="col" class="text-center">Cotizaciones</th>
+
+                <th scope="col" class="text-center">Portal</th>
+
+                <th scope="col" class="text-center">Acción</th>
+
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              <tr *ngFor="let cliente of rows; trackBy: trackByClienteId">
+
+                <td>{{ cliente.clienteID }}</td>
+
+                <td>{{ cliente.nombreCompleto }}</td>
+
+                <td>{{ cliente.numeroDocumento }}</td>
+
+                <td>{{ cliente.email }}</td>
+
+                <td>{{ cliente.telefono }}</td>
+
+                <td class="text-center">
+
+                  <span class="badge bg-primary-100 text-primary-600">{{ cliente.totalCotizaciones || 0 }}</span>
+
+                </td>
+
+                <td class="text-center">
+
+                  <span
+
+                    class="portal-badge"
+
+                    [class.portal-badge--yes]="tieneCuentaPortal(cliente)"
+
+                    [class.portal-badge--no]="!tieneCuentaPortal(cliente)">
+
+                    {{ tieneCuentaPortal(cliente) ? 'Si' : 'No' }}
+
+                  </span>
+
+                </td>
+
+                <td class="text-center">
+
+                  <button type="button" class="btn btn-sm btn-outline-primary-600" (click)="verCotizaciones(cliente)">
+
+                    Ver cotizaciones
+
+                  </button>
+
+                </td>
+
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </ng-template>
+
+      </app-admin-table-shell>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<div class="modal fade show d-block" tabindex="-1" *ngIf="selectedClient" style="background: rgba(0,0,0,.45);">
+
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+
+    <div class="modal-content">
+
+      <div class="modal-header">
+
+        <h5 class="modal-title">Cotizaciones de {{ selectedClient.nombreCompleto }} (DNI {{ selectedClient.numeroDocumento }})</h5>
+
+        <button type="button" class="btn-close" (click)="cerrarDetalle()"></button>
+
+      </div>
+
+      <div class="modal-body">
+
+        <p *ngIf="loadingCotizaciones">Cargando cotizaciones...</p>
+
+        <p *ngIf="!loadingCotizaciones && clientCotizaciones.length === 0">Este cliente no tiene cotizaciones activas.</p>
+
+        <div class="table-responsive" *ngIf="!loadingCotizaciones && clientCotizaciones.length">
+
+          <table class="table sm-table">
+
+            <thead>
+
+              <tr>
+
+                <th>#</th>
+
+                <th>Local</th>
+
+                <th>Fecha</th>
+
+                <th>Invitados</th>
+
+                <th>Total</th>
+
+                <th>Estado</th>
+
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              <tr *ngFor="let c of clientCotizaciones">
+
+                <td>{{ c.cotizacionID }}</td>
+
+                <td>{{ c.localNombre }}</td>
+
+                <td>{{ c.fechaTentativa | date:'dd/MM/yyyy' }}</td>
+
+                <td>{{ c.numeroInvitados }}</td>
+
+                <td>S/ {{ c.totalCotizacion | number:'1.2-2' }}</td>
+
+                <td>{{ c.estadoCotizacion }}</td>
+
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+

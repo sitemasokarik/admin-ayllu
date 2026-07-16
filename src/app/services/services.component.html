@@ -1,0 +1,180 @@
+<div class="dashboard-main-body">
+  <app-breadcrumb [title]="title"></app-breadcrumb>
+
+  <div class="card basic-data-table">
+    <div class="card-body">
+      <app-admin-table-shell
+        [data]="servicios"
+        [loading]="loading"
+        [filterFields]="tableFilterFields"
+        emptyMessage="No hay servicios registrados">
+
+        <div adminTableActions class="justify-content-start d-flex">
+          <a routerLink="/add-services"
+            class="btn btn-primary text-sm btn-sm px-12 py-12 radius-8 d-flex align-items-center gap-2">
+            <iconify-icon icon="ic:baseline-plus" class="icon text-xl line-height-1"></iconify-icon>
+            Agregar Servicio
+          </a>
+        </div>
+
+        <ng-template appAdminTableBody let-rows="rows">
+          <table class="table bordered-table sm-table mb-0">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Precio</th>
+                <th class="text-center">Estado</th>
+                <th class="text-center">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let servicio of rows; trackBy: trackByServicioId">
+                <td>{{ servicio.servicioID }}</td>
+                <td>{{ servicio.nombre }}</td>
+                <td>{{ servicio.precio }}</td>
+                <td class="text-center">
+                  <span [ngClass]="{
+                      'bg-success-focus text-success-600 border border-success-main': servicio.estado,
+                      'bg-danger-200 text-danger-600 border border-danger-main': !servicio.estado
+                    }" class="px-24 py-4 radius-4 fw-medium text-sm">
+                    {{ servicio.estado ? "Activo" : "Inactivo" }}
+                  </span>
+                </td>
+                <td class="text-center">
+                  <div class="d-flex align-items-center gap-10 justify-content-center">
+                    <button type="button"
+                      class="bg-info-focus bg-hover-info-200 text-info-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
+                      title="Ver Servicio" (click)="openServicioModal(servicio)">
+                      <iconify-icon icon="iconamoon:eye-light"></iconify-icon>
+                    </button>
+
+                    <button type="button"
+                      class="bg-success-focus text-success-600 bg-hover-success-200 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
+                      title="Editar Servicio" (click)="editServicio(servicio)">
+                      <iconify-icon icon="lucide:edit"></iconify-icon>
+                    </button>
+
+                    <button type="button"
+                      class="remove-item-btn bg-danger-focus bg-hover-danger-200 text-danger-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
+                      title="Eliminar Servicio" (click)="deleteServicio(servicio.servicioID)">
+                      <iconify-icon icon="mingcute:delete-2-line"></iconify-icon>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </ng-template>
+      </app-admin-table-shell>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Bootstrap para Servicio -->
+<div class="modal fade" id="servicioModal" tabindex="-1" aria-labelledby="servicioModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <!-- Header -->
+      <div class="modal-header text-white">
+        <h5 class="modal-title" id="servicioModalLabel">Detalles del Servicio</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body" *ngIf="selectedServicio">
+        <div class="p-4">
+          <div class="row g-3">
+            <!-- Nombre -->
+            <div class="col-md-6">
+              <h6 class="fw-semibold text-secondary mb-1">Nombre</h6>
+              <p class="mb-0">{{ selectedServicio.nombre }}</p>
+            </div>
+
+            <!-- Descripción -->
+            <div class="col-md-6">
+              <h6 class="fw-semibold text-secondary mb-1">Descripción</h6>
+              <p class="mb-0">{{ selectedServicio.descripcion }}</p>
+            </div>
+
+            <!-- Precio -->
+            <div class="col-md-6">
+              <h6 class="fw-semibold text-secondary mb-1">Precio</h6>
+              <p class="mb-0">{{ selectedServicio.precio }}</p>
+            </div>
+
+            <!-- Estado -->
+            <div class="col-md-6">
+              <h6 class="fw-semibold text-secondary mb-1">Estado</h6>
+              <p class="mb-0">{{ selectedServicio.estado ? 'Activo' : 'Inactivo' }}</p>
+            </div>
+
+            <!-- Usuario de Creación -->
+            <div class="col-md-6">
+              <h6 class="fw-semibold text-secondary mb-1">Creado por</h6>
+              <p class="mb-0">{{ selectedServicio.usuarioCreacion || 'N/A' }}</p>
+            </div>
+
+            <!-- Fecha de Creación -->
+            <div class="col-md-6">
+              <h6 class="fw-semibold text-secondary mb-1">Fecha de Creación</h6>
+              <p class="mb-0">{{ selectedServicio.fechaCreacion | date:'medium' }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Editar Servicio -->
+<div class="modal fade" id="editServicioModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Editar Servicio</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" *ngIf="selectedServicio">
+        <form #editServicioForm="ngForm" (ngSubmit)="submitEditServicio()">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Nombre</label>
+              <input type="text" class="form-control" [(ngModel)]="selectedServicio.nombre" name="nombre" required [ngModelOptions]="{standalone: true}">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Descripción</label>
+              <input type="text" class="form-control" [(ngModel)]="selectedServicio.descripcion" name="descripcion" [ngModelOptions]="{standalone: true}">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Precio por invitado</label>
+              <input type="number" class="form-control" [(ngModel)]="selectedServicio.precio" name="precio" [ngModelOptions]="{standalone: true}">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Mínimo de invitados</label>
+              <input type="number" min="1" class="form-control" [(ngModel)]="selectedServicio.cantidadMinima" name="cantidadMinima" [ngModelOptions]="{standalone: true}">
+            </div>
+            <div class="col-12">
+              <label class="form-label">Fotos del servicio</label>
+              <input type="file" class="form-control mb-2" accept="image/*"
+                (change)="onFotoSelected($event)" [disabled]="fotoUploading" />
+              <div class="text-secondary-light text-sm mb-2" *ngIf="fotoUploading">Subiendo imagen...</div>
+              <div class="d-flex flex-wrap gap-2 pt-2">
+                <div class="position-relative" *ngFor="let foto of selectedServicio.fotosUrls; let i = index">
+                  <img [src]="userService.resolveMediaUrl(foto)" alt="Servicio" class="radius-8"
+                    style="width: 96px; height: 72px; object-fit: cover;" />
+                  <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0"
+                    (click)="removeFotoUrl(i)">×</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer mt-3">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            <button type="submit" class="btn btn-primary" [disabled]="editServicioForm.invalid">Guardar Cambios</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

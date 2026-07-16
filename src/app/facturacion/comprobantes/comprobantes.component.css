@@ -1,0 +1,9 @@
+.facturacion-page .nav-tabs .nav-link {
+  cursor: pointer;
+}
+
+.facturacion-page .nav-tabs .nav-link.active {
+  color: #f47820;
+  border-color: #dee2e6 #dee2e6 #fff;
+  font-weight: 700;
+}

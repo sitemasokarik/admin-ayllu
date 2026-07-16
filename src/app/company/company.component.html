@@ -1,0 +1,159 @@
+<div *ngIf="loading" class="d-flex flex-column align-items-center justify-content-center py-80">
+  <div class="spinner-grow text-primary mb-3" style="width: 3rem; height: 3rem;"></div>
+  <p class="text-primary-light">Cargando información...</p>
+</div> 
+<div *ngIf="!loading" class="dashboard-main-body">
+ 
+  <app-breadcrumb [title]="'Configuración - Empresa'" [main-title]="'Empresa'"></app-breadcrumb>
+
+  <div class="card h-100 p-0 radius-12 overflow-hidden">
+    <div class="card-body p-40">
+      <form [formGroup]="companyForm" (ngSubmit)="saveChanges()">
+        <div class="row">
+          <div class="col-sm-4">
+            <div class="mb-20">
+              <label for="razonSocial" class="form-label fw-semibold text-primary-light text-sm mb-8">Razon
+                Social</label>
+              <input type="text" class="form-control radius-8" id="razonSocial" placeholder="Razon Social"
+                formControlName="razonSocial">
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="mb-20">
+              <label for="nombreComercial" class="form-label fw-semibold text-primary-light text-sm mb-8">Nombre
+                Comercial</label>
+              <input type="text" class="form-control radius-8" id="nombreComercial" placeholder="Nombre Comercial"
+                formControlName="nombreComercial">
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="mb-20">
+              <label for="Ruc" class="form-label fw-semibold text-primary-light text-sm mb-8">Ruc</label>
+              <input type="text" class="form-control radius-8" id="Ruc" placeholder="Ruc" formControlName="ruc">
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="mb-20">
+              <label for="email" class="form-label fw-semibold text-primary-light text-sm mb-8">Correo</label>
+              <input type="text" class="form-control radius-8" id="email" placeholder="Correo" formControlName="email">
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="mb-20">
+              <label for="telefono" class="form-label fw-semibold text-primary-light text-sm mb-8">Número
+                Contacto</label>
+              <input type="text" class="form-control radius-8" id="telefono" placeholder="Número de Contacto"
+                formControlName="telefono">
+              <div *ngIf="companyForm.get('telefono')?.invalid && companyForm.get('telefono')?.touched"
+                class="text-danger text-sm mt-1">
+                El teléfono debe tener exactamente 9 dígitos.
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-4">
+            <div class="mb-20">
+              <label for="direccion" class="form-label fw-semibold text-primary-light text-sm mb-8">Dirección
+                Contacto</label>
+              <input type="text" class="form-control radius-8" id="direccion" placeholder="Dirección"
+                formControlName="direccion">
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="mb-20">
+              <label for="facebook" class="form-label fw-semibold text-primary-light text-sm mb-8">Link Facebook</label>
+              <input type="text" class="form-control radius-8" id="facebook" placeholder="Link Facebook"
+                formControlName="facebook">
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="mb-20">
+              <label for="instagram" class="form-label fw-semibold text-primary-light text-sm mb-8">Link
+                Instagram</label>
+              <input type="text" class="form-control radius-8" id="instagram" placeholder="Link Instagram"
+                formControlName="instagram">
+            </div>
+          </div>
+
+          <div class="col-12"><hr><h6 class="admin-section-title mb-16">Medios de pago (portal clientes)</h6></div>
+
+          <div class="col-sm-4">
+            <div class="mb-20">
+              <label for="montoAdelantoReserva" class="form-label fw-semibold text-primary-light text-sm mb-8">
+                Adelanto para reservar (S/)
+              </label>
+              <input type="number" class="form-control radius-8" id="montoAdelantoReserva" min="1" step="0.01"
+                formControlName="montoAdelantoReserva">
+              <p class="text-secondary-light text-sm mt-8 mb-0">
+                Monto mínimo que el cliente debe pagar para reservar la fecha. Puede abonar más, pero no menos.
+              </p>
+            </div>
+          </div>
+
+          <div class="col-12" *ngFor="let cuenta of cuentasBancarias; let i = index">
+            <div class="card radius-12 mb-16">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-12">
+                  <h6 class="mb-0">Cuenta {{ i + 1 }}</h6>
+                  <button type="button" class="btn btn-sm btn-outline-danger" *ngIf="cuentasBancarias.length > 1" (click)="eliminarCuenta(i)">Eliminar</button>
+                </div>
+                <div class="row">
+                  <div class="col-sm-4"><div class="mb-20"><label class="form-label fw-semibold text-primary-light text-sm mb-8">Alias</label><input class="form-control radius-8" [(ngModel)]="cuenta.alias" [ngModelOptions]="{standalone: true}"></div></div>
+                  <div class="col-sm-4"><div class="mb-20"><label class="form-label fw-semibold text-primary-light text-sm mb-8">Banco</label><input class="form-control radius-8" [(ngModel)]="cuenta.bancoNombre" [ngModelOptions]="{standalone: true}"></div></div>
+                  <div class="col-sm-4"><div class="mb-20"><label class="form-label fw-semibold text-primary-light text-sm mb-8">N° cuenta</label><input class="form-control radius-8" [(ngModel)]="cuenta.numeroCuenta" [ngModelOptions]="{standalone: true}"></div></div>
+                  <div class="col-sm-4"><div class="mb-20"><label class="form-label fw-semibold text-primary-light text-sm mb-8">CCI</label><input class="form-control radius-8" [(ngModel)]="cuenta.cci" [ngModelOptions]="{standalone: true}"></div></div>
+                  <div class="col-sm-4"><div class="mb-20"><label class="form-label fw-semibold text-primary-light text-sm mb-8">Yape</label><input class="form-control radius-8" [(ngModel)]="cuenta.yapeNumero" [ngModelOptions]="{standalone: true}"></div></div>
+                  <div class="col-sm-4"><div class="mb-20"><label class="form-label fw-semibold text-primary-light text-sm mb-8">Plin</label><input class="form-control radius-8" [(ngModel)]="cuenta.plinNumero" [ngModelOptions]="{standalone: true}"></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 mb-16">
+            <button type="button" class="btn btn-outline-primary btn-sm" (click)="agregarCuenta()">+ Agregar otra cuenta</button>
+          </div>
+          <div class="col-sm-12"><div class="mb-20"><label class="form-label fw-semibold text-primary-light text-sm mb-8">Instrucciones de pago</label><textarea class="form-control radius-8" rows="2" formControlName="instruccionesPago"></textarea></div></div>
+          <div class="col-sm-6"><div class="mb-20"><label class="form-label fw-semibold text-primary-light text-sm mb-8">Logo empresa</label><input type="file" class="form-control radius-8" accept="image/*" (change)="onLogoSelected($event)" [disabled]="logoUploading"><div class="text-secondary-light text-sm mt-8" *ngIf="logoUploading">Subiendo logo...</div><img *ngIf="hasLogo" [src]="getLogoUrl()" alt="Logo actual" class="mt-2 d-block" style="max-width:180px;border-radius:8px;border:1px solid #eee;padding:8px;background:#fff;" (error)="onLogoImageError()"><p class="text-secondary-light text-sm mt-8 mb-0" *ngIf="!hasLogo && !logoUploading">No hay logo cargado. Sube una imagen para ver la vista previa.</p></div></div>
+          <div class="col-sm-6"><div class="mb-20"><label class="form-label fw-semibold text-primary-light text-sm mb-8">QR Yape/Plin</label><input type="file" class="form-control radius-8" accept=".jpg,.jpeg,.png,.webp" (change)="onQrSelected($event)"><img *ngIf="qrPreviewUrl" [src]="getQrUrl()" alt="QR pago" class="mt-2" style="max-width:220px;border-radius:8px;"></div></div>
+
+          <div class="col-12"><hr><h6 class="admin-section-title mb-16">Facturación electrónica (SUNAT)</h6></div>
+          <div class="col-sm-4">
+            <div class="mb-20">
+              <label class="form-label fw-semibold text-primary-light text-sm mb-8">Genera fact. electr.</label>
+              <select class="form-control radius-8" formControlName="generaFactElect">
+                <option [ngValue]="false">No</option>
+                <option [ngValue]="true">Sí</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-sm-4"><div class="mb-20"><label class="form-label fw-semibold text-primary-light text-sm mb-8">Ubigeo (INEI)</label><input class="form-control radius-8" formControlName="ubigeo" maxlength="6" placeholder="150101"></div></div>
+          <div class="col-sm-4"><div class="mb-20"><label class="form-label fw-semibold text-primary-light text-sm mb-8">Modo SUNAT</label><select class="form-control radius-8" formControlName="sunatModo"><option value="DESARROLLO">Desarrollo (pruebas SUNAT)</option><option value="PRODUCCION">Producción</option></select><p class="text-secondary-light text-sm mt-8 mb-0">Usa <strong>Desarrollo</strong> para pruebas con certificado/SOL de beta. Cambia a Producción solo cuando estés listo.</p></div></div>
+          <div class="col-sm-4"><div class="mb-20"><label class="form-label fw-semibold text-primary-light text-sm mb-8">URL WS activa</label><input class="form-control radius-8" [value]="sunatWsUrlActivo" readonly><p class="text-secondary-light text-sm mt-8 mb-0">Se asigna automáticamente según el modo seleccionado.</p></div></div>
+          <div class="col-sm-4"><div class="mb-20"><label class="form-label fw-semibold text-primary-light text-sm mb-8">Carpeta certificado (servidor)</label><input class="form-control radius-8" [value]="certificadoRutaFija" readonly></div></div>
+          <div class="col-sm-4"><div class="mb-20"><label class="form-label fw-semibold text-primary-light text-sm mb-8">Usuario SOL</label><input class="form-control radius-8" formControlName="usuarioSol" placeholder="Sin prefijo RUC"></div></div>
+          <div class="col-sm-4"><div class="mb-20"><label class="form-label fw-semibold text-primary-light text-sm mb-8">Clave SOL</label><input type="password" class="form-control radius-8" formControlName="claveSol" placeholder="Dejar vacío para no cambiar"></div></div>
+          <div class="col-sm-6"><div class="mb-20"><label class="form-label fw-semibold text-primary-light text-sm mb-8">Certificado digital (.pfx)</label><input type="password" class="form-control radius-8 mb-8" formControlName="claveCertificado" placeholder="Clave del certificado"><input type="file" class="form-control radius-8" accept=".pfx" (change)="onCertificadoSelected($event)" [disabled]="certificadoUploading"><p class="text-secondary-light text-sm mt-8 mb-0" *ngIf="certificadoFileName">Archivo: {{ certificadoFileName }}</p></div></div>
+
+          <div class="col-12"><hr><h6 class="admin-section-title mb-16">Consulta DNI / RUC (ApiPeru.dev)</h6></div>
+          <div class="col-sm-8">
+            <div class="mb-20">
+              <label class="form-label fw-semibold text-primary-light text-sm mb-8">Token ApiPeru.dev</label>
+              <input type="password" class="form-control radius-8" formControlName="apiPeruDevToken" placeholder="Dejar vacío para no cambiar" autocomplete="off">
+              <p class="text-secondary-light text-sm mt-8 mb-0">
+                Token Bearer para consultar DNI y RUC en facturación.
+                <span *ngIf="tieneApiPeruDevToken"> Actualmente hay un token guardado.</span>
+                Obtén el tuyo en <a href="https://apiperu.dev" target="_blank" rel="noopener">apiperu.dev</a>.
+              </p>
+            </div>
+          </div>
+
+          <div class="d-flex align-items-center justify-content-center gap-3 mt-24">
+            <button type="submit" class="btn btn-primary border border-primary-600 text-md px-24 py-12 radius-8">
+              Guardar Cambios
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

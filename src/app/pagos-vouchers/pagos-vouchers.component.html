@@ -1,0 +1,173 @@
+<div *ngIf="loading" class="d-flex flex-column align-items-center justify-content-center py-80">
+  <div class="spinner-grow text-primary mb-3" style="width: 3rem; height: 3rem;"></div>
+  <p class="text-primary-light">Cargando vouchers...</p>
+</div>
+
+<div *ngIf="!loading" class="dashboard-main-body">
+  <app-breadcrumb [title]="title"></app-breadcrumb>
+
+  <ul class="nav nav-tabs mb-20">
+    <li class="nav-item">
+      <button type="button" class="nav-link" [class.active]="tab === 'pendientes'" (click)="setTab('pendientes')">
+        Pendientes
+        <span class="badge bg-warning ms-2" *ngIf="vouchers.length">{{ vouchers.length }}</span>
+      </button>
+    </li>
+    <li class="nav-item">
+      <button type="button" class="nav-link" [class.active]="tab === 'historial'" (click)="setTab('historial')">
+        Historial
+      </button>
+    </li>
+  </ul>
+
+  <div *ngIf="tab === 'pendientes'">
+    <div class="alert alert-warning d-flex align-items-center gap-2" *ngIf="vouchers.length">
+      <iconify-icon icon="solar:bell-bing-bold"></iconify-icon>
+      <span>{{ vouchers.length }} voucher(es) pendiente(s) de revisión.</span>
+    </div>
+
+    <div class="card basic-data-table" *ngIf="!vouchers.length">
+      <div class="card-body text-center py-5">
+        <p class="mb-0 text-secondary-light">No hay vouchers pendientes por revisar.</p>
+      </div>
+    </div>
+
+    <div class="row g-3" *ngIf="vouchers.length">
+      <div class="col-lg-5">
+        <div class="card h-100">
+          <div class="card-body p-0">
+            <table class="table sm-table mb-0">
+              <thead>
+                <tr>
+                  <th>Cliente</th>
+                  <th>Local</th>
+                  <th>Monto</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let v of vouchers">
+                  <td>{{ v.clienteNombre }}</td>
+                  <td>{{ v.localNombre }}</td>
+                  <td>S/ {{ v.monto | number:'1.2-2' }}</td>
+                  <td><button type="button" class="btn btn-sm btn-outline-primary-600" (click)="ver(v)">Revisar</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-7" *ngIf="selected && tab === 'pendientes'">
+        <ng-container *ngTemplateOutlet="reviewPanel"></ng-container>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="tab === 'historial'">
+    <div class="d-flex flex-wrap gap-2 mb-16 align-items-center">
+      <label class="mb-0 fw-semibold">Estado:</label>
+      <select class="form-select" style="max-width: 220px" [(ngModel)]="filtroEstado" (ngModelChange)="load()">
+        <option value="">Todos</option>
+        <option value="Aprobado">Aprobado</option>
+        <option value="Rechazado">Rechazado</option>
+        <option value="Pendiente">Pendiente</option>
+      </select>
+    </div>
+
+    <div class="row g-3">
+      <div [class.col-lg-5]="selected" [class.col-12]="!selected">
+        <div class="card h-100">
+          <div class="card-body p-0">
+            <table class="table sm-table mb-0">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Cliente</th>
+                  <th>Monto</th>
+                  <th>Estado</th>
+                  <th>Fecha</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let v of historial">
+                  <td>#{{ v.pagoVoucherID }}</td>
+                  <td>{{ v.clienteNombre }}</td>
+                  <td>S/ {{ v.monto | number:'1.2-2' }}</td>
+                  <td>
+                    <span class="badge px-12 py-6 radius-4" [ngClass]="estadoClass(v.estadoPago)">{{ v.estadoPago }}</span>
+                  </td>
+                  <td>{{ v.fechaCreacion | date:'dd/MM/yyyy HH:mm' }}</td>
+                  <td><button type="button" class="btn btn-sm btn-outline-primary" (click)="ver(v, true)">Ver</button></td>
+                </tr>
+                <tr *ngIf="!historial.length">
+                  <td colspan="6" class="text-center text-secondary-light py-24">No hay vouchers en el historial</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-7" *ngIf="selected && tab === 'historial'">
+        <ng-container *ngTemplateOutlet="reviewPanel"></ng-container>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #reviewPanel>
+  <div class="card voucher-review">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">{{ selected.soloLectura ? 'Detalle' : 'Revisión' }} · {{ selected.clienteNombre }}</h5>
+      <button type="button" class="btn-close" (click)="cerrar()"></button>
+    </div>
+    <div class="card-body">
+      <div class="row g-3 mb-3">
+        <div class="col-md-6"><strong>Cotización:</strong> #{{ selected.cotizacionID }}</div>
+        <div class="col-md-6"><strong>Estado:</strong> {{ selected.estadoPago }}</div>
+        <div class="col-md-6"><strong>Fecha tentativa 1:</strong> {{ selected.fechaTentativa | date:'dd/MM/yyyy' }}</div>
+        <div class="col-md-6" *ngIf="selected.fechaTentativaOpcional"><strong>Fecha tentativa 2:</strong> {{ selected.fechaTentativaOpcional | date:'dd/MM/yyyy' }}</div>
+        <div class="col-md-6" *ngIf="selected.fechaReservadaElegida"><strong>Fecha elegida:</strong> {{ selected.fechaReservadaElegida | date:'dd/MM/yyyy' }}</div>
+        <div class="col-md-6"><strong>Correo:</strong> {{ selected.clienteEmail }}</div>
+        <div class="col-md-6"><strong>Monto:</strong> S/ {{ selected.monto | number:'1.2-2' }}</div>
+      </div>
+
+      <div class="alert alert-info py-12 px-16 radius-8 mb-3" *ngIf="!selected.soloLectura && tieneDosFechas(selected)">
+        <strong>Fecha del evento a confirmar</strong>
+        <p class="mb-2 mt-1 text-sm">El adelanto reserva <em>una sola</em> fecha. Elige cuál confirma el cliente:</p>
+        <div class="d-flex flex-wrap gap-2">
+          <label class="d-flex align-items-center gap-2 mb-0" *ngFor="let fecha of getFechasTentativas(selected)">
+            <input type="radio" name="fechaReservadaAdmin" [value]="fecha" [(ngModel)]="fechaReservadaAdmin" />
+            {{ formatFechaLabel(fecha) }}
+          </label>
+        </div>
+      </div>
+
+      <div class="voucher-preview mb-3">
+        <div *ngIf="previewLoading" class="text-center py-4 text-secondary-light">Cargando comprobante...</div>
+        <div *ngIf="previewError" class="alert alert-warning">{{ previewError }}</div>
+        <img *ngIf="!previewLoading && previewUrl && !previewIsPdf" [src]="previewUrl" alt="Voucher de pago" />
+        <iframe *ngIf="!previewLoading && previewSafeUrl && previewIsPdf" [src]="previewSafeUrl" title="Voucher PDF"></iframe>
+        <div class="d-flex gap-2 mt-2 flex-wrap">
+          <button type="button" class="btn btn-sm btn-outline-primary" (click)="descargarVoucher()">Descargar voucher</button>
+        </div>
+      </div>
+
+      <div class="mb-3" *ngIf="!selected.soloLectura">
+        <label class="form-label fw-semibold">Observación admin</label>
+        <textarea class="form-control" rows="3" [(ngModel)]="observacionAdmin"></textarea>
+      </div>
+      <div class="mb-3" *ngIf="selected.soloLectura && selected.observacionAdmin">
+        <label class="form-label fw-semibold">Observación admin</label>
+        <p class="mb-0">{{ selected.observacionAdmin }}</p>
+      </div>
+
+      <div class="d-flex gap-2 flex-wrap" *ngIf="!selected.soloLectura">
+        <button type="button" class="btn btn-success" [disabled]="reviewing" (click)="revisar(true)">Aprobar</button>
+        <button type="button" class="btn btn-danger" [disabled]="reviewing" (click)="revisar(false)">Rechazar</button>
+      </div>
+    </div>
+  </div>
+</ng-template>

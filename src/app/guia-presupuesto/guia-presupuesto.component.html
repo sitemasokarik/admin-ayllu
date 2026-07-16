@@ -1,0 +1,200 @@
+<div class="guia">
+  <header class="guia__hero">
+    <div class="guia__hero-inner">
+      <p class="guia__eyebrow">Documentación interna · Ayllu</p>
+      <h1>Cómo se calcula la cotización</h1>
+      <p class="guia__lead">
+        Esta guía describe la misma lógica que usan el cotizador del admin y el de la landing.
+        Los montos de productos vienen del <strong>precio de venta</strong> registrado en cada producto;
+        el local usa <strong>precio de alquiler</strong>.
+      </p>
+      <div class="guia__actions">
+        <a routerLink="/presupuestador" class="guia__btn guia__btn--primary">Ir al cotizador</a>
+        <a routerLink="/sign-in" class="guia__btn guia__btn--ghost">Volver al admin</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="guia__main">
+    <section class="guia__section">
+      <h2>Fórmula general</h2>
+      <div class="guia__formula-box">
+        <code>
+          Total = (Invitados × Costo por invitado) + Alquiler local + Garantía (S/ 500) + Personal (S/ 100) + Servicios adicionales
+        </code>
+      </div>
+      <p class="guia__hint">
+        <strong>Costo por invitado</strong> = suma de precios del menú seleccionado (sin personal).
+        El <strong>personal de servicio (S/ 100)</strong> es un cargo fijo del evento, igual que la garantía.
+      </p>
+    </section>
+
+    <section class="guia__section">
+      <h2>Paso a paso</h2>
+      <ol class="guia__steps">
+        <li *ngFor="let paso of pasos" class="guia__step">
+          <span class="guia__step-num">{{ paso.orden }}</span>
+          <div>
+            <h3>{{ paso.titulo }}</h3>
+            <p class="guia__step-formula">{{ paso.formula }}</p>
+            <p>{{ paso.detalle }}</p>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <section class="guia__section guia__section--example">
+      <h2>Ejemplo detallado — evento real</h2>
+      <div class="guia__event-summary">
+        <div>
+          <span class="guia__event-label">Invitados</span>
+          <strong>{{ ejemplo.invitados }}</strong>
+        </div>
+        <div>
+          <span class="guia__event-label">Local</span>
+          <strong>{{ ejemplo.localNombre }}</strong>
+          <small>{{ ejemplo.localDireccion }} · Cap. {{ ejemplo.localCapacidad }}</small>
+        </div>
+        <div>
+          <span class="guia__event-label">Adicionales</span>
+          <strong>{{ formatSoles(ejemplo.adicionalesTotal) }}</strong>
+        </div>
+      </div>
+      <p class="guia__hint">
+        Precios tomados del catálogo actual de productos y del local en base de datos.
+      </p>
+
+      <div class="guia__grid">
+        <article class="guia__card guia__card--wide">
+          <h3>1 · Desglose del menú por invitado</h3>
+
+          <div *ngFor="let grupo of gruposMenu" class="guia__menu-group">
+            <div class="guia__menu-group-head">
+              <h4>{{ grupo.categoria }}</h4>
+              <span *ngIf="grupo.limite" class="guia__tag">{{ grupo.limite }}</span>
+            </div>
+            <table class="guia__table">
+              <thead>
+                <tr>
+                  <th>Producto</th>
+                  <th class="guia__col-num">Precio / invitado</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let producto of grupo.productos">
+                  <td>{{ producto.nombre }}</td>
+                  <td class="guia__col-num">{{ formatSoles(producto.precio) }}</td>
+                </tr>
+                <tr class="guia__table-subtotal">
+                  <td>Subtotal {{ grupo.categoria }}</td>
+                  <td class="guia__col-num">{{ formatSoles(subtotalGrupo(grupo)) }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="guia__menu-grand-total">
+            <span>Costo por invitado (solo menú)</span>
+            <strong>{{ formatSoles(subtotalMenuPorInvitado) }}</strong>
+          </div>
+        </article>
+
+        <article class="guia__card">
+          <h3>2 · Menú × invitados</h3>
+          <ul class="guia__calc-list">
+            <li>
+              <span>{{ ejemplo.invitados }} × {{ formatSoles(subtotalMenuPorInvitado) }}</span>
+              <strong>{{ formatSoles(subtotalMenuTotal) }}</strong>
+            </li>
+          </ul>
+          <p class="guia__calc-note">
+            En el cotizador aparece como <em>Menú × invitados</em> o <em>Subtotal menú</em>.
+          </p>
+        </article>
+
+        <article class="guia__card">
+          <h3>3 · Cargos fijos</h3>
+          <ul class="guia__calc-list">
+            <li>
+              <span>Alquiler — {{ ejemplo.localNombre }}</span>
+              <strong>{{ formatSoles(ejemplo.alquiler) }}</strong>
+            </li>
+            <li>
+              <span>Garantía catering</span>
+              <strong>{{ formatSoles(garantia) }}</strong>
+            </li>
+            <li>
+              <span>Personal de servicio</span>
+              <strong>{{ formatSoles(personalServicio) }}</strong>
+            </li>
+            <li>
+              <span>Servicios adicionales</span>
+              <strong>{{ formatSoles(ejemplo.adicionalesTotal) }}</strong>
+            </li>
+          </ul>
+          <p class="guia__calc-note">{{ ejemplo.adicionalesNota }}</p>
+        </article>
+
+        <article class="guia__card guia__card--highlight guia__card--wide">
+          <h3>4 · Total estimado del evento</h3>
+          <ul class="guia__calc-list guia__calc-list--stack">
+            <li>
+              <span>Menú × {{ ejemplo.invitados }} invitados</span>
+              <strong>{{ formatSoles(subtotalMenuTotal) }}</strong>
+            </li>
+            <li>
+              <span>+ Alquiler Salón Gran Canevaro</span>
+              <strong>{{ formatSoles(ejemplo.alquiler) }}</strong>
+            </li>
+            <li>
+              <span>+ Garantía</span>
+              <strong>{{ formatSoles(garantia) }}</strong>
+            </li>
+            <li>
+              <span>+ Personal de servicio</span>
+              <strong>{{ formatSoles(personalServicio) }}</strong>
+            </li>
+            <li>
+              <span>+ Adicionales</span>
+              <strong>{{ formatSoles(ejemplo.adicionalesTotal) }}</strong>
+            </li>
+          </ul>
+          <div class="guia__total">
+            <span>Total estimado</span>
+            <strong>{{ formatSoles(totalEstimado) }}</strong>
+          </div>
+          <p class="guia__calc-note">
+            Precio por cubierto ({{ formatSoles(totalEstimado) }} ÷ {{ ejemplo.invitados }}):
+            <strong>{{ formatSoles(precioPorCubierto) }}</strong> por persona.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section class="guia__section">
+      <h2>Notas importantes</h2>
+      <ul class="guia__notes">
+        <li>
+          Cada precio de plato es <strong>por invitado</strong>. El sistema multiplica el costo por invitado
+          por los 100 invitados; no multiplica cada plato por separado otra vez.
+        </li>
+        <li>
+          En este ejemplo, el costo por invitado del menú es {{ formatSoles(subtotalMenuPorInvitado) }}
+          (coctel {{ formatSoles(4) }} + entremeses {{ formatSoles(304) }} + entrada {{ formatSoles(200) }}
+          + fondo {{ formatSoles(200) }}). El personal ({{ formatSoles(personalServicio) }}) se suma aparte como cargo fijo.
+        </li>
+        <li>
+          La garantía (S/ 500) y el personal (S/ 100 fijo) están en la configuración interna del cotizador.
+        </li>
+        <li>
+          Si cambias precios en el módulo de productos, el cotizador recalcula automáticamente con los nuevos valores.
+        </li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="guia__footer">
+    <span>Ayllu · Guía del cotizador</span>
+    <a routerLink="/presupuestador">Abrir cotizador</a>
+  </footer>
+</div>
